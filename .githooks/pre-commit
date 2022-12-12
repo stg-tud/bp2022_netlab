@@ -2,14 +2,14 @@
 set -e
 
 echo -n "Checking format... "
-if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
+changed_go_files=`git diff --cached --name-only *.go`
+if [[ -n "$changed_go_files"  && "$(gofmt -s -l ${changed_go_files} | wc -l)" -gt 0 ]]; then
     echo "FAIL"
-    echo "Found formatting errors. Please run gofmt to check and fix them."
+    echo ""
+    echo "Found formatting errors in these files:"
+    gofmt -s -l ${changed_go_files}
     exit 1;
 fi
 echo "OK"
-
-echo "Running tests..."
-go test -v
 
 echo "Ready to commit!"
