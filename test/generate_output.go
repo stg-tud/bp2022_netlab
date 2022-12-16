@@ -9,5 +9,6 @@ import (
 
 func main() {
 	og := outputgenerators.Debug{}
-	fmt.Println(og.Generate(experiment.ExampleExperiment))
+	exampleExperiment := experiment.GetExampleExperiment()
+	fmt.Println(og.Generate(exampleExperiment))
 }
