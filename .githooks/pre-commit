@@ -12,4 +12,10 @@ if [[ -n "$changed_go_files"  && "$(gofmt -s -l ${changed_go_files} | wc -l)" -g
 fi
 echo "OK"
 
+echo "Trying to build..."
+go build ./...
+
+echo "Running tests..."
+go test ./...
+
 echo "Ready to commit!"
