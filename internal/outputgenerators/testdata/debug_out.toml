@@ -1,10 +1,15 @@
 Name = 'Debug Output Test'
 Runs = 5
+Targets = [0, 1]
+Duration = 123456
+
+[WorldSize]
+Height = 170
+Width = 240
 
 [[NodeGroups]]
 Prefix = 'a'
 NoNodes = 1
-MovementModel = 'static'
 IPv4Net = '10.0.0.0'
 IPv4Mask = 24
 IPv6Net = '2001::'
@@ -16,11 +21,15 @@ Jitter = 0
 Delay = 20000
 Error = 0
 Promiscuous = 0
+
+[NodeGroups.MovementModel]
+MinSpeed = 123
+MaxSpeed = 456
+MaxPause = 0
 
 [[NodeGroups]]
 Prefix = 'b'
 NoNodes = 2
-MovementModel = 'static'
 IPv4Net = '10.0.0.0'
 IPv4Mask = 24
 IPv6Net = '2001::'
@@ -32,11 +41,15 @@ Jitter = 0
 Delay = 20000
 Error = 0
 Promiscuous = 0
+
+[NodeGroups.MovementModel]
+MinSpeed = 123
+MaxSpeed = 456
+MaxPause = 0
 
 [[NodeGroups]]
 Prefix = 'c'
 NoNodes = 3
-MovementModel = 'static'
 IPv4Net = '10.0.0.0'
 IPv4Mask = 24
 IPv6Net = '2001::'
@@ -49,10 +62,14 @@ Delay = 20000
 Error = 0
 Promiscuous = 0
 
+[NodeGroups.MovementModel]
+MinSpeed = 123
+MaxSpeed = 456
+MaxPause = 0
+
 [[NodeGroups]]
 Prefix = 'd'
 NoNodes = 4
-MovementModel = 'static'
 IPv4Net = '10.0.0.0'
 IPv4Mask = 24
 IPv6Net = '2001::'
@@ -64,3 +81,8 @@ Jitter = 0
 Delay = 20000
 Error = 0
 Promiscuous = 0
+
+[NodeGroups.MovementModel]
+MinSpeed = 123
+MaxSpeed = 456
+MaxPause = 0
