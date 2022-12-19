@@ -23,6 +23,10 @@ func TestDebug(t *testing.T) {
 		NodeGroups: nodegroups,
 	}
 
+	t.Cleanup(func() {
+		os.Remove("debug_out.toml")
+	})
+
 	og := outputgenerators.Debug{}
 	og.Generate(exp)
 
@@ -39,8 +43,6 @@ func TestDebug(t *testing.T) {
 	if string(actual) != string(expected) {
 		t.Fatal("Output does not match expected output!")
 	}
-
-	os.Remove("debug_out.toml")
 
 	return
 }
