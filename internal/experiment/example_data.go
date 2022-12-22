@@ -5,6 +5,7 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 )
 
+// GetExampleExperiment returns a Experiment loaded with example values.
 func GetExampleExperiment() Experiment {
 	var nodegroups []NodeGroup
 	nodegroups = append(nodegroups, NewNodeGroup("n", 1))

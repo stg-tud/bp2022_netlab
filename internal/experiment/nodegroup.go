@@ -4,6 +4,8 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 )
 
+// A NodeGroup represents a group of dependent nodes sharing properties
+// such as a MovementModel or network settings.
 type NodeGroup struct {
 	Prefix  string
 	NoNodes int
@@ -45,6 +47,7 @@ var defaultValues = NodeGroup{
 	Promiscuous: 0,
 }
 
+// NewNodeGroup returns a new NodeGroup loaded with default values.
 func NewNodeGroup(prefix string, noNodes int) NodeGroup {
 	out := defaultValues
 	out.Prefix = prefix
