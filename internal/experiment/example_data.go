@@ -1,5 +1,6 @@
 package experiment
 
+// GetExampleExperiment returns a Experiment loaded with example values.
 func GetExampleExperiment() Experiment {
 	var nodegroups []NodeGroup
 	nodegroups = append(nodegroups, NewNodeGroup("n", 1))
