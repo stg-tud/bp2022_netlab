@@ -1,0 +1,65 @@
+Name = 'Example Experiment'
+Runs = 1
+Targets = [1, 0]
+Duration = 120
+
+[WorldSize]
+Height = 800
+Width = 800
+
+[[NodeGroups]]
+Prefix = 'n'
+NoNodes = 1
+IPv4Net = '10.0.0.0'
+IPv4Mask = 24
+IPv6Net = '2001::'
+IPv6Mask = 120
+NetworkType = 'WIRELESS_LAN'
+Bandwidth = 54000000
+Range = 180
+Jitter = 0
+Delay = 20000
+Error = 0
+Promiscuous = 0
+
+[NodeGroups.MovementModel]
+MinSpeed = 123
+MaxSpeed = 456
+MaxPause = 0
+
+[[NodeGroups]]
+Prefix = 'p'
+NoNodes = 29
+IPv4Net = '10.0.0.0'
+IPv4Mask = 24
+IPv6Net = '2001::'
+IPv6Mask = 120
+NetworkType = 'WIRELESS_LAN'
+Bandwidth = 54000000
+Range = 180
+Jitter = 0
+Delay = 20000
+Error = 0
+Promiscuous = 0
+
+[NodeGroups.MovementModel]
+MinSpeed = 123
+MaxSpeed = 456
+MaxPause = 0
+
+[[NodeGroups]]
+Prefix = 'x'
+NoNodes = 17
+IPv4Net = '10.0.0.0'
+IPv4Mask = 24
+IPv6Net = '2001::'
+IPv6Mask = 120
+NetworkType = 'WIRELESS_LAN'
+Bandwidth = 54000000
+Range = 180
+Jitter = 0
+Delay = 20000
+Error = 0
+Promiscuous = 0
+
+[NodeGroups.MovementModel]

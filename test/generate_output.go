@@ -1,12 +1,21 @@
 package main
 
 import (
-	"github.com/stg-tud/bp2022_netlab/internal/experiment"
-	"github.com/stg-tud/bp2022_netlab/internal/outputgenerators"
+	"fmt"
+	"github.com/stg-tud/bp2022_netlab/internal/load"
 )
 
 func main() {
+
+	/**
 	og := outputgenerators.Debug{}
 	exampleExperiment := experiment.GetExampleExperiment()
 	og.Generate(exampleExperiment)
+	**/
+	
+	load.Loading()
+	
+	fmt.Println(load.GetExperiment().Duration)
+
+	
 }
