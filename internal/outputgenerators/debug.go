@@ -1,6 +1,7 @@
 package outputgenerators
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/pelletier/go-toml/v2"
@@ -16,5 +17,6 @@ func (t Debug) Generate(exp experiment.Experiment) {
 	if err != nil {
 		panic(err)
 	}
-	os.WriteFile("debug_out.toml", b, 0644)
+	os.Mkdir(OUTPUT_FOLDER, 0755)
+	os.WriteFile(fmt.Sprintf("%s/debug_out.toml", OUTPUT_FOLDER), b, 0644)
 }

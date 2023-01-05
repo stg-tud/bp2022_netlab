@@ -1,9 +1,11 @@
 package outputgenerators_test
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
+	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/outputgenerators"
 )
@@ -18,13 +20,21 @@ func TestDebug(t *testing.T) {
 	nodegroups = append(nodegroups, experiment.NewNodeGroup("d", 4))
 
 	exp := experiment.Experiment{
-		Name:       "Debug Output Test",
-		Runs:       5,
+		Name:    "Debug Output Test",
+		Runs:    5,
+		Targets: []experiment.Target{experiment.TARGET_CORE, experiment.TARGET_THEONE},
+
+		Duration: 123456,
+		WorldSize: customtypes.Area{
+			Height: 170,
+			Width:  240,
+		},
+
 		NodeGroups: nodegroups,
 	}
 
 	t.Cleanup(func() {
-		os.Remove("debug_out.toml")
+		os.RemoveAll(outputgenerators.OUTPUT_FOLDER)
 	})
 
 	og := outputgenerators.Debug{}
@@ -35,7 +45,7 @@ func TestDebug(t *testing.T) {
 		t.Fatal("Could not read output file", err)
 	}
 
-	actual, err := os.ReadFile("debug_out.toml")
+	actual, err := os.ReadFile(fmt.Sprintf("%s/debug_out.toml", outputgenerators.OUTPUT_FOLDER))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}
