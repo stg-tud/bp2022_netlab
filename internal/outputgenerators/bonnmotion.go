@@ -10,12 +10,13 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 )
 
+// The executable of BonnMotion to call.
 const EXECUTABLE = "bonnmotion"
 
+// The Bonnmotion output generator calles BonnMotion with the correct parameters.
 type Bonnmotion struct{}
 
-type commandParams struct{}
-
+// Returns the correct BonnMotion platform name for the given Target.
 func platform(t experiment.Target) (bool, string) {
 	switch t {
 	case experiment.TARGET_THEONE:
@@ -29,11 +30,13 @@ func platform(t experiment.Target) (bool, string) {
 	}
 }
 
+// Returns whether the given Target is (currently) supported by this output generator.
 func isSupported(t experiment.Target) bool {
 	supported, _ := platform(t)
 	return supported
 }
 
+// Returns the parameter set for Random Waypoint movement model for a given NodeGroup inside an Experiment.
 func randomWaypointParameters(exp experiment.Experiment, nodeGroup experiment.NodeGroup) []string {
 	movementmodel := nodeGroup.MovementModel.(movementpatterns.RandomWaypoint)
 	return []string{
@@ -44,6 +47,7 @@ func randomWaypointParameters(exp experiment.Experiment, nodeGroup experiment.No
 	}
 }
 
+// Returns the general parameters for a given NodeGroup inside an Experiment.
 func generalParameters(exp experiment.Experiment, nodeGroup experiment.NodeGroup) []string {
 	return []string{
 		fmt.Sprintf("-d%d", exp.Duration),
@@ -53,6 +57,7 @@ func generalParameters(exp experiment.Experiment, nodeGroup experiment.NodeGroup
 	}
 }
 
+// Calls BonnMotion to generate the Random Waypoint data for a given NodeGroup inside an Experiment.
 func generateRandomWaypointNodeGroup(exp experiment.Experiment, nodeGroup experiment.NodeGroup) {
 	command := []string{
 		fmt.Sprintf("-f%s", nodeGroup.Prefix),
@@ -68,6 +73,7 @@ func generateRandomWaypointNodeGroup(exp experiment.Experiment, nodeGroup experi
 	}
 }
 
+// Calls BonnMotion to convert the BonnMotion output to the given Target's format for a given NodeGroup.
 func convertToTargetFormat(target experiment.Target, nodeGroup experiment.NodeGroup) {
 	supported, model := platform(target)
 	if !supported {
@@ -86,6 +92,7 @@ func convertToTargetFormat(target experiment.Target, nodeGroup experiment.NodeGr
 	}
 }
 
+// Generate generates output for the given Experiment with BonnMotion.
 func (t Bonnmotion) Generate(exp experiment.Experiment) {
 	os.Mkdir(OUTPUT_FOLDER, 0755)
 	for i := 0; i < len(exp.NodeGroups); i++ {

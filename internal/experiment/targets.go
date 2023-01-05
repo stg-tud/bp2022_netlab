@@ -1,9 +1,12 @@
 package experiment
 
+// A Target is a platform for which output should be generated.
 type Target int
 
 const (
+	// Target: Core
 	TARGET_CORE Target = iota
+	// Target: The ONE
 	TARGET_THEONE
 )
 
