@@ -6,7 +6,7 @@ import (
 
 var exp Experiment
 
-// loads the read file into experiment and returns said experiment
+// loads the read file into experiment and returns experiment
 
 func Loading(doc []byte) Experiment {
 
