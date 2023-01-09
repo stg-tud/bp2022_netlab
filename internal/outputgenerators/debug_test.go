@@ -53,6 +53,4 @@ func TestDebug(t *testing.T) {
 	if string(actual) != string(expected) {
 		t.Fatal("Output does not match expected output!")
 	}
-
-	return
 }
