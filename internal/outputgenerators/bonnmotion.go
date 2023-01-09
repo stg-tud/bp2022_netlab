@@ -31,7 +31,7 @@ func platform(t experiment.Target) (bool, string) {
 }
 
 // Returns whether the given Target is (currently) supported by this output generator.
-func isSupported(t experiment.Target) bool {
+func IsSupported(t experiment.Target) bool {
 	supported, _ := platform(t)
 	return supported
 }
