@@ -17,13 +17,29 @@ type NodeGroup struct {
 	IPv6Net  string
 	IPv6Mask int
 
-	NetworkType string
+	NetworkType NetworkType
 	Bandwidth   int
 	Range       int
 	Jitter      int
 	Delay       int
 	Error       int
 	Promiscuous int
+}
+
+type NetworkType int
+
+const (
+	WIRELESS_LAN NetworkType = iota
+)
+
+func (nt NetworkType) String() string {
+	switch nt {
+	case WIRELESS_LAN:
+		return "WIRELESS_LAN"
+
+	default:
+		return ""
+	}
 }
 
 var defaultValues = NodeGroup{
@@ -38,7 +54,7 @@ var defaultValues = NodeGroup{
 	IPv6Net:  "2001::",
 	IPv6Mask: 120,
 
-	NetworkType: "WIRELESS_LAN",
+	NetworkType: WIRELESS_LAN,
 	Range:       180,
 	Bandwidth:   54000000,
 	Jitter:      0,

@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<scenario name="{{$.ScenarioName}}">
+{{- if .Networks}}
+  <networks>
+    {{- range .Networks}}
+    <network id="{{ .Id }}" name="net_{{ .Prefix }}" icon="" canvas="0" type="{{ .Type }}">
+      <position x="192.0" y="252.0" lat="47.576875768013494" lon="-122.12973707073171" alt="2.0"/>
+    </network>
+    {{- end}}
+  </networks>
+  <devices>
+    {{- range .Networks}}
+    {{- range .Devices}}
+    <device id="{{ .Id }}" name="{{ .Name }}" icon="" canvas="0" type="router" class="" image="">
+      <position x="384.0" y="456.0" lat="47.57502136348161" lon="-122.12714992271346" alt="2.0"/>
+      <services>
+        <service name="zebra"/>
+        <service name="OSPFv2"/>
+        <service name="OSPFv3"/>
+        <service name="IPForward"/>
+      </services>
+    </device>
+    {{- end}}
+    {{- end}}
+  </devices>
+  <links>
+    {{- range $index, $netw := .Networks}}
+    {{- range $index, $dev := .Devices}}
+        <link node1="{{ $netw.Id }}" node2="{{ $dev.Id }}">
+          <iface2 id="0" name="eth0" mac="{{ $dev.Mac }}" ip4="{{ $dev.IPv4 }}" ip4_mask="{{ $netw.IPv4Mask }}" ip6="{{ $dev.IPv6 }}" ip6_mask="{{ $netw.IPv6Mask }}"/>
+          <options delay="{{ $netw.Delay }}" bandwidth="{{ $netw.Bandwidth }}" loss="0.0" dup="0" jitter="{{ $netw.Jitter }}" unidirectional="0" buffer="0"/>
+        </link>
+    {{- end}}
+    {{- end}}
+  </links>
+{{- else}}
+  <networks/>
+  <links/>
+  <devices/>
+{{- end}}
+  <session_origin lat="47.579166412353516" lon="-122.13232421875" alt="2.0" scale="150.0"/>
+  <session_options>
+    <configuration name="controlnet" value=""/>
+    <configuration name="controlnet0" value=""/>
+    <configuration name="controlnet1" value=""/>
+    <configuration name="controlnet2" value=""/>
+    <configuration name="controlnet3" value=""/>
+    <configuration name="controlnet_updown_script" value=""/>
+    <configuration name="enablerj45" value="1"/>
+    <configuration name="preservedir" value="0"/>
+    <configuration name="enablesdt" value="0"/>
+    <configuration name="sdturl" value="tcp://127.0.0.1:50000/"/>
+    <configuration name="ovs" value="0"/>
+    <configuration name="platform_id_start" value="1"/>
+    <configuration name="nem_id_start" value="1"/>
+    <configuration name="link_enabled" value="1"/>
+    <configuration name="loss_threshold" value="30"/>
+    <configuration name="link_interval" value="1"/>
+    <configuration name="link_timeout" value="4"/>
+    <configuration name="mtu" value="0"/>
+  </session_options>
+  <session_metadata>
+    <configuration name="shapes" value="[]"/>
+    <configuration name="edges" value="[]"/>
+    <configuration name="hidden" value="[]"/>
+    <configuration name="canvas" value="{&quot;gridlines&quot;: true, &quot;canvases&quot;: [{&quot;id&quot;: 1, &quot;wallpaper&quot;: null, &quot;wallpaper_style&quot;: 1, &quot;fit_image&quot;: false, &quot;dimensions&quot;: [1000, 750]}]}"/>
+  </session_metadata>
+  <default_services>
+    <node type="mdr">
+      <service name="zebra"/>
+      <service name="OSPFv3MDR"/>
+      <service name="IPForward"/>
+    </node>
+    <node type="PC">
+      <service name="DefaultRoute"/>
+    </node>
+    <node type="prouter"/>
+    <node type="router">
+      <service name="zebra"/>
+      <service name="OSPFv2"/>
+      <service name="OSPFv3"/>
+      <service name="IPForward"/>
+    </node>
+    <node type="host">
+      <service name="DefaultRoute"/>
+      <service name="SSH"/>
+    </node>
+  </default_services>
+</scenario>
