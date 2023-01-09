@@ -17,7 +17,7 @@ const EXECUTABLE = "bonnmotion"
 type Bonnmotion struct{}
 
 // Returns the correct BonnMotion platform name for the given Target.
-func platform(t experiment.Target) (bool, string) {
+func (Bonnmotion) platform(t experiment.Target) (bool, string) {
 	switch t {
 	case experiment.TARGET_THEONE:
 		return true, "TheONEFile"
@@ -31,13 +31,13 @@ func platform(t experiment.Target) (bool, string) {
 }
 
 // Returns whether the given Target is (currently) supported by this output generator.
-func IsSupported(t experiment.Target) bool {
-	supported, _ := platform(t)
+func (b Bonnmotion) IsSupported(t experiment.Target) bool {
+	supported, _ := b.platform(t)
 	return supported
 }
 
 // Returns the parameter set for Random Waypoint movement model for a given NodeGroup inside an Experiment.
-func randomWaypointParameters(exp experiment.Experiment, nodeGroup experiment.NodeGroup) []string {
+func (Bonnmotion) randomWaypointParameters(exp experiment.Experiment, nodeGroup experiment.NodeGroup) []string {
 	movementmodel := nodeGroup.MovementModel.(movementpatterns.RandomWaypoint)
 	return []string{
 		"RandomWaypoint",
@@ -48,7 +48,7 @@ func randomWaypointParameters(exp experiment.Experiment, nodeGroup experiment.No
 }
 
 // Returns the general parameters for a given NodeGroup inside an Experiment.
-func generalParameters(exp experiment.Experiment, nodeGroup experiment.NodeGroup) []string {
+func (Bonnmotion) generalParameters(exp experiment.Experiment, nodeGroup experiment.NodeGroup) []string {
 	return []string{
 		fmt.Sprintf("-d%d", exp.Duration),
 		fmt.Sprintf("-n%d", nodeGroup.NoNodes),
@@ -58,12 +58,12 @@ func generalParameters(exp experiment.Experiment, nodeGroup experiment.NodeGroup
 }
 
 // Calls BonnMotion to generate the Random Waypoint data for a given NodeGroup inside an Experiment.
-func generateRandomWaypointNodeGroup(exp experiment.Experiment, nodeGroup experiment.NodeGroup) {
+func (b Bonnmotion) generateRandomWaypointNodeGroup(exp experiment.Experiment, nodeGroup experiment.NodeGroup) {
 	command := []string{
 		fmt.Sprintf("-f%s", nodeGroup.Prefix),
 	}
-	command = append(command, randomWaypointParameters(exp, nodeGroup)...)
-	command = append(command, generalParameters(exp, nodeGroup)...)
+	command = append(command, b.randomWaypointParameters(exp, nodeGroup)...)
+	command = append(command, b.generalParameters(exp, nodeGroup)...)
 	fmt.Printf("Random Waypoint. Running: %v\n", command)
 	execCommand := exec.Command(EXECUTABLE, command...)
 	execCommand.Dir = OUTPUT_FOLDER
@@ -74,8 +74,8 @@ func generateRandomWaypointNodeGroup(exp experiment.Experiment, nodeGroup experi
 }
 
 // Calls BonnMotion to convert the BonnMotion output to the given Target's format for a given NodeGroup.
-func convertToTargetFormat(target experiment.Target, nodeGroup experiment.NodeGroup) {
-	supported, model := platform(target)
+func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup experiment.NodeGroup) {
+	supported, model := b.platform(target)
 	if !supported {
 		fmt.Printf("Target platform \"%s\" is currently not supported.\n", target.String())
 		return
@@ -93,19 +93,19 @@ func convertToTargetFormat(target experiment.Target, nodeGroup experiment.NodeGr
 }
 
 // Generate generates output for the given Experiment with BonnMotion.
-func (t Bonnmotion) Generate(exp experiment.Experiment) {
+func (b Bonnmotion) Generate(exp experiment.Experiment) {
 	os.Mkdir(OUTPUT_FOLDER, 0755)
 	for i := 0; i < len(exp.NodeGroups); i++ {
 		nodeGroup := exp.NodeGroups[i]
 		switch nodeGroup.MovementModel.(type) {
 		case movementpatterns.RandomWaypoint:
-			generateRandomWaypointNodeGroup(exp, nodeGroup)
+			b.generateRandomWaypointNodeGroup(exp, nodeGroup)
 		default:
 			fmt.Printf("Movement model \"%s\" is currently not supported.\n", reflect.TypeOf(nodeGroup.MovementModel))
 			continue
 		}
 		for y := 0; y < len(exp.Targets); y++ {
-			convertToTargetFormat(exp.Targets[y], nodeGroup)
+			b.convertToTargetFormat(exp.Targets[y], nodeGroup)
 		}
 	}
 }
