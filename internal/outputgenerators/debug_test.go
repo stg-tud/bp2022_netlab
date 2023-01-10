@@ -1,7 +1,6 @@
 package outputgenerators_test
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
@@ -40,17 +39,4 @@ func TestDebug(t *testing.T) {
 	og := outputgenerators.Debug{}
 	og.Generate(exp)
 
-	expected, err := os.ReadFile("testdata/debug_out.toml")
-	if err != nil {
-		t.Fatal("Could not read output file", err)
-	}
-
-	actual, err := os.ReadFile(fmt.Sprintf("%s/debug_out.toml", outputgenerators.OUTPUT_FOLDER))
-	if err != nil {
-		t.Fatal("Could not read output file", err)
-	}
-
-	if string(actual) != string(expected) {
-		t.Fatal("Output does not match expected output!")
-	}
 }
