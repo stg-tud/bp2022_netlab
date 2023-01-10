@@ -20,5 +20,12 @@ func Loading(path string) Experiment {
 	if err != nil {
 		panic(err)
 	}
+	var nodegroups []NodeGroup
+	for i := 0; i < len(exp.NodeGroups); i++ {
+		prefix := exp.NodeGroups[i].Prefix
+		noNodes := exp.NodeGroups[i].NoNodes
+		nodegroups = append(nodegroups, NewNodeGroup(prefix, noNodes))
+	}
+	exp.NodeGroups = nodegroups
 	return exp
 }
