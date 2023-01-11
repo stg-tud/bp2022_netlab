@@ -10,7 +10,8 @@ Width = 240
 [[NodeGroups]]
 Prefix = 'a'
 NoNodes = 1
-IPv4Net = '10.0.0.0'
+# IPv4Net not set
+# IPv4Net = '10.0.0.0'
 IPv4Mask = 24
 IPv6Net = '2001::'
 IPv6Mask = 120
@@ -66,3 +67,8 @@ Promiscuous = 0
 MinSpeed = 123
 MaxSpeed = 456
 MaxPause = 0
+
+# NodeGroup d without any given variables
+[[NodeGroups]]
+Prefix = 'd'
+NoNodes = 4
