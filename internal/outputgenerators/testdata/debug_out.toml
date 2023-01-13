@@ -10,10 +10,6 @@ Width = 240
 [[NodeGroups]]
 Prefix = 'a'
 NoNodes = 1
-IPv4Net = '10.0.0.0'
-IPv4Mask = 24
-IPv6Net = '2001::'
-IPv6Mask = 120
 NetworkType = 0
 Bandwidth = 54000000
 Range = 180
@@ -30,10 +26,6 @@ MaxPause = 0
 [[NodeGroups]]
 Prefix = 'b'
 NoNodes = 2
-IPv4Net = '10.0.0.0'
-IPv4Mask = 24
-IPv6Net = '2001::'
-IPv6Mask = 120
 NetworkType = 0
 Bandwidth = 54000000
 Range = 180
@@ -50,10 +42,6 @@ MaxPause = 0
 [[NodeGroups]]
 Prefix = 'c'
 NoNodes = 3
-IPv4Net = '10.0.0.0'
-IPv4Mask = 24
-IPv6Net = '2001::'
-IPv6Mask = 120
 NetworkType = 0
 Bandwidth = 54000000
 Range = 180
@@ -70,10 +58,6 @@ MaxPause = 0
 [[NodeGroups]]
 Prefix = 'd'
 NoNodes = 4
-IPv4Net = '10.0.0.0'
-IPv4Mask = 24
-IPv6Net = '2001::'
-IPv6Mask = 120
 NetworkType = 0
 Bandwidth = 54000000
 Range = 180

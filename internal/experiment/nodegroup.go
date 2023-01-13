@@ -12,11 +12,6 @@ type NodeGroup struct {
 
 	MovementModel movementpatterns.MovementPattern
 
-	IPv4Net  string
-	IPv4Mask int
-	IPv6Net  string
-	IPv6Mask int
-
 	NetworkType NetworkType
 	Bandwidth   int
 	Range       int
@@ -49,11 +44,6 @@ var defaultValues = NodeGroup{
 		MaxPause: 0,
 	},
 
-	IPv4Net:  "10.0.0.0",
-	IPv4Mask: 24,
-	IPv6Net:  "2001::",
-	IPv6Mask: 120,
-
 	NetworkType: WIRELESS_LAN,
 	Range:       180,
 	Bandwidth:   54000000,
@@ -65,6 +55,9 @@ var defaultValues = NodeGroup{
 
 // NewNodeGroup returns a new NodeGroup loaded with default values.
 func NewNodeGroup(prefix string, noNodes int) NodeGroup {
+	if len(prefix) == 0 {
+		panic("NodeGroup prefix must contain at least one letter!")
+	}
 	out := defaultValues
 	out.Prefix = prefix
 	out.NoNodes = noNodes

@@ -2,10 +2,10 @@ package outputgenerators
 
 import (
 	"fmt"
-	"net"
 	"os"
 	"text/template"
 
+	"github.com/korylprince/ipnetgen"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 )
 
@@ -47,11 +47,37 @@ type network struct {
 
 var ScenarioIdCounter int
 
-func getId() int {
+// getId returns an incrementing unique id used for all nodes in CORE configuration
+func (Core) getId() int {
 	ScenarioIdCounter++
 	return ScenarioIdCounter - 1
 }
 
+// getMac returns an unique MAC address for different NodeGroups and index
+func (Core) getMac(groupIndex int, nodeGroup experiment.NodeGroup, index int) string {
+	return fmt.Sprintf("%02x:%02x:00:00:%02x:00", groupIndex, int(nodeGroup.Prefix[0]), index)
+}
+
+// getIpSpace returns an ip space consisting of an IPv4 and an IPv6 network. They are collision free for different index values.
+func (Core) getIpSpace(index int) (IPv4Net *ipnetgen.IPNetGenerator, IPv4Mask int, IPv6Net *ipnetgen.IPNetGenerator, IPv6Mask int) {
+	v4Net, err := ipnetgen.New(fmt.Sprintf("10.%d.0.0/24", index))
+	if err != nil {
+		panic(err)
+	}
+	v4Mask, _ := v4Net.Mask.Size()
+	v4Net.Next()
+
+	v6Net, err := ipnetgen.New(fmt.Sprintf("2001:%d::/120", index))
+	if err != nil {
+		panic(err)
+	}
+	v6Mask, _ := v6Net.Mask.Size()
+	v6Net.Next()
+
+	return v4Net, v4Mask, v6Net, v6Mask
+}
+
+// networkType returns the correct CORE string for given NetworkType
 func (Core) networkType(nt experiment.NetworkType) string {
 	switch nt {
 	case experiment.WIRELESS_LAN:
@@ -76,26 +102,29 @@ func (c Core) Generate(exp experiment.Experiment) {
 		nodeGroup := exp.NodeGroups[i]
 		devices := []device{}
 
-		IPv4 := net.ParseIP(nodeGroup.IPv4Net).To4()
+		IPv4Net, IPv4Mask, IPv6Net, IPv6Mask := c.getIpSpace(i + 1)
 
 		for y := 0; y < nodeGroup.NoNodes; y++ {
+			IPv4 := IPv4Net.Next()
+			IPv6 := IPv6Net.Next()
+
 			dev := device{
-				Id:   getId(),
+				Id:   c.getId(),
 				Name: fmt.Sprintf("%s%d", nodeGroup.Prefix, y),
 
-				IPv4: net.IPv4(IPv4[0], IPv4[1], IPv4[2], IPv4[3]+byte(y+1)).String(),
-				IPv6: nodeGroup.IPv6Net,
-				Mac:  fmt.Sprintf("%02x:%02x:00:00:%02x:00", i, int(nodeGroup.Prefix[0]), y+1),
+				IPv4: IPv4.String(),
+				IPv6: IPv6.String(),
+				Mac:  c.getMac(i+1, nodeGroup, y+1),
 			}
 
 			devices = append(devices, dev)
 		}
 		networks = append(networks, network{
-			Id:     getId(),
+			Id:     c.getId(),
 			Prefix: nodeGroup.Prefix,
 
-			IPv4Mask: nodeGroup.IPv4Mask,
-			IPv6Mask: nodeGroup.IPv6Mask,
+			IPv4Mask: IPv4Mask,
+			IPv6Mask: IPv6Mask,
 
 			Type:        c.networkType(nodeGroup.NetworkType),
 			Bandwidth:   nodeGroup.Bandwidth,
