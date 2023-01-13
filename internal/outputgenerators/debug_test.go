@@ -7,6 +7,7 @@ import (
 
 	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
+	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 	"github.com/stg-tud/bp2022_netlab/internal/outputgenerators"
 )
 
@@ -18,6 +19,13 @@ func TestDebug(t *testing.T) {
 	nodegroups = append(nodegroups, experiment.NewNodeGroup("b", 2))
 	nodegroups = append(nodegroups, experiment.NewNodeGroup("c", 3))
 	nodegroups = append(nodegroups, experiment.NewNodeGroup("d", 4))
+
+	nodegroups[2].NetworkType = networktypes.Switch{}.Default()
+
+	changedWifi := networktypes.WirelessLAN{}.Default()
+	changedWifi.Bandwidth = 17
+	changedWifi.Promiscuous = true
+	nodegroups[3].NetworkType = changedWifi
 
 	exp := experiment.Experiment{
 		Name:    "Debug Output Test",

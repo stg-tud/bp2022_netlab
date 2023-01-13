@@ -2,6 +2,7 @@ package experiment
 
 import (
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
+	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
 // A NodeGroup represents a group of dependent nodes sharing properties
@@ -12,29 +13,7 @@ type NodeGroup struct {
 
 	MovementModel movementpatterns.MovementPattern
 
-	NetworkType NetworkType
-	Bandwidth   int
-	Range       int
-	Jitter      int
-	Delay       int
-	Error       int
-	Promiscuous int
-}
-
-type NetworkType int
-
-const (
-	WIRELESS_LAN NetworkType = iota
-)
-
-func (nt NetworkType) String() string {
-	switch nt {
-	case WIRELESS_LAN:
-		return "WIRELESS_LAN"
-
-	default:
-		return ""
-	}
+	NetworkType networktypes.NetworkType
 }
 
 var defaultValues = NodeGroup{
@@ -44,13 +23,7 @@ var defaultValues = NodeGroup{
 		MaxPause: 0,
 	},
 
-	NetworkType: WIRELESS_LAN,
-	Range:       180,
-	Bandwidth:   54000000,
-	Jitter:      0,
-	Delay:       20000,
-	Error:       0,
-	Promiscuous: 0,
+	NetworkType: networktypes.WirelessLAN{}.Default(),
 }
 
 // NewNodeGroup returns a new NodeGroup loaded with default values.
