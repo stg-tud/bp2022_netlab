@@ -1,3 +1,5 @@
 package movementpatterns
 
-type MovementPattern interface{}
+type MovementPattern interface {
+	String() string
+}
