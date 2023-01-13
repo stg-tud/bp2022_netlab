@@ -5,3 +5,7 @@ type RandomWaypoint struct {
 	MaxSpeed int
 	MaxPause int
 }
+
+func (RandomWaypoint) String() string {
+	return "Random Waypoint"
+}
