@@ -1,10 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<scenario name="{{$.ScenarioName}}">
+<scenario name="{{ .ScenarioName }}">
 {{- if .Networks}}
+  {{- $WirelessLANExists := false }}
+  {{- $PCExists := false }}
   <networks>
     {{- range .Networks}}
-    <network id="{{ .Id }}" name="net_{{ .Prefix }}" icon="" canvas="0" type="{{ .Type }}">
-      <position x="192.0" y="252.0" lat="47.576875768013494" lon="-122.12973707073171" alt="2.0"/>
+    <network id="{{ .Id }}" name="net_{{ .Prefix }}" icon="" canvas="0" type="{{ .NetworkTypeName }}">
+      <position x="{{ .Position.X }}" y="{{ .Position.Y }}"/>
     </network>
     {{- end}}
   </networks>
@@ -12,13 +14,22 @@
     {{- range .Networks}}
     {{- range .Devices}}
     <device id="{{ .Id }}" name="{{ .Name }}" icon="" canvas="0" type="router" class="" image="">
-      <position x="384.0" y="456.0" lat="47.57502136348161" lon="-122.12714992271346" alt="2.0"/>
+      <position x="{{ .Position.X }}" y="{{ .Position.Y }}"/>
+      {{- if eq .Type "router"}}
       <services>
         <service name="zebra"/>
         <service name="OSPFv2"/>
         <service name="OSPFv3"/>
         <service name="IPForward"/>
       </services>
+      {{- else if eq .Type "PC"}}
+      {{- $PCExists = true }}
+      <services>
+        <service name="DefaultRoute"/>
+      </services>
+      {{- else}}
+      <services/>
+      {{- end}}
     </device>
     {{- end}}
     {{- end}}
@@ -26,17 +37,55 @@
   <links>
     {{- range $index, $netw := .Networks}}
     {{- range $index, $dev := .Devices}}
-        <link node1="{{ $netw.Id }}" node2="{{ $dev.Id }}">
-          <iface2 id="0" name="eth0" mac="{{ $dev.Mac }}" ip4="{{ $dev.IPv4 }}" ip4_mask="{{ $netw.IPv4Mask }}" ip6="{{ $dev.IPv6 }}" ip6_mask="{{ $netw.IPv6Mask }}"/>
-          <options delay="{{ $netw.Delay }}" bandwidth="{{ $netw.Bandwidth }}" loss="0.0" dup="0" jitter="{{ $netw.Jitter }}" unidirectional="0" buffer="0"/>
-        </link>
+    <link node1="{{ $netw.Id }}" node2="{{ $dev.Id }}">
+      <iface2 id="0" name="eth0" mac="{{ $dev.Mac }}" ip4="{{ $dev.IPv4 }}" ip4_mask="{{ $netw.IPv4Mask }}" ip6="{{ $dev.IPv6 }}" ip6_mask="{{ $netw.IPv6Mask }}"/>
+      {{- if eq $netw.NetworkTypeName "WIRELESS_LAN"}}
+      {{- $WirelessLANExists = true }}
+      <options delay="{{ $netw.NetworkType.Delay }}" bandwidth="{{ $netw.NetworkType.Bandwidth }}" loss="{{ $netw.NetworkType.Loss }}" dup="0" jitter="{{ $netw.NetworkType.Jitter }}" unidirectional="0" buffer="0"/>
+      {{- else}}
+      <options/>
+      {{- end}}
+    </link>
     {{- end}}
     {{- end}}
   </links>
+  {{- if $WirelessLANExists }}
+  <mobility_configurations>
+    {{- range .Networks}}
+    {{- if eq .NetworkTypeName "WIRELESS_LAN"}}
+    <mobility_configuration node="{{ .Id }}" model="basic_range">
+      <configuration name="range" value="{{ .NetworkType.Range }}"/>
+      <configuration name="bandwidth" value="{{ .NetworkType.Bandwidth }}"/>
+      <configuration name="jitter" value="{{ .NetworkType.Jitter }}"/>
+      <configuration name="delay" value="{{ .NetworkType.Delay }}"/>
+      <configuration name="error" value="{{ .NetworkType.Loss }}"/>
+      <configuration name="promiscuous" value="{{if .NetworkType.Promiscuous}}1{{else}}0{{end}}"/>
+    </mobility_configuration>
+    {{- end}}
+    {{- end}}
+  </mobility_configurations>
+  {{- else}}
+  <mobility_configurations/>
+  {{- end}}
+  {{- if $PCExists }}
+  <configservice_configurations>
+    {{- range .Networks}}
+    {{- range .Devices}}
+    {{- if eq .Type "PC"}}
+    <service name="DefaultRoute" node="{{ .Id }}"/>
+    {{- end}}
+    {{- end}}
+    {{- end}}
+  </configservice_configurations>
+  {{- else}}
+  <configservice_configurations/>
+  {{- end}}
 {{- else}}
   <networks/>
   <links/>
   <devices/>
+  <mobility_configurations/>
+  <configservice_configurations/>
 {{- end}}
   <session_origin lat="47.579166412353516" lon="-122.13232421875" alt="2.0" scale="150.0"/>
   <session_options>
@@ -63,7 +112,7 @@
     <configuration name="shapes" value="[]"/>
     <configuration name="edges" value="[]"/>
     <configuration name="hidden" value="[]"/>
-    <configuration name="canvas" value="{&quot;gridlines&quot;: true, &quot;canvases&quot;: [{&quot;id&quot;: 1, &quot;wallpaper&quot;: null, &quot;wallpaper_style&quot;: 1, &quot;fit_image&quot;: false, &quot;dimensions&quot;: [1000, 750]}]}"/>
+    <configuration name="canvas" value="{&quot;gridlines&quot;: true, &quot;canvases&quot;: [{&quot;id&quot;: 1, &quot;wallpaper&quot;: null, &quot;wallpaper_style&quot;: 1, &quot;fit_image&quot;: false, &quot;dimensions&quot;: [{{ .WorldSize.Width }}, {{ .WorldSize.Height }}]}]}"/>
   </session_metadata>
   <default_services>
     <node type="mdr">

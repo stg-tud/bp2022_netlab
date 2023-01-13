@@ -6,7 +6,9 @@ import (
 	"text/template"
 
 	"github.com/korylprince/ipnetgen"
+	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
+	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
 // The Core output generator generates a XML configuration file for CORE.
@@ -16,11 +18,14 @@ type coreData struct {
 	ScenarioName string
 	Devices      []device
 	Networks     []network
+	WorldSize    customtypes.Area
 }
 
 type device struct {
-	Id   int
-	Name string
+	Id       int
+	Name     string
+	Position customtypes.Position
+	Type     string
 
 	IPv4 string
 	IPv6 string
@@ -28,24 +33,36 @@ type device struct {
 }
 
 type network struct {
-	Id     int
-	Prefix string
+	Id       int
+	Prefix   string
+	Position customtypes.Position
 
 	IPv4Mask int
 	IPv6Mask int
 
-	Type        string
-	Bandwidth   int
-	Range       int
-	Jitter      int
-	Delay       int
-	Error       int
-	Promiscuous int
+	NetworkTypeName string
+	NetworkType     networktypes.NetworkType
 
 	Devices []device
 }
 
 var ScenarioIdCounter int
+var lastPosition customtypes.Position
+
+const NODE_SIZE int = 100
+
+// getPosition returns an incrementing position for nodes to be placed on the canvas without overlap
+func (Core) getPosition(worldSize customtypes.Area) customtypes.Position {
+	lastPosition.X = lastPosition.X + NODE_SIZE
+	if lastPosition.X >= worldSize.Width {
+		lastPosition.X = NODE_SIZE
+		lastPosition.Y = lastPosition.Y + NODE_SIZE
+		if lastPosition.Y >= worldSize.Height {
+			lastPosition.Y = worldSize.Height - NODE_SIZE
+		}
+	}
+	return lastPosition
+}
 
 // getId returns an incrementing unique id used for all nodes in CORE configuration
 func (Core) getId() int {
@@ -55,7 +72,7 @@ func (Core) getId() int {
 
 // getMac returns an unique MAC address for different NodeGroups and index
 func (Core) getMac(groupIndex int, nodeGroup experiment.NodeGroup, index int) string {
-	return fmt.Sprintf("%02x:%02x:00:00:%02x:00", groupIndex, int(nodeGroup.Prefix[0]), index)
+	return fmt.Sprintf("02:%02x:%02x:00:00:%02x", groupIndex, int(nodeGroup.Prefix[0]), index)
 }
 
 // getIpSpace returns an ip space consisting of an IPv4 and an IPv6 network. They are collision free for different index values.
@@ -67,7 +84,7 @@ func (Core) getIpSpace(index int) (IPv4Net *ipnetgen.IPNetGenerator, IPv4Mask in
 	v4Mask, _ := v4Net.Mask.Size()
 	v4Net.Next()
 
-	v6Net, err := ipnetgen.New(fmt.Sprintf("2001:%d::/120", index))
+	v6Net, err := ipnetgen.New(fmt.Sprintf("2001:%d::/64", index))
 	if err != nil {
 		panic(err)
 	}
@@ -78,10 +95,13 @@ func (Core) getIpSpace(index int) (IPv4Net *ipnetgen.IPNetGenerator, IPv4Mask in
 }
 
 // networkType returns the correct CORE string for given NetworkType
-func (Core) networkType(nt experiment.NetworkType) string {
-	switch nt {
-	case experiment.WIRELESS_LAN:
+func (Core) networkType(nt networktypes.NetworkType) string {
+	switch nt.(type) {
+	case networktypes.WirelessLAN:
 		return "WIRELESS_LAN"
+
+	case networktypes.Switch:
+		return "SWITCH"
 
 	default:
 		return ""
@@ -90,7 +110,8 @@ func (Core) networkType(nt experiment.NetworkType) string {
 
 // Generate generates the XML configuration for CORE for a given Experiment.
 func (c Core) Generate(exp experiment.Experiment) {
-	ScenarioIdCounter = 0
+	ScenarioIdCounter = 5
+	lastPosition = customtypes.Position{X: 0, Y: NODE_SIZE}
 
 	fbuffer, err := os.Create("output/core.xml")
 	if err != nil {
@@ -109,8 +130,9 @@ func (c Core) Generate(exp experiment.Experiment) {
 			IPv6 := IPv6Net.Next()
 
 			dev := device{
-				Id:   c.getId(),
-				Name: fmt.Sprintf("%s%d", nodeGroup.Prefix, y),
+				Id:       c.getId(),
+				Name:     fmt.Sprintf("%s%d", nodeGroup.Prefix, y+1),
+				Position: c.getPosition(exp.WorldSize),
 
 				IPv4: IPv4.String(),
 				IPv6: IPv6.String(),
@@ -120,26 +142,25 @@ func (c Core) Generate(exp experiment.Experiment) {
 			devices = append(devices, dev)
 		}
 		networks = append(networks, network{
-			Id:     c.getId(),
-			Prefix: nodeGroup.Prefix,
+			Id:       c.getId(),
+			Prefix:   nodeGroup.Prefix,
+			Position: c.getPosition(exp.WorldSize),
 
 			IPv4Mask: IPv4Mask,
 			IPv6Mask: IPv6Mask,
 
-			Type:        c.networkType(nodeGroup.NetworkType),
-			Bandwidth:   nodeGroup.Bandwidth,
-			Range:       nodeGroup.Range,
-			Jitter:      nodeGroup.Jitter,
-			Delay:       nodeGroup.Delay,
-			Error:       nodeGroup.Error,
-			Promiscuous: nodeGroup.Promiscuous,
+			NetworkTypeName: c.networkType(nodeGroup.NetworkType),
+			NetworkType:     nodeGroup.NetworkType,
 
 			Devices: devices,
 		})
+		// Get a new position to create empty space between networks
+		c.getPosition(exp.WorldSize)
 	}
 	replacements := coreData{
 		ScenarioName: exp.Name,
 		Networks:     networks,
+		WorldSize:    exp.WorldSize,
 	}
 	xmlTemplate, err := template.ParseFiles("internal/outputgenerators/templates/core.xml")
 	if err != nil {
