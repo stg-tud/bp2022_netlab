@@ -1,8 +1,15 @@
 #!/bin/bash
 set -e
 
-echo -n "Checking format... "
 changed_go_files=`git diff --cached --name-only *.go`
+
+echo -n "Formatting files... "
+if [[ -n "$changed_go_files" ]] ; then
+    gofmt -w $changed_go_files
+fi
+echo "DONE"
+
+echo -n "Checking format... "
 if [[ -n "$changed_go_files"  && "$(gofmt -s -l ${changed_go_files} | wc -l)" -gt 0 ]]; then
     echo "FAIL"
     echo ""
