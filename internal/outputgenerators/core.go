@@ -3,6 +3,7 @@ package outputgenerators
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"text/template"
 
 	"github.com/korylprince/ipnetgen"
@@ -114,7 +115,7 @@ func (c Core) Generate(exp experiment.Experiment) {
 	lastPosition = customtypes.Position{X: 0, Y: NODE_SIZE}
 
 	os.Mkdir(OUTPUT_FOLDER, 0755)
-	fbuffer, err := os.Create(fmt.Sprintf("%s/core.xml", OUTPUT_FOLDER))
+	fbuffer, err := os.Create(filepath.Join(OUTPUT_FOLDER, "core.xml"))
 	if err != nil {
 		panic(err)
 	}
@@ -163,7 +164,7 @@ func (c Core) Generate(exp experiment.Experiment) {
 		Networks:     networks,
 		WorldSize:    exp.WorldSize,
 	}
-	xmlTemplate, err := template.ParseFiles(fmt.Sprintf("%s/core.xml", TEMPLATES_FOLDER))
+	xmlTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "core.xml"))
 	if err != nil {
 		panic(err)
 	}
