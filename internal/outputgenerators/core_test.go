@@ -8,20 +8,20 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/outputgenerators"
 )
 
-func TestDebug(t *testing.T) {
+func TestCore(t *testing.T) {
 	t.Cleanup(func() {
 		os.RemoveAll(outputgenerators.OUTPUT_FOLDER)
 	})
 
-	og := outputgenerators.Debug{}
+	og := outputgenerators.Core{}
 	og.Generate(GetTestingExperiment())
 
-	expected, err := os.ReadFile(fmt.Sprintf("%s/debug_out.toml", TESTDATA_FOLDER))
+	expected, err := os.ReadFile(fmt.Sprintf("%s/core.xml", TESTDATA_FOLDER))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}
 
-	actual, err := os.ReadFile(fmt.Sprintf("%s/debug_out.toml", outputgenerators.OUTPUT_FOLDER))
+	actual, err := os.ReadFile(fmt.Sprintf("%s/core.xml", outputgenerators.OUTPUT_FOLDER))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}

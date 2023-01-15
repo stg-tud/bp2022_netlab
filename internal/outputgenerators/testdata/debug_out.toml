@@ -1,4 +1,4 @@
-Name = 'Debug Output Test'
+Name = 'Testing Experiment'
 Runs = 5
 Targets = [0, 1]
 Duration = 123456
@@ -46,9 +46,6 @@ Prefix = 'c'
 NoNodes = 3
 
 [NodeGroups.MovementModel]
-MinSpeed = 123
-MaxSpeed = 456
-MaxPause = 0
 
 [NodeGroups.NetworkType]
 

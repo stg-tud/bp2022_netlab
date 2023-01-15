@@ -113,7 +113,8 @@ func (c Core) Generate(exp experiment.Experiment) {
 	ScenarioIdCounter = 5
 	lastPosition = customtypes.Position{X: 0, Y: NODE_SIZE}
 
-	fbuffer, err := os.Create("output/core.xml")
+	os.Mkdir(OUTPUT_FOLDER, 0755)
+	fbuffer, err := os.Create(fmt.Sprintf("%s/core.xml", OUTPUT_FOLDER))
 	if err != nil {
 		panic(err)
 	}
@@ -162,7 +163,7 @@ func (c Core) Generate(exp experiment.Experiment) {
 		Networks:     networks,
 		WorldSize:    exp.WorldSize,
 	}
-	xmlTemplate, err := template.ParseFiles("internal/outputgenerators/templates/core.xml")
+	xmlTemplate, err := template.ParseFiles(fmt.Sprintf("%s/core.xml", TEMPLATES_FOLDER))
 	if err != nil {
 		panic(err)
 	}
