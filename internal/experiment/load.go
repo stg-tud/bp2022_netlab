@@ -7,9 +7,8 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 )
 
-//loads the path string with toml file into experiment
-
-func Loading(path string) Experiment {
+// Loads the path string with toml file into experiment
+func LoadFromFile(path string) Experiment {
 	var exp Experiment
 
 	doc, e := os.ReadFile(path)
