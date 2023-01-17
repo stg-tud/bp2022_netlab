@@ -24,6 +24,8 @@ func TestDebug(t *testing.T) {
 		Runs:    5,
 		Targets: []experiment.Target{experiment.TARGET_CORE, experiment.TARGET_THEONE},
 
+		RandomSeed: 1673916419715,
+
 		Duration: 123456,
 		WorldSize: customtypes.Area{
 			Height: 170,
