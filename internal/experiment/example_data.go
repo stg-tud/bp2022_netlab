@@ -17,6 +17,8 @@ func GetExampleExperiment() Experiment {
 
 	ng3 := NewNodeGroup("x", 17)
 	ng3.MovementModel = movementpatterns.Static{}
+	ng3.NetworkType = networktypes.Switch{}.Default()
+	ng3.NodesType = NODE_TYPE_PC
 	nodegroups = append(nodegroups, ng3)
 
 	var ExampleExperiment = Experiment{

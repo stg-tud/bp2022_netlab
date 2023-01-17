@@ -23,10 +23,11 @@ type coreData struct {
 }
 
 type device struct {
-	Id       int
-	Name     string
-	Position customtypes.Position
-	Type     string
+	Id            int
+	IdInNodeGroup int
+	Name          string
+	Position      customtypes.Position
+	Type          string
 
 	IPv4 string
 	IPv6 string
@@ -96,13 +97,36 @@ func (Core) getIpSpace(index int) (IPv4Net *ipnetgen.IPNetGenerator, IPv4Mask in
 }
 
 // networkType returns the correct CORE string for given NetworkType
-func (Core) networkType(nt networktypes.NetworkType) string {
-	switch nt.(type) {
+func (Core) networkType(networkType networktypes.NetworkType) string {
+	switch networkType.(type) {
 	case networktypes.WirelessLAN:
 		return "WIRELESS_LAN"
 
 	case networktypes.Switch:
 		return "SWITCH"
+
+	case networktypes.Wireless:
+		return "WIRELESS"
+
+	case networktypes.Hub:
+		return "HUB"
+
+	case networktypes.Emane:
+		return "EMANE"
+
+	default:
+		return ""
+	}
+}
+
+// deviceType returns the correct CORE string for a given NodeType
+func (Core) deviceType(deviceType experiment.NodeType) string {
+	switch deviceType {
+	case experiment.NODE_TYPE_ROUTER:
+		return "router"
+
+	case experiment.NODE_TYPE_PC:
+		return "PC"
 
 	default:
 		return ""
@@ -131,10 +155,19 @@ func (c Core) Generate(exp experiment.Experiment) {
 			IPv4 := IPv4Net.Next()
 			IPv6 := IPv6Net.Next()
 
+			devType := nodeGroup.NodesType
+			// If NodeGroup consists of PCs, make first device a Router so they have a gateway
+			if nodeGroup.NodesType == experiment.NODE_TYPE_PC && y == 0 {
+				devType = experiment.NODE_TYPE_ROUTER
+			}
+
 			dev := device{
-				Id:       c.getId(),
-				Name:     fmt.Sprintf("%s%d", nodeGroup.Prefix, y+1),
-				Position: c.getPosition(exp.WorldSize),
+				Id:            c.getId(),
+				IdInNodeGroup: y,
+				Name:          fmt.Sprintf("%s%d", nodeGroup.Prefix, y+1),
+				Position:      c.getPosition(exp.WorldSize),
+
+				Type: c.deviceType(devType),
 
 				IPv4: IPv4.String(),
 				IPv6: IPv6.String(),

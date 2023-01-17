@@ -16,20 +16,18 @@ type WirelessLAN struct {
 	Promiscuous bool
 }
 
-var defaultValues = WirelessLAN{
-	Bandwidth:   54000000,
-	Range:       275,
-	Jitter:      0,
-	Delay:       5000,
-	Loss:        0.0,
-	Promiscuous: false,
-}
-
 func (WirelessLAN) String() string {
 	return "Wireless LAN"
 }
 
 // Returns a new configuration of WirelessLAN with default values applied.
 func (WirelessLAN) Default() WirelessLAN {
-	return defaultValues
+	return WirelessLAN{
+		Bandwidth:   54000000,
+		Range:       275,
+		Jitter:      0,
+		Delay:       5000,
+		Loss:        0.0,
+		Promiscuous: false,
+	}
 }

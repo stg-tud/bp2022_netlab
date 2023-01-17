@@ -13,6 +13,8 @@ type NodeGroup struct {
 
 	MovementModel movementpatterns.MovementPattern
 
+	NodesType NodeType
+
 	NetworkType networktypes.NetworkType
 }
 
@@ -22,6 +24,8 @@ var defaultValues = NodeGroup{
 		MaxSpeed: 456,
 		MaxPause: 0,
 	},
+
+	NodesType: NODE_TYPE_ROUTER,
 
 	NetworkType: networktypes.WirelessLAN{}.Default(),
 }

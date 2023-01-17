@@ -10,6 +10,7 @@ Width = 240
 [[NodeGroups]]
 Prefix = 'a'
 NoNodes = 1
+NodesType = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 123
@@ -27,6 +28,7 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'b'
 NoNodes = 2
+NodesType = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 123
@@ -44,6 +46,7 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'c'
 NoNodes = 3
+NodesType = 0
 
 [NodeGroups.MovementModel]
 
@@ -52,6 +55,7 @@ NoNodes = 3
 [[NodeGroups]]
 Prefix = 'd'
 NoNodes = 4
+NodesType = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 123
@@ -65,3 +69,44 @@ Jitter = 0
 Delay = 5000
 Loss = 0.0
 Promiscuous = true
+
+[[NodeGroups]]
+Prefix = 'e'
+NoNodes = 5
+NodesType = 1
+
+[NodeGroups.MovementModel]
+
+[NodeGroups.NetworkType]
+
+[[NodeGroups]]
+Prefix = 'f'
+NoNodes = 6
+NodesType = 0
+
+[NodeGroups.MovementModel]
+MinSpeed = 1
+MaxSpeed = 2
+MaxPause = 17
+
+[NodeGroups.NetworkType]
+
+[[NodeGroups]]
+Prefix = 'g'
+NoNodes = 7
+NodesType = 0
+
+[NodeGroups.MovementModel]
+MinSpeed = 123
+MaxSpeed = 456
+MaxPause = 0
+
+[NodeGroups.NetworkType]
+Movement = true
+Bandwidth = 54000000
+Range = 400
+Jitter = 0
+Delay = 5000
+LossInitial = 0.0
+LossFactor = 1.0
+LossStartRange = 300.0
