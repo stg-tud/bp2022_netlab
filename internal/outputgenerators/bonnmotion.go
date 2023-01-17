@@ -1,9 +1,11 @@
 package outputgenerators
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"os/exec"
+	"path"
 	"reflect"
 
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
@@ -12,6 +14,9 @@ import (
 
 // The executable of BonnMotion to call.
 const EXECUTABLE = "bonnmotion"
+
+// The name of the file that the taken steps should be written into.
+const STEP_FILE = "bonnmotion.steps"
 
 // The Bonnmotion output generator calles BonnMotion with the correct parameters.
 type Bonnmotion struct{}
@@ -57,6 +62,23 @@ func (Bonnmotion) generalParameters(exp experiment.Experiment, nodeGroup experim
 	}
 }
 
+// Writes the command to the stp file and executes it
+func (Bonnmotion) execute(command []string) error {
+	stepFile, err := os.OpenFile(path.Join(OUTPUT_FOLDER, STEP_FILE), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer stepFile.Close()
+	stepFile.WriteString(fmt.Sprintln(command))
+	execCommand := exec.Command(EXECUTABLE, command...)
+	execCommand.Dir = OUTPUT_FOLDER
+	if flag.Lookup("test.v") != nil {
+		return nil
+	}
+	_, err = execCommand.Output()
+	return err
+}
+
 // Calls BonnMotion to generate the Random Waypoint data for a given NodeGroup inside an Experiment.
 func (b Bonnmotion) generateRandomWaypointNodeGroup(exp experiment.Experiment, nodeGroup experiment.NodeGroup) {
 	command := []string{
@@ -64,10 +86,7 @@ func (b Bonnmotion) generateRandomWaypointNodeGroup(exp experiment.Experiment, n
 	}
 	command = append(command, b.randomWaypointParameters(exp, nodeGroup)...)
 	command = append(command, b.generalParameters(exp, nodeGroup)...)
-	fmt.Printf("Random Waypoint. Running: %v\n", command)
-	execCommand := exec.Command(EXECUTABLE, command...)
-	execCommand.Dir = OUTPUT_FOLDER
-	_, err := execCommand.Output()
+	err := b.execute(command)
 	if err != nil {
 		panic(err)
 	}
@@ -84,9 +103,7 @@ func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup ex
 		model,
 		fmt.Sprintf("-f%s", nodeGroup.Prefix),
 	}
-	execCommand := exec.Command(EXECUTABLE, command...)
-	execCommand.Dir = OUTPUT_FOLDER
-	_, err := execCommand.Output()
+	err := b.execute(command)
 	if err != nil {
 		panic(err)
 	}
@@ -95,6 +112,7 @@ func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup ex
 // Generate generates output for the given Experiment with BonnMotion.
 func (b Bonnmotion) Generate(exp experiment.Experiment) {
 	os.Mkdir(OUTPUT_FOLDER, 0755)
+	os.Create(path.Join(OUTPUT_FOLDER, STEP_FILE))
 	for i := 0; i < len(exp.NodeGroups); i++ {
 		nodeGroup := exp.NodeGroups[i]
 		switch nodeGroup.MovementModel.(type) {

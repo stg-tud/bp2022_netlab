@@ -1,7 +1,7 @@
 package experiment
 
 // A Target is a platform for which output should be generated.
-type Target int
+type Target uint
 
 const (
 	// Target: Core
@@ -17,6 +17,8 @@ func (t Target) String() string {
 
 	case TARGET_THEONE:
 		return "The ONE"
+
+	default:
+		return "Unknown target"
 	}
-	return "Unknown target"
 }

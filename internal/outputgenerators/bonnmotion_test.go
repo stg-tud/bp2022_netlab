@@ -8,20 +8,20 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/outputgenerators"
 )
 
-func TestDebug(t *testing.T) {
+func TestBonnmotion(t *testing.T) {
 	t.Cleanup(func() {
 		os.RemoveAll(outputgenerators.OUTPUT_FOLDER)
 	})
 
-	og := outputgenerators.Debug{}
+	og := outputgenerators.Bonnmotion{}
 	og.Generate(GetTestingExperiment())
 
-	expected, err := os.ReadFile(filepath.Join(TESTDATA_FOLDER, "debug_out.toml"))
+	expected, err := os.ReadFile(filepath.Join(TESTDATA_FOLDER, "bonnmotion.steps"))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}
 
-	actual, err := os.ReadFile(filepath.Join(outputgenerators.OUTPUT_FOLDER, "debug_out.toml"))
+	actual, err := os.ReadFile(filepath.Join(outputgenerators.OUTPUT_FOLDER, "bonnmotion.steps"))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}
