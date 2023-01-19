@@ -13,10 +13,10 @@ import (
 )
 
 // The executable of BonnMotion to call.
-const EXECUTABLE = "bonnmotion"
+const BonnMotionExecutable = "bonnmotion"
 
 // The name of the file that the taken steps should be written into.
-const STEP_FILE = "bonnmotion.steps"
+const BonnMotionStepFile = "bonnmotion.steps"
 
 // The Bonnmotion output generator calles BonnMotion with the correct parameters.
 type Bonnmotion struct{}
@@ -24,10 +24,10 @@ type Bonnmotion struct{}
 // Returns the correct BonnMotion platform name for the given Target.
 func (Bonnmotion) platform(t experiment.Target) (bool, string) {
 	switch t {
-	case experiment.TARGET_THEONE:
+	case experiment.TargetTheOne:
 		return true, "TheONEFile"
 
-	case experiment.TARGET_CORE:
+	case experiment.TargetCore:
 		return true, "NSFile"
 
 	default:
@@ -65,14 +65,15 @@ func (Bonnmotion) generalParameters(exp experiment.Experiment, nodeGroup experim
 
 // Writes the command to the stp file and executes it
 func (Bonnmotion) execute(command []string) error {
-	stepFile, err := os.OpenFile(path.Join(OUTPUT_FOLDER, STEP_FILE), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	stepFile, err := os.OpenFile(path.Join(OutputFolder, BonnMotionStepFile), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
 	}
 	defer stepFile.Close()
 	stepFile.WriteString(fmt.Sprintln(command))
-	execCommand := exec.Command(EXECUTABLE, command...)
-	execCommand.Dir = OUTPUT_FOLDER
+	execCommand := exec.Command(BonnMotionExecutable, command...)
+	execCommand.Dir = OutputFolder
+	// Check if the function is currently unit tested and do not execute actual BonnMotion command if so.
 	if flag.Lookup("test.v") != nil {
 		return nil
 	}
@@ -112,8 +113,8 @@ func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup ex
 
 // Generate generates output for the given Experiment with BonnMotion.
 func (b Bonnmotion) Generate(exp experiment.Experiment) {
-	os.Mkdir(OUTPUT_FOLDER, 0755)
-	os.Create(path.Join(OUTPUT_FOLDER, STEP_FILE))
+	os.Mkdir(OutputFolder, 0755)
+	os.Create(path.Join(OutputFolder, BonnMotionStepFile))
 	for i := 0; i < len(exp.NodeGroups); i++ {
 		nodeGroup := exp.NodeGroups[i]
 		switch nodeGroup.MovementModel.(type) {

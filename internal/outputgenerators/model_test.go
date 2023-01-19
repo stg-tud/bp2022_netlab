@@ -6,8 +6,10 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 )
 
-const TESTDATA_FOLDER = "testdata"
+// The relative name of the folder containing the expected test outputs and additional testing data.
+const TestDataFolder = "testdata"
 
+// GetTestingExperiment returns an Experiment loaded with values used for unit tests.
 func GetTestingExperiment() experiment.Experiment {
 	var nodegroups []experiment.NodeGroup
 	ng, _ := experiment.NewNodeGroup("a", 1)
@@ -38,7 +40,7 @@ func GetTestingExperiment() experiment.Experiment {
 	exp := experiment.Experiment{
 		Name:    "Testing Experiment",
 		Runs:    5,
-		Targets: []experiment.Target{experiment.TARGET_CORE, experiment.TARGET_THEONE},
+		Targets: []experiment.Target{experiment.TargetCore, experiment.TargetTheOne},
 
 		RandomSeed: 1673916419715,
 

@@ -20,7 +20,7 @@ func GetExampleExperiment() Experiment {
 	var ExampleExperiment = Experiment{
 		Name:    "Example Experiment",
 		Runs:    1,
-		Targets: []Target{TARGET_THEONE, TARGET_CORE},
+		Targets: []Target{TargetTheOne, TargetCore},
 
 		RandomSeed: GenerateRandomSeed(),
 

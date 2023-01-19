@@ -3,7 +3,8 @@ package outputgenerators
 
 import "github.com/stg-tud/bp2022_netlab/internal/experiment"
 
-const OUTPUT_FOLDER = "output"
+// The name of the folder all output files from generators should be put in.
+const OutputFolder = "output"
 
 type OutputGenerator interface {
 	// Generate takes a Experiment and generates the output in the given format

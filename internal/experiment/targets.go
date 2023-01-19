@@ -5,17 +5,17 @@ type Target uint
 
 const (
 	// Target: Core
-	TARGET_CORE Target = iota
+	TargetCore Target = iota
 	// Target: The ONE
-	TARGET_THEONE
+	TargetTheOne
 )
 
 func (t Target) String() string {
 	switch t {
-	case TARGET_CORE:
+	case TargetCore:
 		return "Core"
 
-	case TARGET_THEONE:
+	case TargetTheOne:
 		return "The ONE"
 
 	default:
