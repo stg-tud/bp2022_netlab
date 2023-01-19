@@ -59,6 +59,7 @@ func (Bonnmotion) generalParameters(exp experiment.Experiment, nodeGroup experim
 		fmt.Sprintf("-n%d", nodeGroup.NoNodes),
 		fmt.Sprintf("-x%d", exp.WorldSize.Width),
 		fmt.Sprintf("-y%d", exp.WorldSize.Height),
+		fmt.Sprintf("-R%d", exp.RandomSeed),
 	}
 }
 

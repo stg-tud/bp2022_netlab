@@ -22,6 +22,8 @@ func GetExampleExperiment() Experiment {
 		Runs:    1,
 		Targets: []Target{TARGET_THEONE, TARGET_CORE},
 
+		RandomSeed: GenerateRandomSeed(),
+
 		Duration: 120,
 		WorldSize: customtypes.Area{
 			Height: 800,
