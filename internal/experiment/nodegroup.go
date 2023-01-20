@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
+	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
 // A NodeGroup represents a group of dependent nodes sharing properties
@@ -14,18 +15,9 @@ type NodeGroup struct {
 
 	MovementModel movementpatterns.MovementPattern
 
-	IPv4Net  string
-	IPv4Mask uint
-	IPv6Net  string
-	IPv6Mask uint
+	NodesType NodeType
 
-	NetworkType string
-	Bandwidth   int
-	Range       int
-	Jitter      int
-	Delay       int
-	Error       int
-	Promiscuous int
+	NetworkType networktypes.NetworkType
 }
 
 var defaultValues = NodeGroup{
@@ -35,18 +27,9 @@ var defaultValues = NodeGroup{
 		MaxPause: 0,
 	},
 
-	IPv4Net:  "10.0.0.0",
-	IPv4Mask: 24,
-	IPv6Net:  "2001::",
-	IPv6Mask: 120,
+	NodesType: NODE_TYPE_ROUTER,
 
-	NetworkType: "WIRELESS_LAN",
-	Range:       180,
-	Bandwidth:   54000000,
-	Jitter:      0,
-	Delay:       20000,
-	Error:       0,
-	Promiscuous: 0,
+	NetworkType: networktypes.WirelessLAN{}.Default(),
 }
 
 // NewNodeGroup returns a new NodeGroup loaded with default values.

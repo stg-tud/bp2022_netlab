@@ -2,7 +2,7 @@ package outputgenerators
 
 import (
 	"os"
-	"path"
+	"path/filepath"
 
 	"github.com/pelletier/go-toml/v2"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
@@ -21,5 +21,5 @@ func (Debug) Generate(exp experiment.Experiment) {
 		panic(err)
 	}
 	os.Mkdir(OutputFolder, 0755)
-	os.WriteFile(path.Join(OutputFolder, DebugOutputFile), b, 0644)
+	os.WriteFile(filepath.Join(OutputFolder, DebugOutputFile), b, 0644)
 }

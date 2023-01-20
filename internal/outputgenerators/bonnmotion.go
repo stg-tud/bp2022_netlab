@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path"
+	"path/filepath"
 	"reflect"
 
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 )
 
-// The executable of BonnMotion to call.
+// The name of the executable to run BonnMotion.
 const BonnMotionExecutable = "bonnmotion"
 
 // The name of the file that the taken steps should be written into.
@@ -63,9 +63,9 @@ func (Bonnmotion) generalParameters(exp experiment.Experiment, nodeGroup experim
 	}
 }
 
-// Writes the command to the stp file and executes it
+// Writes the command to the step file and executes it
 func (Bonnmotion) execute(command []string) error {
-	stepFile, err := os.OpenFile(path.Join(OutputFolder, BonnMotionStepFile), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	stepFile, err := os.OpenFile(filepath.Join(OutputFolder, BonnMotionStepFile), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
 	}
@@ -114,7 +114,7 @@ func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup ex
 // Generate generates output for the given Experiment with BonnMotion.
 func (b Bonnmotion) Generate(exp experiment.Experiment) {
 	os.Mkdir(OutputFolder, 0755)
-	os.Create(path.Join(OutputFolder, BonnMotionStepFile))
+	os.Create(filepath.Join(OutputFolder, BonnMotionStepFile))
 	for i := 0; i < len(exp.NodeGroups); i++ {
 		nodeGroup := exp.NodeGroups[i]
 		switch nodeGroup.MovementModel.(type) {

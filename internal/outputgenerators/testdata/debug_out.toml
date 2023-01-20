@@ -11,133 +11,103 @@ Width = 240
 [[NodeGroups]]
 Prefix = 'a'
 NoNodes = 1
-IPv4Net = '10.0.0.0'
-IPv4Mask = 24
-IPv6Net = '2001::'
-IPv6Mask = 120
-NetworkType = 'WIRELESS_LAN'
-Bandwidth = 54000000
-Range = 180
-Jitter = 0
-Delay = 20000
-Error = 0
-Promiscuous = 0
+NodesType = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 123
 MaxSpeed = 456
 MaxPause = 0
+
+[NodeGroups.NetworkType]
+Bandwidth = 54000000
+Range = 275
+Jitter = 0
+Delay = 5000
+Loss = 0.0
+Promiscuous = false
 
 [[NodeGroups]]
 Prefix = 'b'
 NoNodes = 2
-IPv4Net = '10.0.0.0'
-IPv4Mask = 24
-IPv6Net = '2001::'
-IPv6Mask = 120
-NetworkType = 'WIRELESS_LAN'
-Bandwidth = 54000000
-Range = 180
-Jitter = 0
-Delay = 20000
-Error = 0
-Promiscuous = 0
+NodesType = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 123
 MaxSpeed = 456
 MaxPause = 0
+
+[NodeGroups.NetworkType]
+Bandwidth = 54000000
+Range = 275
+Jitter = 0
+Delay = 5000
+Loss = 0.0
+Promiscuous = false
 
 [[NodeGroups]]
 Prefix = 'c'
 NoNodes = 3
-IPv4Net = '10.0.0.0'
-IPv4Mask = 24
-IPv6Net = '2001::'
-IPv6Mask = 120
-NetworkType = 'WIRELESS_LAN'
-Bandwidth = 54000000
-Range = 180
-Jitter = 0
-Delay = 20000
-Error = 0
-Promiscuous = 0
+NodesType = 0
 
 [NodeGroups.MovementModel]
+
+[NodeGroups.NetworkType]
 
 [[NodeGroups]]
 Prefix = 'd'
 NoNodes = 4
-IPv4Net = '10.0.0.0'
-IPv4Mask = 24
-IPv6Net = '2001::'
-IPv6Mask = 120
-NetworkType = 'WIRELESS_LAN'
-Bandwidth = 54000000
-Range = 180
-Jitter = 0
-Delay = 20000
-Error = 0
-Promiscuous = 0
+NodesType = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 123
 MaxSpeed = 456
 MaxPause = 0
 
+[NodeGroups.NetworkType]
+Bandwidth = 17
+Range = 275
+Jitter = 0
+Delay = 5000
+Loss = 0.0
+Promiscuous = true
+
 [[NodeGroups]]
 Prefix = 'e'
 NoNodes = 5
-IPv4Net = '10.0.0.0'
-IPv4Mask = 24
-IPv6Net = '2001::'
-IPv6Mask = 120
-NetworkType = 'WIRELESS_LAN'
-Bandwidth = 54000000
-Range = 180
-Jitter = 0
-Delay = 20000
-Error = 0
-Promiscuous = 0
+NodesType = 1
 
 [NodeGroups.MovementModel]
+
+[NodeGroups.NetworkType]
 
 [[NodeGroups]]
 Prefix = 'f'
 NoNodes = 6
-IPv4Net = '10.0.0.0'
-IPv4Mask = 24
-IPv6Net = '2001::'
-IPv6Mask = 120
-NetworkType = 'WIRELESS_LAN'
-Bandwidth = 54000000
-Range = 180
-Jitter = 0
-Delay = 20000
-Error = 0
-Promiscuous = 0
+NodesType = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 1
 MaxSpeed = 2
 MaxPause = 17
 
+[NodeGroups.NetworkType]
+
 [[NodeGroups]]
 Prefix = 'g'
 NoNodes = 7
-IPv4Net = '10.0.0.0'
-IPv4Mask = 24
-IPv6Net = '2001::'
-IPv6Mask = 120
-NetworkType = 'WIRELESS_LAN'
-Bandwidth = 54000000
-Range = 180
-Jitter = 0
-Delay = 20000
-Error = 0
-Promiscuous = 0
+NodesType = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 123
 MaxSpeed = 456
 MaxPause = 0
+
+[NodeGroups.NetworkType]
+Movement = true
+Bandwidth = 54000000
+Range = 400
+Jitter = 0
+Delay = 5000
+LossInitial = 0.0
+LossFactor = 1.0
+LossStartRange = 300.0
