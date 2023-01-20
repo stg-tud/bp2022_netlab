@@ -1,8 +1,8 @@
 package outputgenerators
 
 import (
-	"fmt"
 	"os"
+	"path"
 
 	"github.com/pelletier/go-toml/v2"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
@@ -11,12 +11,15 @@ import (
 // Debug output generator dumps the experiment config as TOML for debug purposes.
 type Debug struct{}
 
+// The name of the file where the debug output should be dumped to
+const DebugOutputFile = "debug_out.toml"
+
 // Generate outputs the given Experiment as TOML to the file debug_out.toml
 func (Debug) Generate(exp experiment.Experiment) {
 	b, err := toml.Marshal(exp)
 	if err != nil {
 		panic(err)
 	}
-	os.Mkdir(OUTPUT_FOLDER, 0755)
-	os.WriteFile(fmt.Sprintf("%s/debug_out.toml", OUTPUT_FOLDER), b, 0644)
+	os.Mkdir(OutputFolder, 0755)
+	os.WriteFile(path.Join(OutputFolder, DebugOutputFile), b, 0644)
 }

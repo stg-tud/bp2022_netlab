@@ -8,12 +8,12 @@ import (
 // A Experiment is a fixed set of parameters to run a simulation.
 type Experiment struct {
 	Name    string
-	Runs    int
+	Runs    uint
 	Targets []Target
 
 	RandomSeed int64
 
-	Duration  int
+	Duration  uint
 	WorldSize customtypes.Area
 
 	NodeGroups []NodeGroup

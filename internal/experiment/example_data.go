@@ -8,17 +8,19 @@ import (
 // GetExampleExperiment returns a Experiment loaded with example values.
 func GetExampleExperiment() Experiment {
 	var nodegroups []NodeGroup
-	nodegroups = append(nodegroups, NewNodeGroup("n", 1))
-	nodegroups = append(nodegroups, NewNodeGroup("p", 29))
+	ng, _ := NewNodeGroup("n", 1)
+	nodegroups = append(nodegroups, ng)
+	ng, _ = NewNodeGroup("p", 29)
+	nodegroups = append(nodegroups, ng)
 
-	ng3 := NewNodeGroup("x", 17)
-	ng3.MovementModel = movementpatterns.Static{}
-	nodegroups = append(nodegroups, ng3)
+	ng, _ = NewNodeGroup("x", 17)
+	ng.MovementModel = movementpatterns.Static{}
+	nodegroups = append(nodegroups, ng)
 
 	var ExampleExperiment = Experiment{
 		Name:    "Example Experiment",
 		Runs:    1,
-		Targets: []Target{TARGET_THEONE, TARGET_CORE},
+		Targets: []Target{TargetTheOne, TargetCore},
 
 		RandomSeed: GenerateRandomSeed(),
 

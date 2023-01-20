@@ -1,4 +1,4 @@
-Name = 'Debug Output Test'
+Name = 'Testing Experiment'
 Runs = 5
 Targets = [0, 1]
 RandomSeed = 1673916419715
@@ -64,13 +64,67 @@ Error = 0
 Promiscuous = 0
 
 [NodeGroups.MovementModel]
+
+[[NodeGroups]]
+Prefix = 'd'
+NoNodes = 4
+IPv4Net = '10.0.0.0'
+IPv4Mask = 24
+IPv6Net = '2001::'
+IPv6Mask = 120
+NetworkType = 'WIRELESS_LAN'
+Bandwidth = 54000000
+Range = 180
+Jitter = 0
+Delay = 20000
+Error = 0
+Promiscuous = 0
+
+[NodeGroups.MovementModel]
 MinSpeed = 123
 MaxSpeed = 456
 MaxPause = 0
 
 [[NodeGroups]]
-Prefix = 'd'
-NoNodes = 4
+Prefix = 'e'
+NoNodes = 5
+IPv4Net = '10.0.0.0'
+IPv4Mask = 24
+IPv6Net = '2001::'
+IPv6Mask = 120
+NetworkType = 'WIRELESS_LAN'
+Bandwidth = 54000000
+Range = 180
+Jitter = 0
+Delay = 20000
+Error = 0
+Promiscuous = 0
+
+[NodeGroups.MovementModel]
+
+[[NodeGroups]]
+Prefix = 'f'
+NoNodes = 6
+IPv4Net = '10.0.0.0'
+IPv4Mask = 24
+IPv6Net = '2001::'
+IPv6Mask = 120
+NetworkType = 'WIRELESS_LAN'
+Bandwidth = 54000000
+Range = 180
+Jitter = 0
+Delay = 20000
+Error = 0
+Promiscuous = 0
+
+[NodeGroups.MovementModel]
+MinSpeed = 1
+MaxSpeed = 2
+MaxPause = 17
+
+[[NodeGroups]]
+Prefix = 'g'
+NoNodes = 7
 IPv4Net = '10.0.0.0'
 IPv4Mask = 24
 IPv6Net = '2001::'
