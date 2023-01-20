@@ -1,6 +1,7 @@
 Name = 'Testing Experiment'
 Runs = 5
 Targets = [0, 1]
+RandomSeed = 1673916419715
 Duration = 123456
 
 [WorldSize]

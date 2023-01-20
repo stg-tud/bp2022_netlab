@@ -8,8 +8,11 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 )
 
-const OUTPUT_FOLDER = "output"
-const TEMPLATES_FOLDER = "templates"
+// The name of the folder all output files from generators should be put in.
+const OutputFolder = "output"
+
+// The name of the folder containing the template files for output generators.
+const TemplatesFolder = "templates"
 
 type OutputGenerator interface {
 	// Generate takes a Experiment and generates the output in the given format
@@ -17,7 +20,8 @@ type OutputGenerator interface {
 	Generate(experiment.Experiment)
 }
 
+// GetTemplatesFolder returns the absolute path of the folder containing the template files.
 func GetTemplatesFolder() string {
 	_, callerPath, _, _ := runtime.Caller(0)
-	return filepath.Join(filepath.Dir(callerPath), TEMPLATES_FOLDER)
+	return filepath.Join(filepath.Dir(callerPath), TemplatesFolder)
 }

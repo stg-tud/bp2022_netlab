@@ -9,22 +9,25 @@ import (
 // GetExampleExperiment returns a Experiment loaded with example values.
 func GetExampleExperiment() Experiment {
 	var nodegroups []NodeGroup
-	nodegroups = append(nodegroups, NewNodeGroup("n", 1))
+	ng, _ := NewNodeGroup("n", 1)
+	nodegroups = append(nodegroups, ng)
 
-	ng2 := NewNodeGroup("p", 29)
-	ng2.NetworkType = networktypes.Switch{}.Default()
-	nodegroups = append(nodegroups, ng2)
+	ng, _ = NewNodeGroup("p", 29)
+	ng.NetworkType = networktypes.Switch{}.Default()
+	nodegroups = append(nodegroups, ng)
 
-	ng3 := NewNodeGroup("x", 17)
-	ng3.MovementModel = movementpatterns.Static{}
-	ng3.NetworkType = networktypes.Switch{}.Default()
-	ng3.NodesType = NODE_TYPE_PC
-	nodegroups = append(nodegroups, ng3)
+	ng, _ = NewNodeGroup("x", 17)
+	ng.MovementModel = movementpatterns.Static{}
+	ng.NetworkType = networktypes.Switch{}.Default()
+	ng.NodesType = NODE_TYPE_PC
+	nodegroups = append(nodegroups, ng)
 
 	var ExampleExperiment = Experiment{
 		Name:    "Example Experiment",
 		Runs:    1,
-		Targets: []Target{TARGET_THEONE, TARGET_CORE},
+		Targets: []Target{TargetTheOne, TargetCore},
+
+		RandomSeed: GenerateRandomSeed(),
 
 		Duration: 120,
 		WorldSize: customtypes.Area{

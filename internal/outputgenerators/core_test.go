@@ -10,18 +10,18 @@ import (
 
 func TestCore(t *testing.T) {
 	t.Cleanup(func() {
-		os.RemoveAll(outputgenerators.OUTPUT_FOLDER)
+		os.RemoveAll(outputgenerators.OutputFolder)
 	})
 
 	og := outputgenerators.Core{}
 	og.Generate(GetTestingExperiment())
 
-	expected, err := os.ReadFile(filepath.Join(TESTDATA_FOLDER, "core.xml"))
+	expected, err := os.ReadFile(filepath.Join(TestDataFolder, "core.xml"))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}
 
-	actual, err := os.ReadFile(filepath.Join(outputgenerators.OUTPUT_FOLDER, "core.xml"))
+	actual, err := os.ReadFile(filepath.Join(outputgenerators.OutputFolder, "core.xml"))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}

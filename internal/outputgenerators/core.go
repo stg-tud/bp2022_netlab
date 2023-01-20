@@ -23,8 +23,8 @@ type coreData struct {
 }
 
 type device struct {
-	Id            int
-	IdInNodeGroup int
+	Id            uint
+	IdInNodeGroup uint
 	Name          string
 	Position      customtypes.Position
 	Type          string
@@ -35,7 +35,7 @@ type device struct {
 }
 
 type network struct {
-	Id       int
+	Id       uint
 	Prefix   string
 	Position customtypes.Position
 
@@ -48,7 +48,7 @@ type network struct {
 	Devices []device
 }
 
-var ScenarioIdCounter int
+var ScenarioIdCounter uint
 var lastPosition customtypes.Position
 
 const NODE_SIZE int = 100
@@ -56,29 +56,29 @@ const NODE_SIZE int = 100
 // getPosition returns an incrementing position for nodes to be placed on the canvas without overlap
 func (Core) getPosition(worldSize customtypes.Area) customtypes.Position {
 	lastPosition.X = lastPosition.X + NODE_SIZE
-	if lastPosition.X >= worldSize.Width {
+	if lastPosition.X >= int(worldSize.Width) {
 		lastPosition.X = NODE_SIZE
 		lastPosition.Y = lastPosition.Y + NODE_SIZE
-		if lastPosition.Y >= worldSize.Height {
-			lastPosition.Y = worldSize.Height - NODE_SIZE
+		if lastPosition.Y >= int(worldSize.Height) {
+			lastPosition.Y = int(worldSize.Height) - NODE_SIZE
 		}
 	}
 	return lastPosition
 }
 
 // getId returns an incrementing unique id used for all nodes in CORE configuration
-func (Core) getId() int {
+func (Core) getId() uint {
 	ScenarioIdCounter++
 	return ScenarioIdCounter - 1
 }
 
 // getMac returns an unique MAC address for different NodeGroups and index
-func (Core) getMac(groupIndex int, nodeGroup experiment.NodeGroup, index int) string {
+func (Core) getMac(groupIndex uint, nodeGroup experiment.NodeGroup, index uint) string {
 	return fmt.Sprintf("02:%02x:%02x:00:00:%02x", groupIndex, int(nodeGroup.Prefix[0]), index)
 }
 
 // getIpSpace returns an ip space consisting of an IPv4 and an IPv6 network. They are collision free for different index values.
-func (Core) getIpSpace(index int) (IPv4Net *ipnetgen.IPNetGenerator, IPv4Mask int, IPv6Net *ipnetgen.IPNetGenerator, IPv6Mask int) {
+func (Core) getIpSpace(index uint) (IPv4Net *ipnetgen.IPNetGenerator, IPv4Mask int, IPv6Net *ipnetgen.IPNetGenerator, IPv6Mask int) {
 	v4Net, err := ipnetgen.New(fmt.Sprintf("10.%d.0.0/24", index))
 	if err != nil {
 		panic(err)
@@ -138,20 +138,22 @@ func (c Core) Generate(exp experiment.Experiment) {
 	ScenarioIdCounter = 5
 	lastPosition = customtypes.Position{X: 0, Y: NODE_SIZE}
 
-	os.Mkdir(OUTPUT_FOLDER, 0755)
-	fbuffer, err := os.Create(filepath.Join(OUTPUT_FOLDER, "core.xml"))
+	os.Mkdir(OutputFolder, 0755)
+	fbuffer, err := os.Create(filepath.Join(OutputFolder, "core.xml"))
 	if err != nil {
 		panic(err)
 	}
 
 	networks := []network{}
-	for i := 0; i < len(exp.NodeGroups); i++ {
+	var i uint
+	for i = 0; int(i) < len(exp.NodeGroups); i++ {
 		nodeGroup := exp.NodeGroups[i]
 		devices := []device{}
 
 		IPv4Net, IPv4Mask, IPv6Net, IPv6Mask := c.getIpSpace(i + 1)
 
-		for y := 0; y < nodeGroup.NoNodes; y++ {
+		var y uint
+		for y = 0; y < nodeGroup.NoNodes; y++ {
 			IPv4 := IPv4Net.Next()
 			IPv6 := IPv6Net.Next()
 

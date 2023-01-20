@@ -1,6 +1,8 @@
 package experiment
 
 import (
+	"errors"
+
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
@@ -9,7 +11,7 @@ import (
 // such as a MovementModel or network settings.
 type NodeGroup struct {
 	Prefix  string
-	NoNodes int
+	NoNodes uint
 
 	MovementModel movementpatterns.MovementPattern
 
@@ -31,12 +33,16 @@ var defaultValues = NodeGroup{
 }
 
 // NewNodeGroup returns a new NodeGroup loaded with default values.
-func NewNodeGroup(prefix string, noNodes int) NodeGroup {
+func NewNodeGroup(prefix string, noNodes uint) (NodeGroup, error) {
 	if len(prefix) == 0 {
-		panic("NodeGroup prefix must contain at least one letter!")
+		return NodeGroup{}, errors.New("prefix must consist of at least one character")
 	}
+	if noNodes <= 0 {
+		return NodeGroup{}, errors.New("NodeGroup must at least consist of one node")
+	}
+
 	out := defaultValues
 	out.Prefix = prefix
 	out.NoNodes = noNodes
-	return out
+	return out, nil
 }
