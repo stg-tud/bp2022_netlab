@@ -145,12 +145,11 @@ func (c Core) Generate(exp experiment.Experiment) {
 	}
 
 	networks := []network{}
-	var i uint
-	for i = 0; int(i) < len(exp.NodeGroups); i++ {
-		nodeGroup := exp.NodeGroups[i]
+	for i, nodeGroup := range exp.NodeGroups {
 		devices := []device{}
+		ui := uint(i)
 
-		IPv4Net, IPv4Mask, IPv6Net, IPv6Mask := c.getIpSpace(i + 1)
+		IPv4Net, IPv4Mask, IPv6Net, IPv6Mask := c.getIpSpace(ui + 1)
 
 		var y uint
 		for y = 0; y < nodeGroup.NoNodes; y++ {
@@ -173,7 +172,7 @@ func (c Core) Generate(exp experiment.Experiment) {
 
 				IPv4: IPv4.String(),
 				IPv6: IPv6.String(),
-				Mac:  c.getMac(i+1, nodeGroup, y+1),
+				Mac:  c.getMac(ui+1, nodeGroup, y+1),
 			}
 
 			devices = append(devices, dev)
