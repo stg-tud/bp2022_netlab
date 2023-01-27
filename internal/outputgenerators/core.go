@@ -22,45 +22,53 @@ type coreData struct {
 	WorldSize    customtypes.Area
 }
 
+type network struct {
+	Id               uint
+	Name             string
+	Position         customtypes.Position
+	Type             networktypes.NetworkType
+	TypeName         string
+	DevicesConnected uint
+
+	IPv4Net  *ipnetgen.IPNetGenerator
+	IPv4Mask int
+	IPv6Net  *ipnetgen.IPNetGenerator
+	IPv6Mask int
+}
+
+type networkInterface struct {
+	Network     *network
+	IdInNetwork uint
+	IPv4        string
+	IPv6        string
+	Mac         string
+}
+
 type device struct {
 	Id            uint
 	IdInNodeGroup uint
 	Name          string
 	Position      customtypes.Position
 	Type          string
-
-	IPv4 string
-	IPv6 string
-	Mac  string
+	Interfaces    []networkInterface
 }
 
-type network struct {
-	Id       uint
-	Prefix   string
-	Position customtypes.Position
+// The first id to be assigned inside a scenario
+const ScenarioIdOffset uint = 5
 
-	IPv4Mask int
-	IPv6Mask int
-
-	NetworkTypeName string
-	NetworkType     networktypes.NetworkType
-
-	Devices []device
-}
-
-var ScenarioIdCounter uint
+var scenarioIdCounter uint
 var lastPosition customtypes.Position
 
-const NODE_SIZE int = 100
+const nodeSize int = 100
 
 // getPosition returns an incrementing position for nodes to be placed on the canvas without overlap
 func (Core) getPosition(worldSize customtypes.Area) customtypes.Position {
-	lastPosition.X = lastPosition.X + NODE_SIZE
+	lastPosition.X = lastPosition.X + nodeSize
 	if lastPosition.X >= int(worldSize.Width) {
-		lastPosition.X = NODE_SIZE
-		lastPosition.Y = lastPosition.Y + NODE_SIZE
+		lastPosition.X = nodeSize
+		lastPosition.Y = lastPosition.Y + nodeSize
 		if lastPosition.Y >= int(worldSize.Height) {
-			lastPosition.Y = int(worldSize.Height) - NODE_SIZE
+			lastPosition.Y = int(worldSize.Height) - nodeSize
 		}
 	}
 	return lastPosition
@@ -68,13 +76,13 @@ func (Core) getPosition(worldSize customtypes.Area) customtypes.Position {
 
 // getId returns an incrementing unique id used for all nodes in CORE configuration
 func (Core) getId() uint {
-	ScenarioIdCounter++
-	return ScenarioIdCounter - 1
+	scenarioIdCounter++
+	return scenarioIdCounter - 1
 }
 
 // getMac returns an unique MAC address for different NodeGroups and index
-func (Core) getMac(groupIndex uint, nodeGroup experiment.NodeGroup, index uint) string {
-	return fmt.Sprintf("02:%02x:%02x:00:00:%02x", groupIndex, int(nodeGroup.Prefix[0]), index)
+func (Core) getMac(network network, index uint) string {
+	return fmt.Sprintf("02:%02x:%02x:00:00:%02x", network.Id, int(network.Name[0]), index)
 }
 
 // getIpSpace returns an ip space consisting of an IPv4 and an IPv6 network. They are collision free for different index values.
@@ -122,10 +130,10 @@ func (Core) networkType(networkType networktypes.NetworkType) string {
 // deviceType returns the correct CORE string for a given NodeType
 func (Core) deviceType(deviceType experiment.NodeType) string {
 	switch deviceType {
-	case experiment.NODE_TYPE_ROUTER:
+	case experiment.NodeTypeRouter:
 		return "router"
 
-	case experiment.NODE_TYPE_PC:
+	case experiment.NodeTypePC:
 		return "PC"
 
 	default:
@@ -135,8 +143,8 @@ func (Core) deviceType(deviceType experiment.NodeType) string {
 
 // Generate generates the XML configuration for CORE for a given Experiment.
 func (c Core) Generate(exp experiment.Experiment) {
-	ScenarioIdCounter = 5
-	lastPosition = customtypes.Position{X: 0, Y: NODE_SIZE}
+	scenarioIdCounter = ScenarioIdOffset
+	lastPosition = customtypes.Position{X: 0, Y: nodeSize}
 
 	os.Mkdir(OutputFolder, 0755)
 	fbuffer, err := os.Create(filepath.Join(OutputFolder, "core.xml"))
@@ -144,58 +152,67 @@ func (c Core) Generate(exp experiment.Experiment) {
 		panic(err)
 	}
 
+	networkMapping := make(map[*experiment.Network]*network)
 	networks := []network{}
-	for i, nodeGroup := range exp.NodeGroups {
-		devices := []device{}
+	for i := range exp.Networks {
+		expNetwork := &exp.Networks[i]
 		ui := uint(i)
-
 		IPv4Net, IPv4Mask, IPv6Net, IPv6Mask := c.getIpSpace(ui + 1)
+		net := network{
+			Id:               c.getId(),
+			Position:         c.getPosition(exp.WorldSize),
+			Name:             expNetwork.Name,
+			Type:             expNetwork.Type,
+			TypeName:         c.networkType(expNetwork.Type),
+			DevicesConnected: 0,
+			IPv4Net:          IPv4Net,
+			IPv4Mask:         IPv4Mask,
+			IPv6Net:          IPv6Net,
+			IPv6Mask:         IPv6Mask,
+		}
+		networkMapping[expNetwork] = &net
+		networks = append(networks, net)
+	}
 
-		var y uint
-		for y = 0; y < nodeGroup.NoNodes; y++ {
-			IPv4 := IPv4Net.Next()
-			IPv6 := IPv6Net.Next()
-
-			devType := nodeGroup.NodesType
-			// If NodeGroup consists of PCs, make first device a Router so they have a gateway
-			if nodeGroup.NodesType == experiment.NODE_TYPE_PC && y == 0 {
-				devType = experiment.NODE_TYPE_ROUTER
+	devices := []device{}
+	for _, nodeGroup := range exp.NodeGroups {
+		nodeGroupNetworks := []*network{}
+		for _, nodeGroupNetwork := range nodeGroup.Networks {
+			network := networkMapping[nodeGroupNetwork]
+			nodeGroupNetworks = append(nodeGroupNetworks, network)
+		}
+		var deviceId uint
+		for deviceId = 0; deviceId < nodeGroup.NoNodes; deviceId++ {
+			ifaces := []networkInterface{}
+			for _, network := range nodeGroupNetworks {
+				iface := networkInterface{
+					Network:     network,
+					IdInNetwork: network.DevicesConnected,
+					IPv4:        network.IPv4Net.Next().String(),
+					IPv6:        network.IPv6Net.Next().String(),
+					Mac:         c.getMac(*network, deviceId+1),
+				}
+				network.DevicesConnected++
+				ifaces = append(ifaces, iface)
 			}
 
 			dev := device{
 				Id:            c.getId(),
-				IdInNodeGroup: y,
-				Name:          fmt.Sprintf("%s%d", nodeGroup.Prefix, y+1),
+				IdInNodeGroup: deviceId,
+				Name:          fmt.Sprintf("%s%d", nodeGroup.Prefix, deviceId+1),
 				Position:      c.getPosition(exp.WorldSize),
-
-				Type: c.deviceType(devType),
-
-				IPv4: IPv4.String(),
-				IPv6: IPv6.String(),
-				Mac:  c.getMac(ui+1, nodeGroup, y+1),
+				Type:          c.deviceType(nodeGroup.NodesType),
+				Interfaces:    ifaces,
 			}
 
 			devices = append(devices, dev)
 		}
-		networks = append(networks, network{
-			Id:       c.getId(),
-			Prefix:   nodeGroup.Prefix,
-			Position: c.getPosition(exp.WorldSize),
-
-			IPv4Mask: IPv4Mask,
-			IPv6Mask: IPv6Mask,
-
-			NetworkTypeName: c.networkType(nodeGroup.NetworkType),
-			NetworkType:     nodeGroup.NetworkType,
-
-			Devices: devices,
-		})
-		// Get a new position to create empty space between networks
-		c.getPosition(exp.WorldSize)
 	}
+
 	replacements := coreData{
 		ScenarioName: exp.Name,
 		Networks:     networks,
+		Devices:      devices,
 		WorldSize:    exp.WorldSize,
 	}
 	xmlTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "core.xml"))
