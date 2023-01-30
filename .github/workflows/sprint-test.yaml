@@ -6,12 +6,40 @@ on:
     - cron: "0 10 * * 2"
 
 jobs:
-  build:
+  static-analysis:
+    name: Static analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - name: Formatter
+        run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
+
+      - name: Go Vet
+        run: go vet ./...
+
+      - name: Staticcheck
+        uses: dominikh/staticcheck-action@v1.2.0
+        with:
+          version: "2022.1.3"
+
+      - name: Coverage
+        run: >
+          go test -v -coverpkg=./... -coverprofile=profile.cov ./...
+          go tool cover -func profile.cov
+
+  build-test:
+    name: "Build & test"
     strategy:
       fail-fast: false
       matrix:
         os: ["windows-latest", "ubuntu-latest", "macOS-latest"]
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
 
@@ -26,16 +54,5 @@ jobs:
       - name: Build
         run: go build -v ./...
 
-      - name: Go Vet
-        run: go vet ./...
-
-      - name: Staticcheck
-        uses: dominikh/staticcheck-action@v1.2.0
-        with:
-          version: "2022.1.3"
-
       - name: Unit Tests
-        run: go test -v -coverpkg=./... -coverprofile=profile.cov ./...
-
-      - name: Coverage
-        run: go tool cover -func profile.cov
+        run: go test -v ./...
