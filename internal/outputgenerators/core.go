@@ -141,19 +141,10 @@ func (Core) deviceType(deviceType experiment.NodeType) string {
 	}
 }
 
-// Generate generates the XML configuration for CORE for a given Experiment.
-func (c Core) Generate(exp experiment.Experiment) {
-	scenarioIdCounter = ScenarioIdOffset
-	lastPosition = customtypes.Position{X: 0, Y: nodeSize}
-
-	os.Mkdir(OutputFolder, 0755)
-	fbuffer, err := os.Create(filepath.Join(OutputFolder, "core.xml"))
-	if err != nil {
-		panic(err)
-	}
-
-	networkMapping := make(map[*experiment.Network]*network)
+// buildNetworks generates a list of networks used for CORE configuration as well as a mapping of experiment.Network to (CORE) networks
+func (c Core) buildNetworks(exp experiment.Experiment) ([]network, map[*experiment.Network]*network, error) {
 	networks := []network{}
+	networkMapping := make(map[*experiment.Network]*network)
 	for i := range exp.Networks {
 		expNetwork := &exp.Networks[i]
 		ui := uint(i)
@@ -173,7 +164,37 @@ func (c Core) Generate(exp experiment.Experiment) {
 		networkMapping[expNetwork] = &net
 		networks = append(networks, net)
 	}
+	return networks, networkMapping, nil
+}
 
+// buildDevice generates the device configuration for CORE
+func (c Core) buildDevice(deviceId uint, exp experiment.Experiment, nodeGroup experiment.NodeGroup, nodeGroupNetworks []*network) (device, error) {
+	deviceNetworkInterfaces := []networkInterface{}
+	for _, network := range nodeGroupNetworks {
+		deviceNetworkInterface := networkInterface{
+			Network:     network,
+			IdInNetwork: network.DevicesConnected,
+			IPv4:        network.IPv4Net.Next().String(),
+			IPv6:        network.IPv6Net.Next().String(),
+			Mac:         c.getMac(*network, deviceId+1),
+		}
+		network.DevicesConnected++
+		deviceNetworkInterfaces = append(deviceNetworkInterfaces, deviceNetworkInterface)
+	}
+
+	dev := device{
+		Id:            c.getId(),
+		IdInNodeGroup: deviceId,
+		Name:          fmt.Sprintf("%s%d", nodeGroup.Prefix, deviceId+1),
+		Position:      c.getPosition(exp.WorldSize),
+		Type:          c.deviceType(nodeGroup.NodesType),
+		Interfaces:    deviceNetworkInterfaces,
+	}
+	return dev, nil
+}
+
+// buildDevices generates the configuration for devices for CORE
+func (c Core) buildDevices(exp experiment.Experiment, networkMapping map[*experiment.Network]*network) ([]device, error) {
 	devices := []device{}
 	for _, nodeGroup := range exp.NodeGroups {
 		nodeGroupNetworks := []*network{}
@@ -183,30 +204,34 @@ func (c Core) Generate(exp experiment.Experiment) {
 		}
 		var deviceId uint
 		for deviceId = 0; deviceId < nodeGroup.NoNodes; deviceId++ {
-			ifaces := []networkInterface{}
-			for _, network := range nodeGroupNetworks {
-				iface := networkInterface{
-					Network:     network,
-					IdInNetwork: network.DevicesConnected,
-					IPv4:        network.IPv4Net.Next().String(),
-					IPv6:        network.IPv6Net.Next().String(),
-					Mac:         c.getMac(*network, deviceId+1),
-				}
-				network.DevicesConnected++
-				ifaces = append(ifaces, iface)
+			dev, err := c.buildDevice(deviceId, exp, nodeGroup, nodeGroupNetworks)
+			if err != nil {
+				return []device{}, err
 			}
-
-			dev := device{
-				Id:            c.getId(),
-				IdInNodeGroup: deviceId,
-				Name:          fmt.Sprintf("%s%d", nodeGroup.Prefix, deviceId+1),
-				Position:      c.getPosition(exp.WorldSize),
-				Type:          c.deviceType(nodeGroup.NodesType),
-				Interfaces:    ifaces,
-			}
-
 			devices = append(devices, dev)
 		}
+	}
+	return devices, nil
+}
+
+// Generate generates the XML configuration for CORE for a given Experiment.
+func (c Core) Generate(exp experiment.Experiment) {
+	scenarioIdCounter = ScenarioIdOffset
+	lastPosition = customtypes.Position{X: 0, Y: nodeSize}
+
+	os.Mkdir(OutputFolder, 0755)
+	fbuffer, err := os.Create(filepath.Join(OutputFolder, "core.xml"))
+	if err != nil {
+		panic(err)
+	}
+
+	networks, networkMapping, err := c.buildNetworks(exp)
+	if err != nil {
+		panic(err)
+	}
+	devices, err := c.buildDevices(exp, networkMapping)
+	if err != nil {
+		panic(err)
 	}
 
 	replacements := coreData{
