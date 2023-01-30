@@ -115,8 +115,7 @@ func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup ex
 func (b Bonnmotion) Generate(exp experiment.Experiment) {
 	os.Mkdir(OutputFolder, 0755)
 	os.Create(filepath.Join(OutputFolder, BonnMotionStepFile))
-	for i := 0; i < len(exp.NodeGroups); i++ {
-		nodeGroup := exp.NodeGroups[i]
+	for _, nodeGroup := range exp.NodeGroups {
 		switch nodeGroup.MovementModel.(type) {
 		case movementpatterns.RandomWaypoint:
 			b.generateRandomWaypointNodeGroup(exp, nodeGroup)
@@ -124,8 +123,8 @@ func (b Bonnmotion) Generate(exp experiment.Experiment) {
 			fmt.Printf("Movement model \"%s\" is currently not supported.\n", reflect.TypeOf(nodeGroup.MovementModel))
 			continue
 		}
-		for y := 0; y < len(exp.Targets); y++ {
-			b.convertToTargetFormat(exp.Targets[y], nodeGroup)
+		for _, target := range exp.Targets {
+			b.convertToTargetFormat(target, nodeGroup)
 		}
 	}
 }

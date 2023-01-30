@@ -8,18 +8,28 @@ import (
 
 // GetExampleExperiment returns a Experiment loaded with example values.
 func GetExampleExperiment() Experiment {
+	var networks []Network
+	net, _ := NewNetwork("switched", networktypes.Switch{}.Default())
+	networks = append(networks, net)
+	net, _ = NewNetwork("wifi", networktypes.WirelessLAN{}.Default())
+	networks = append(networks, net)
+	net, _ = NewNetwork("bluetooth", networktypes.Wireless{}.Default())
+	networks = append(networks, net)
+
 	var nodegroups []NodeGroup
 	ng, _ := NewNodeGroup("n", 1)
+	ng.Networks = append(ng.Networks, &networks[0])
 	nodegroups = append(nodegroups, ng)
 
 	ng, _ = NewNodeGroup("p", 29)
-	ng.NetworkType = networktypes.Switch{}.Default()
+	ng.Networks = append(ng.Networks, &networks[1])
+	ng.Networks = append(ng.Networks, &networks[2])
 	nodegroups = append(nodegroups, ng)
 
 	ng, _ = NewNodeGroup("x", 17)
 	ng.MovementModel = movementpatterns.Static{}
-	ng.NetworkType = networktypes.Switch{}.Default()
-	ng.NodesType = NODE_TYPE_PC
+	ng.Networks = append(ng.Networks, &networks[2])
+	ng.NodesType = NodeTypePC
 	nodegroups = append(nodegroups, ng)
 
 	var ExampleExperiment = Experiment{
@@ -35,6 +45,7 @@ func GetExampleExperiment() Experiment {
 			Width:  1000,
 		},
 
+		Networks:   networks,
 		NodeGroups: nodegroups,
 	}
 	return ExampleExperiment

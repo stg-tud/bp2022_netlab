@@ -16,5 +16,6 @@ type Experiment struct {
 	Duration  uint
 	WorldSize customtypes.Area
 
+	Networks   []Network
 	NodeGroups []NodeGroup
 }

@@ -5,17 +5,17 @@ type NodeType int
 
 const (
 	// Router
-	NODE_TYPE_ROUTER NodeType = iota
+	NodeTypeRouter NodeType = iota
 	// PC
-	NODE_TYPE_PC
+	NodeTypePC
 )
 
 func (n NodeType) String() string {
 	switch n {
-	case NODE_TYPE_PC:
+	case NodeTypePC:
 		return "PC"
 
-	case NODE_TYPE_ROUTER:
+	case NodeTypeRouter:
 		return "Router"
 
 	default:
