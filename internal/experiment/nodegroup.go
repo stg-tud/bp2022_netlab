@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
-	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
 // A NodeGroup represents a group of dependent nodes sharing properties
@@ -17,7 +16,7 @@ type NodeGroup struct {
 
 	NodesType NodeType
 
-	NetworkType networktypes.NetworkType
+	Networks []*Network
 }
 
 var defaultValues = NodeGroup{
@@ -27,9 +26,9 @@ var defaultValues = NodeGroup{
 		MaxPause: 0,
 	},
 
-	NodesType: NODE_TYPE_ROUTER,
+	NodesType: NodeTypeRouter,
 
-	NetworkType: networktypes.WirelessLAN{}.Default(),
+	Networks: []*Network{},
 }
 
 // NewNodeGroup returns a new NodeGroup loaded with default values.

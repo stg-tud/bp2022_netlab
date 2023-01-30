@@ -1,27 +1,25 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <scenario name="{{ .ScenarioName }}">
-{{- if .Networks}}
   <networks>
     {{- range .Networks}}
-    <network id="{{ .Id }}" name="net_{{ .Prefix }}" icon="" canvas="1" {{if eq .NetworkTypeName "EMANE" -}}model="emane_bypass" {{ end -}} type="{{ .NetworkTypeName }}">
+    <network id="{{ .Id }}" name="net_{{ .Name }}" icon="" canvas="1" {{if eq .Name "EMANE" -}}model="emane_bypass" {{ end -}} type="{{ .TypeName }}">
       <position x="{{ .Position.X }}" y="{{ .Position.Y }}"/>
-      {{- if eq .NetworkTypeName "WIRELESS"}}
+      {{- if eq .TypeName "WIRELESS"}}
       <wireless>
-        <configuration name="movement" value="{{ if .NetworkType.Movement }}1{{ else }}0{{ end }}"/>
-        <configuration name="max-range" value="{{ .NetworkType.Range }}"/>
-        <configuration name="bandwidth" value="{{ .NetworkType.Bandwidth }}"/>
-        <configuration name="delay" value="{{ .NetworkType.Delay }}"/>
-        <configuration name="jitter" value="{{ .NetworkType.Jitter }}"/>
-        <configuration name="loss-range" value="{{ .NetworkType.LossStartRange }}"/>
-        <configuration name="loss-factor" value="{{ .NetworkType.LossFactor }}"/>
-        <configuration name="loss" value="{{ .NetworkType.LossInitial }}"/>
+        <configuration name="movement" value="{{ if .Type.Movement }}1{{ else }}0{{ end }}"/>
+        <configuration name="max-range" value="{{ .Type.Range }}"/>
+        <configuration name="bandwidth" value="{{ .Type.Bandwidth }}"/>
+        <configuration name="delay" value="{{ .Type.Delay }}"/>
+        <configuration name="jitter" value="{{ .Type.Jitter }}"/>
+        <configuration name="loss-range" value="{{ .Type.LossStartRange }}"/>
+        <configuration name="loss-factor" value="{{ .Type.LossFactor }}"/>
+        <configuration name="loss" value="{{ .Type.LossInitial }}"/>
       </wireless>
       {{- end}}
     </network>
     {{- end}}
   </networks>
   <devices>
-    {{- range .Networks}}
     {{- range .Devices}}
     <device id="{{ .Id }}" name="{{ .Name }}" icon="" canvas="1" type="{{ .Type }}" class="" image="">
       <position x="{{ .Position.X }}" y="{{ .Position.Y }}"/>
@@ -39,41 +37,39 @@
       {{- end}}
     </device>
     {{- end}}
-    {{- end}}
   </devices>
   <links>
-    {{- range $index, $network := .Networks}}
     {{- range $index, $device := .Devices}}
-    <link node1="{{ $device.Id }}" node2="{{ $network.Id }}">
-      <iface1 id="0" name="eth0" mac="{{ $device.Mac }}" ip4="{{ $device.IPv4 }}" ip4_mask="{{ $network.IPv4Mask }}" ip6="{{ $device.IPv6 }}" ip6_mask="{{ $network.IPv6Mask }}"/>
-      {{- if eq $network.NetworkTypeName "WIRELESS_LAN"}}
-      <options delay="{{ $network.NetworkType.Delay }}" bandwidth="{{ $network.NetworkType.Bandwidth }}" loss="{{ $network.NetworkType.Loss }}" dup="0" jitter="{{ $network.NetworkType.Jitter }}" unidirectional="0" buffer="0"/>
-      {{- else if eq $network.NetworkTypeName "SWITCH" "HUB"}}
-      <iface2 id="{{ $device.IdInNodeGroup }}" name="veth{{ $network.Id }}.{{ $device.IdInNodeGroup }}.1"/>
+    {{- range $ifaceId, $iface := .Interfaces }}
+    <link node1="{{ $device.Id }}" node2="{{ $iface.Network.Id }}">
+      <iface1 id="{{ $ifaceId }}" name="eth{{ $ifaceId }}" mac="{{ $iface.Mac }}" ip4="{{ $iface.IPv4 }}" ip4_mask="{{ $iface.Network.IPv4Mask }}" ip6="{{ $iface.IPv6 }}" ip6_mask="{{ $iface.Network.IPv6Mask }}"/>
+      {{- if eq $iface.Network.TypeName "WIRELESS_LAN"}}
+      <options delay="{{ $iface.Network.Type.Delay }}" bandwidth="{{ $iface.Network.Type.Bandwidth }}" loss="{{ $iface.Network.Type.Loss }}" dup="0" jitter="{{ $iface.Network.Type.Jitter }}" unidirectional="0" buffer="0"/>
+      {{- else if eq $iface.Network.TypeName "SWITCH" "HUB"}}
+      <iface2 id="{{ $iface.IdInNetwork }}" name="veth{{ $iface.Network.Id }}.{{ $iface.IdInNetwork }}.1"/>
       <options delay="0" bandwidth="0" loss="0.0" dup="0" jitter="0" unidirectional="0" buffer="0"/>
       {{- end}}
     </link>
-    {{- end}}
+    {{- end }}
     {{- end}}
   </links>
   <mobility_configurations>
     {{- range .Networks}}
-    {{- if eq .NetworkTypeName "WIRELESS_LAN"}}
+    {{- if eq .TypeName "WIRELESS_LAN"}}
     <mobility_configuration node="{{ .Id }}" model="basic_range">
-      <configuration name="range" value="{{ .NetworkType.Range }}"/>
-      <configuration name="bandwidth" value="{{ .NetworkType.Bandwidth }}"/>
-      <configuration name="jitter" value="{{ .NetworkType.Jitter }}"/>
-      <configuration name="delay" value="{{ .NetworkType.Delay }}"/>
-      <configuration name="error" value="{{ .NetworkType.Loss }}"/>
-      <configuration name="promiscuous" value="{{if .NetworkType.Promiscuous}}1{{else}}0{{end}}"/>
+      <configuration name="range" value="{{ .Type.Range }}"/>
+      <configuration name="bandwidth" value="{{ .Type.Bandwidth }}"/>
+      <configuration name="jitter" value="{{ .Type.Jitter }}"/>
+      <configuration name="delay" value="{{ .Type.Delay }}"/>
+      <configuration name="error" value="{{ .Type.Loss }}"/>
+      <configuration name="promiscuous" value="{{if .Type.Promiscuous}}1{{else}}0{{end}}"/>
     </mobility_configuration>
     {{- end}}
     {{- end}}
   </mobility_configurations>
   <configservice_configurations>
-    {{- range .Networks}}
     {{- range .Devices}}
-    {{- if eq .Type "Router"}}
+    {{- if eq .Type "router"}}
     <service name="zebra" node="{{ .Id }}"/>
     <service name="OSPFv2" node="{{ .Id }}"/>
     <service name="OSPFv3" node="{{ .Id }}"/>
@@ -82,15 +78,7 @@
     <service name="DefaultRoute" node="{{ .Id }}"/>
     {{- end}}
     {{- end}}
-    {{- end}}
   </configservice_configurations>
-{{- else}}
-  <networks/>
-  <links/>
-  <devices/>
-  <mobility_configurations/>
-  <configservice_configurations/>
-{{- end}}
   <session_origin lat="47.579166412353516" lon="-122.13232421875" alt="2.0" scale="150.0"/>
   <session_options>
     <configuration name="controlnet" value=""/>
