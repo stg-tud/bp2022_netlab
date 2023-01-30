@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"text/template"
 
 	"github.com/korylprince/ipnetgen"
@@ -20,6 +21,7 @@ type coreData struct {
 	Devices      []device
 	Networks     []network
 	WorldSize    customtypes.Area
+	HiddenNodes  string
 }
 
 type network struct {
@@ -174,6 +176,36 @@ func (c Core) Generate(exp experiment.Experiment) {
 		networks = append(networks, net)
 	}
 
+	// Add a ghost WIRELESS_LAN network to load mobility patterns
+	ipv4net, err := ipnetgen.New("172.16.0.0/12")
+	if err != nil {
+		panic(err)
+	}
+	ipv6net, err := ipnetgen.New("fdff:172:16::/48")
+	if err != nil {
+		panic(err)
+	}
+	mobilityGhostNet := network{
+		Id:       c.getId(),
+		Position: c.getPosition(exp.WorldSize),
+		Name:     "mobility_configuration",
+		Type: networktypes.WirelessLAN{
+			Bandwidth:   0,
+			Range:       0,
+			Jitter:      0,
+			Delay:       0,
+			Loss:        0,
+			Promiscuous: false,
+		},
+		TypeName:         c.networkType(networktypes.WirelessLAN{}),
+		DevicesConnected: 0,
+		IPv4Net:          ipv4net,
+		IPv4Mask:         8,
+		IPv6Net:          ipv6net,
+		IPv6Mask:         32,
+	}
+	networks = append(networks, mobilityGhostNet)
+
 	devices := []device{}
 	for _, nodeGroup := range exp.NodeGroups {
 		nodeGroupNetworks := []*network{}
@@ -181,6 +213,7 @@ func (c Core) Generate(exp experiment.Experiment) {
 			network := networkMapping[nodeGroupNetwork]
 			nodeGroupNetworks = append(nodeGroupNetworks, network)
 		}
+		nodeGroupNetworks = append(nodeGroupNetworks, &mobilityGhostNet)
 		var deviceId uint
 		for deviceId = 0; deviceId < nodeGroup.NoNodes; deviceId++ {
 			ifaces := []networkInterface{}
@@ -214,6 +247,7 @@ func (c Core) Generate(exp experiment.Experiment) {
 		Networks:     networks,
 		Devices:      devices,
 		WorldSize:    exp.WorldSize,
+		HiddenNodes:  strconv.Itoa(int(mobilityGhostNet.Id)),
 	}
 	xmlTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "core.xml"))
 	if err != nil {

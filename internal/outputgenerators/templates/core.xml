@@ -103,7 +103,7 @@
   <session_metadata>
     <configuration name="shapes" value="[]"/>
     <configuration name="edges" value="[]"/>
-    <configuration name="hidden" value="[]"/>
+    <configuration name="hidden" value="[{{ .HiddenNodes }}]"/>
     <configuration name="canvas" value="{&quot;gridlines&quot;: true, &quot;canvases&quot;: [{&quot;id&quot;: 1, &quot;wallpaper&quot;: null, &quot;wallpaper_style&quot;: 1, &quot;fit_image&quot;: false, &quot;dimensions&quot;: [{{ .WorldSize.Width }}, {{ .WorldSize.Height }}]}]}"/>
   </session_metadata>
   <default_services>

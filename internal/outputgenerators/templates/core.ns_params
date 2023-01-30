@@ -1,0 +1,4 @@
+set val(x) {{ .Experiment.WorldSize.Width }}
+set val(y) {{ .Experiment.WorldSize.Height }}
+set val(nn) {{ .NoNodes }}
+set val(duration) {{ .Experiment.Duration }}
