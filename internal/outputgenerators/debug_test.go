@@ -34,7 +34,7 @@ func TestDebug(t *testing.T) {
 	}
 
 	t.Cleanup(func() {
-		os.RemoveAll(outputgenerators.OUTPUT_FOLDER)
+		os.RemoveAll(outputgenerators.OutputFolder)
 	})
 
 	og := outputgenerators.Debug{}
@@ -45,7 +45,7 @@ func TestDebug(t *testing.T) {
 		t.Fatal("Could not read output file", err)
 	}
 
-	actual, err := os.ReadFile(fmt.Sprintf("%s/debug_out.toml", outputgenerators.OUTPUT_FOLDER))
+	actual, err := os.ReadFile(fmt.Sprintf("%s/debug_out.toml", outputgenerators.OutputFolder))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}

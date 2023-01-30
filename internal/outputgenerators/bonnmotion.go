@@ -66,7 +66,7 @@ func (b Bonnmotion) generateRandomWaypointNodeGroup(exp experiment.Experiment, n
 	command = append(command, b.generalParameters(exp, nodeGroup)...)
 	fmt.Printf("Random Waypoint. Running: %v\n", command)
 	execCommand := exec.Command(EXECUTABLE, command...)
-	execCommand.Dir = OUTPUT_FOLDER
+	execCommand.Dir = OutputFolder
 	_, err := execCommand.Output()
 	if err != nil {
 		panic(err)
@@ -85,7 +85,7 @@ func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup ex
 		fmt.Sprintf("-f%s", nodeGroup.Prefix),
 	}
 	execCommand := exec.Command(EXECUTABLE, command...)
-	execCommand.Dir = OUTPUT_FOLDER
+	execCommand.Dir = OutputFolder
 	_, err := execCommand.Output()
 	if err != nil {
 		panic(err)
@@ -94,7 +94,7 @@ func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup ex
 
 // Generate generates output for the given Experiment with BonnMotion.
 func (b Bonnmotion) Generate(exp experiment.Experiment) {
-	os.Mkdir(OUTPUT_FOLDER, 0755)
+	os.Mkdir(OutputFolder, 0755)
 	for i := 0; i < len(exp.NodeGroups); i++ {
 		nodeGroup := exp.NodeGroups[i]
 		switch nodeGroup.MovementModel.(type) {

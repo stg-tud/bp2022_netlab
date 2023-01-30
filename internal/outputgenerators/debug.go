@@ -17,6 +17,6 @@ func (Debug) Generate(exp experiment.Experiment) {
 	if err != nil {
 		panic(err)
 	}
-	os.Mkdir(OUTPUT_FOLDER, 0755)
-	os.WriteFile(fmt.Sprintf("%s/debug_out.toml", OUTPUT_FOLDER), b, 0644)
+	os.Mkdir(OutputFolder, 0755)
+	os.WriteFile(fmt.Sprintf("%s/debug_out.toml", OutputFolder), b, 0644)
 }

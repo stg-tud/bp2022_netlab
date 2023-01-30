@@ -1,49 +1,49 @@
 package outputgenerators
 
 import (
-	"encoding/xml"
 	"os"
-)
+	"path/filepath"
+	"text/template"
 
-const (
-	Header = `<?xml version="1.0" encoding="UTF-8"?>` + "\n"
+	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 )
 
 type CoreEmulab struct{}
 
-type Scenario struct {
-	XMLName  xml.Name  `xml:"scenario"`
-	Networks []Network `xml:"networks`
-}
-
-type Network struct {
-	XMLName xml.Name `xml:"network"`
-	Id      int      `xml:"id,attr"`
-	Name    string   `xml:"name,attr"`
-	Type    string   `xml:"type,attr"`
+type data struct {
+	Name string
+	Scenario string
+	Automator string
+	GUI int
+	PidStat string
+	PidParam string
+	Net int
+	NetParam string
+	XY int
+	Contacts int
+	Shutdown string
+	Runtime int
 }
 
 // generates a XML and a conf configuartion for CoreEmulab with a given experiment
-func (c CoreEmulab) Generate() {
+func (c CoreEmulab) Generate(exp experiment.Experiment) {
 
-	nt := Network{
-		Id:   1,
-		Name: "AdHoc",
-		Type: "WIRELESS",
-	}
-	scenario := &Scenario{}
-	scenario.Networks = []Network{nt}
+	os.Mkdir(OutputFolder, 0755)
 
-	data, err := os.Create("coreemulab.xml")
+	fbuffer, err := os.Create(filepath.Join(OutputFolder, "experiment.conf"))
 	if err != nil {
 		panic(err)
 	}
-	data.WriteString(xml.Header)
-	encoder := xml.NewEncoder(data)
-	encoder.Indent("", "\t")
-	err = encoder.Encode(&scenario)
+	replace := data{
+		Name: exp.Name,
+		
+		Runtime: exp.Duration,
+	}
+
+	confTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "experiment.conf"))
 	if err != nil {
 		panic(err)
 	}
+	confTemplate.Execute(fbuffer, replace)
 
 }
