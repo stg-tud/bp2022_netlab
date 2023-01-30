@@ -12,8 +12,8 @@ func TestOutput(t *testing.T) {
 	core := outputgenerators.CoreEmulab{}
 
 	exp := experiment.Experiment{
-		Name: "e1",
+		Name:     "e1",
 		Duration: 245,
-		}	
+	}
 	core.Generate(exp)
 }
