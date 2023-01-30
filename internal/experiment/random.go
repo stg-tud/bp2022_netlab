@@ -7,6 +7,7 @@ import (
 
 // GenerateRandomSeed returns a random seed used for random generations
 func GenerateRandomSeed() int64 {
+	time.Sleep(1000) // Sleep a few nanoseconds in order for Windows to update its time and allow unique timestamps
 	source := rand.NewSource(time.Now().UnixNano())
 	randObj := rand.New(source)
 	seed := randObj.Int63()
