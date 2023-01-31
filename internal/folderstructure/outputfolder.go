@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	logger "github.com/gookit/slog"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 )
 
@@ -23,6 +24,7 @@ func GetOutputFolder(exp experiment.Experiment, subfolders ...string) string {
 // GetOutputFolder returns the relative path of the output folder and creates the folder if it does not exist
 func GetAndCreateOutputFolder(exp experiment.Experiment, subfolders ...string) (string, error) {
 	outputFolder := GetOutputFolder(exp, subfolders...)
+	logger.Trace("Creating folder", outputFolder)
 	err := os.MkdirAll(outputFolder, 0755)
 	if err != nil {
 		return "", err
