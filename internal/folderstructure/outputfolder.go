@@ -11,6 +11,7 @@ import (
 // The name of the (top level) output folder
 const OutputFolderName = "output"
 
+// GetOutputFolder returns the relative path of the output folder
 func GetOutputFolder(exp experiment.Experiment, subfolders ...string) string {
 	outputFolder := filepath.Join(OutputFolderName, FileSystemEscape(exp.Name))
 	for _, subfolder := range subfolders {
@@ -19,8 +20,12 @@ func GetOutputFolder(exp experiment.Experiment, subfolders ...string) string {
 	return outputFolder
 }
 
+// GetOutputFolder returns the relative path of the output folder and creates the folder if it does not exist
 func GetAndCreateOutputFolder(exp experiment.Experiment, subfolders ...string) (string, error) {
 	outputFolder := GetOutputFolder(exp, subfolders...)
-	os.MkdirAll(outputFolder, 0755)
+	err := os.MkdirAll(outputFolder, 0755)
+	if err != nil {
+		return "", err
+	}
 	return outputFolder, nil
 }

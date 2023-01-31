@@ -62,6 +62,8 @@ func TestGetAndCreateOutputFolder(t *testing.T) {
 			RandomSeed: experiment.GenerateRandomSeed(),
 		},
 	}
+	// Add the second experiment a second time to check for errors with existing folders
+	experiments = append(experiments, experiments[1])
 	for _, experiment := range experiments {
 		subfolders := []string{"test-subdir"}
 		outputFolder, err := folderstructure.GetAndCreateOutputFolder(experiment, subfolders...)
