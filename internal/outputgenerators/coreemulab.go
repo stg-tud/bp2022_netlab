@@ -14,15 +14,19 @@ type data struct {
 	Name      string
 	Scenario  string
 	Automator string
-	GUI       int
-	PidStat   string
-	PidParam  string
-	Net       int
-	NetParam  string
-	XY        int
-	Contacts  int
-	Shutdown  string
-	Runtime   int
+
+	GUI           int
+	PidStat       string
+	PidParam      string
+	Net           int
+	NetParam      string
+	XY            int
+	XYParam       int
+	Contacts      int
+	ContactsParam int
+	Shutdown      string
+	Warmup        int
+	Runtime       int
 }
 
 // generates a XML and a conf configuartion for CoreEmulab with a given experiment
