@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"text/template"
 
+	logger "github.com/gookit/slog"
 	"github.com/korylprince/ipnetgen"
 	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
@@ -63,6 +64,7 @@ const nodeSize int = 100
 
 // getPosition returns an incrementing position for nodes to be placed on the canvas without overlap
 func (Core) getPosition(worldSize customtypes.Area) customtypes.Position {
+	logger.Trace("Getting new position")
 	lastPosition.X = lastPosition.X + nodeSize
 	if lastPosition.X >= int(worldSize.Width) {
 		lastPosition.X = nodeSize
@@ -86,22 +88,25 @@ func (Core) getMac(network network, index uint) string {
 }
 
 // getIpSpace returns an ip space consisting of an IPv4 and an IPv6 network. They are collision free for different index values.
-func (Core) getIpSpace(index uint) (IPv4Net *ipnetgen.IPNetGenerator, IPv4Mask int, IPv6Net *ipnetgen.IPNetGenerator, IPv6Mask int) {
+func (Core) getIpSpace(index uint) (IPv4Net *ipnetgen.IPNetGenerator, IPv4Mask int, IPv6Net *ipnetgen.IPNetGenerator, IPv6Mask int, error error) {
+	logger.Trace("Getting new IP space for index", index)
 	v4Net, err := ipnetgen.New(fmt.Sprintf("10.%d.0.0/24", index))
 	if err != nil {
-		panic(err)
+		logger.Error("Error generating IPv4 space", err)
+		return &ipnetgen.IPNetGenerator{}, 0, &ipnetgen.IPNetGenerator{}, 0, err
 	}
 	v4Mask, _ := v4Net.Mask.Size()
 	v4Net.Next()
 
 	v6Net, err := ipnetgen.New(fmt.Sprintf("2001:%d::/64", index))
 	if err != nil {
-		panic(err)
+		logger.Error("Error generating IPv6 space", err)
+		return &ipnetgen.IPNetGenerator{}, 0, &ipnetgen.IPNetGenerator{}, 0, err
 	}
 	v6Mask, _ := v6Net.Mask.Size()
 	v6Net.Next()
 
-	return v4Net, v4Mask, v6Net, v6Mask
+	return v4Net, v4Mask, v6Net, v6Mask, nil
 }
 
 // networkType returns the correct CORE string for given NetworkType
@@ -143,12 +148,14 @@ func (Core) deviceType(deviceType experiment.NodeType) string {
 
 // buildNetworks generates a list of networks used for CORE configuration as well as a mapping of experiment.Network to (CORE) networks
 func (c Core) buildNetworks(exp experiment.Experiment) ([]network, map[*experiment.Network]*network, error) {
+	logger.Trace("Building networks")
 	networks := []network{}
 	networkMapping := make(map[*experiment.Network]*network)
 	for i := range exp.Networks {
 		expNetwork := &exp.Networks[i]
+		logger.Tracef("Building network \"%s\"", expNetwork.Name)
 		ui := uint(i)
-		IPv4Net, IPv4Mask, IPv6Net, IPv6Mask := c.getIpSpace(ui + 1)
+		IPv4Net, IPv4Mask, IPv6Net, IPv6Mask, _ := c.getIpSpace(ui + 1)
 		net := network{
 			Id:               c.getId(),
 			Position:         c.getPosition(exp.WorldSize),
@@ -169,6 +176,7 @@ func (c Core) buildNetworks(exp experiment.Experiment) ([]network, map[*experime
 
 // buildDevice generates the device configuration for CORE
 func (c Core) buildDevice(deviceId uint, exp experiment.Experiment, nodeGroup experiment.NodeGroup, nodeGroupNetworks []*network) (device, error) {
+	logger.Tracef("Building device \"%s%d\"", nodeGroup.Prefix, deviceId)
 	deviceNetworkInterfaces := []networkInterface{}
 	for _, network := range nodeGroupNetworks {
 		deviceNetworkInterface := networkInterface{
@@ -195,8 +203,10 @@ func (c Core) buildDevice(deviceId uint, exp experiment.Experiment, nodeGroup ex
 
 // buildDevices generates the configuration for devices for CORE
 func (c Core) buildDevices(exp experiment.Experiment, networkMapping map[*experiment.Network]*network) ([]device, error) {
+	logger.Trace("Building devices")
 	devices := []device{}
 	for _, nodeGroup := range exp.NodeGroups {
+		logger.Tracef("Processing NodeGroup \"%s\"", nodeGroup.Prefix)
 		nodeGroupNetworks := []*network{}
 		for _, nodeGroupNetwork := range nodeGroup.Networks {
 			network := networkMapping[nodeGroupNetwork]
@@ -216,22 +226,25 @@ func (c Core) buildDevices(exp experiment.Experiment, networkMapping map[*experi
 
 // Generate generates the XML configuration for CORE for a given Experiment.
 func (c Core) Generate(exp experiment.Experiment) {
+	logger.Info("Generating CORE output")
 	scenarioIdCounter = ScenarioIdOffset
 	lastPosition = customtypes.Position{X: 0, Y: nodeSize}
 
+	logger.Tracef("Creating folder \"%s\"", OutputFolder)
+	logger.Tracef("Opening file \"%s\"", filepath.Join(OutputFolder, "core.xml"))
 	os.Mkdir(OutputFolder, 0755)
 	fbuffer, err := os.Create(filepath.Join(OutputFolder, "core.xml"))
 	if err != nil {
-		panic(err)
+		logger.Error("Error creating output file:", err)
 	}
 
 	networks, networkMapping, err := c.buildNetworks(exp)
 	if err != nil {
-		panic(err)
+		logger.Error("Error building networks:", err)
 	}
 	devices, err := c.buildDevices(exp, networkMapping)
 	if err != nil {
-		panic(err)
+		logger.Error("Error building devices:", err)
 	}
 
 	replacements := coreData{
@@ -242,7 +255,8 @@ func (c Core) Generate(exp experiment.Experiment) {
 	}
 	xmlTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "core.xml"))
 	if err != nil {
-		panic(err)
+		logger.Error("Error opening template file:", err)
 	}
 	xmlTemplate.Execute(fbuffer, replacements)
+	logger.Trace("Finished generation")
 }

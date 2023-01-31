@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"runtime"
 
+	logger "github.com/gookit/slog"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 )
 
@@ -23,5 +24,6 @@ type OutputGenerator interface {
 // GetTemplatesFolder returns the absolute path of the folder containing the template files.
 func GetTemplatesFolder() string {
 	_, callerPath, _, _ := runtime.Caller(0)
+	logger.Trace("Getting template folder from caller path:", callerPath)
 	return filepath.Join(filepath.Dir(callerPath), TemplatesFolder)
 }
