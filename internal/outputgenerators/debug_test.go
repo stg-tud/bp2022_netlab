@@ -1,56 +1,35 @@
 package outputgenerators_test
 
 import (
-	"fmt"
 	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 
-	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
-	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/outputgenerators"
 )
 
-const EXPECTED_OUTPUT = "Test"
-
-func TestDebug(t *testing.T) {
-	var nodegroups []experiment.NodeGroup
-	nodegroups = append(nodegroups, experiment.NewNodeGroup("a", 1))
-	nodegroups = append(nodegroups, experiment.NewNodeGroup("b", 2))
-	nodegroups = append(nodegroups, experiment.NewNodeGroup("c", 3))
-	nodegroups = append(nodegroups, experiment.NewNodeGroup("d", 4))
-
-	exp := experiment.Experiment{
-		Name:    "Debug Output Test",
-		Runs:    5,
-		Targets: []experiment.Target{experiment.TARGET_CORE, experiment.TARGET_THEONE},
-
-		Duration: 123456,
-		WorldSize: customtypes.Area{
-			Height: 170,
-			Width:  240,
-		},
-
-		NodeGroups: nodegroups,
-	}
-
+func TestDebugGeneration(t *testing.T) {
 	t.Cleanup(func() {
-		os.RemoveAll(outputgenerators.OUTPUT_FOLDER)
+		os.RemoveAll(outputgenerators.OutputFolder)
 	})
 
 	og := outputgenerators.Debug{}
-	og.Generate(exp)
+	og.Generate(GetTestingExperiment())
 
-	expected, err := os.ReadFile("testdata/debug_out.toml")
+	expected, err := os.ReadFile(filepath.Join(TestDataFolder, outputgenerators.DebugOutputFile))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}
+	expectedClean := strings.ReplaceAll(string(expected), "\r\n", "\n")
 
-	actual, err := os.ReadFile(fmt.Sprintf("%s/debug_out.toml", outputgenerators.OUTPUT_FOLDER))
+	actual, err := os.ReadFile(filepath.Join(outputgenerators.OutputFolder, outputgenerators.DebugOutputFile))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}
+	actualClean := strings.ReplaceAll(string(actual), "\r\n", "\n")
 
-	if string(actual) != string(expected) {
+	if string(actualClean) != string(expectedClean) {
 		t.Fatal("Output does not match expected output!")
 	}
 }
