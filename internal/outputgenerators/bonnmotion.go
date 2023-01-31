@@ -23,6 +23,7 @@ const BonnMotionStepFile = "bonnmotion.steps"
 // The Bonnmotion output generator calles BonnMotion with the correct parameters.
 type Bonnmotion struct {
 	outputFolder string
+	stepFilePath string
 }
 
 // Returns the correct BonnMotion platform name for the given Target.
@@ -70,8 +71,8 @@ func (Bonnmotion) generalParameters(exp experiment.Experiment, nodeGroup experim
 // Writes the command to the step file and executes it
 func (b Bonnmotion) execute(command []string) error {
 	logger.Trace("Running command:", command)
-	logger.Tracef("Writing file \"%s\"", filepath.Join(b.outputFolder, BonnMotionExecutable))
-	stepFile, err := os.OpenFile(filepath.Join(b.outputFolder, BonnMotionStepFile), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	logger.Tracef("Writing file \"%s\"", b.stepFilePath)
+	stepFile, err := os.OpenFile(b.stepFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		logger.Error("Error opening step file:", err)
 		return err
@@ -130,8 +131,19 @@ func (b Bonnmotion) Generate(exp experiment.Experiment) {
 		return
 	}
 	b.outputFolder = outputFolder
+
+	b.stepFilePath = filepath.Join(b.outputFolder, BonnMotionStepFile)
+	allowedToWriteStepFile := folderstructure.MayCreatePath(b.stepFilePath)
+	if !allowedToWriteStepFile {
+		logger.Error("Not allowed to write step file!")
+		return
+	}
 	for _, nodeGroup := range exp.NodeGroups {
 		logger.Tracef("Processing NodeGroup \"%s\"", nodeGroup.Prefix)
+		if !folderstructure.MayCreatePath(filepath.Join(b.outputFolder, fmt.Sprintf("%s.movements.gz", nodeGroup.Prefix))) {
+			logger.Error("Not allowed to write output file!")
+			return
+		}
 		switch nodeGroup.MovementModel.(type) {
 		case movementpatterns.RandomWaypoint:
 			b.generateRandomWaypointNodeGroup(exp, nodeGroup)

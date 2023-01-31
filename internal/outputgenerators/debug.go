@@ -29,7 +29,12 @@ func (Debug) Generate(exp experiment.Experiment) {
 		logger.Error("Could not create output folder!", err)
 		return
 	}
-	logger.Tracef("Writing file \"%s\"", filepath.Join(outputFolder, DebugOutputFile))
-	os.WriteFile(filepath.Join(outputFolder, DebugOutputFile), b, 0644)
+	outputFilePath := filepath.Join(outputFolder, DebugOutputFile)
+	if !folderstructure.MayCreatePath(outputFilePath) {
+		logger.Error("Not allowed to write output file!")
+		return
+	}
+	logger.Tracef("Writing file \"%s\"", outputFilePath)
+	os.WriteFile(outputFilePath, b, 0644)
 	logger.Trace("Finished generation")
 }
