@@ -15,7 +15,7 @@ func TestExistingPathsAllowance(t *testing.T) {
 
 	os.Setenv(folderstructure.SkipExistingEnv, "0")
 
-	err := os.Mkdir(folderstructure.OutputFolderName, 0755)
+	err := os.MkdirAll(folderstructure.OutputFolderName, 0755)
 	if err != nil {
 		t.Fatal("Error creating output folder", err)
 	}
@@ -43,7 +43,7 @@ func TestExistingPathsDenial(t *testing.T) {
 
 	os.Setenv(folderstructure.SkipExistingEnv, "1")
 
-	err := os.Mkdir(folderstructure.OutputFolderName, 0755)
+	err := os.MkdirAll(folderstructure.OutputFolderName, 0755)
 	if err != nil {
 		t.Fatal("Error creating output folder", err)
 	}
