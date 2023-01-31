@@ -7,10 +7,8 @@ import (
 
 	"github.com/gookit/slog"
 	"github.com/gookit/slog/handler"
+	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 )
-
-// The name of the folder the log file should be written to
-const OutputFolder = "output"
 
 // The name of the log file to write
 const FileName = "app.log"
@@ -28,7 +26,7 @@ func Init() {
 	fileFormatter.EnableColor = false
 	fileFormatter.TimeFormat = "2006-01-02T15:04:05.000"
 	fileFormatter.SetTemplate("{{datetime}} ({{caller}}) [{{level}}] {{message}} {{data}} {{extra}}\n")
-	fileStream, err := os.OpenFile(filepath.Join(OutputFolder, FileName), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	fileStream, err := os.OpenFile(filepath.Join(folderstructure.OutputFolderName, FileName), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		panic(err)
 	}

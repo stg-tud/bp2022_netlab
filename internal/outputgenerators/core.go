@@ -10,6 +10,7 @@ import (
 	"github.com/korylprince/ipnetgen"
 	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
+	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
@@ -230,10 +231,13 @@ func (c Core) Generate(exp experiment.Experiment) {
 	scenarioIdCounter = ScenarioIdOffset
 	lastPosition = customtypes.Position{X: 0, Y: nodeSize}
 
-	logger.Tracef("Creating folder \"%s\"", OutputFolder)
-	logger.Tracef("Opening file \"%s\"", filepath.Join(OutputFolder, "core.xml"))
-	os.Mkdir(OutputFolder, 0755)
-	fbuffer, err := os.Create(filepath.Join(OutputFolder, "core.xml"))
+	outputFolder, err := folderstructure.GetAndCreateOutputFolder(exp)
+	if err != nil {
+		logger.Error("Could not create output folder!", err)
+		return
+	}
+	logger.Tracef("Opening file \"%s\"", filepath.Join(outputFolder, "core.xml"))
+	fbuffer, err := os.Create(filepath.Join(outputFolder, "core.xml"))
 	if err != nil {
 		logger.Error("Error creating output file:", err)
 	}

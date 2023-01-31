@@ -7,6 +7,7 @@ import (
 	logger "github.com/gookit/slog"
 	"github.com/pelletier/go-toml/v2"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
+	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 )
 
 // Debug output generator dumps the experiment config as TOML for debug purposes.
@@ -23,9 +24,12 @@ func (Debug) Generate(exp experiment.Experiment) {
 		logger.Error("Could not marshal Experiment to TOML!", err)
 		return
 	}
-	logger.Tracef("Creating folder \"%s\"", OutputFolder)
-	os.Mkdir(OutputFolder, 0755)
-	logger.Tracef("Writing file \"%s\"", filepath.Join(OutputFolder, DebugOutputFile))
-	os.WriteFile(filepath.Join(OutputFolder, DebugOutputFile), b, 0644)
+	outputFolder, err := folderstructure.GetAndCreateOutputFolder(exp)
+	if err != nil {
+		logger.Error("Could not create output folder!", err)
+		return
+	}
+	logger.Tracef("Writing file \"%s\"", filepath.Join(outputFolder, DebugOutputFile))
+	os.WriteFile(filepath.Join(outputFolder, DebugOutputFile), b, 0644)
 	logger.Trace("Finished generation")
 }
