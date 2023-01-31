@@ -23,10 +23,11 @@ func TestExistingPathsAllowance(t *testing.T) {
 	if !folderstructure.MayCreatePath(testingFile) {
 		t.Fatal("Creation denied while it should be allowed!")
 	}
-	_, err = os.Create(testingFile)
+	fbuffer, err := os.Create(testingFile)
 	if err != nil {
 		t.Fatal("Error creating file", err)
 	}
+	defer fbuffer.Close()
 	if !folderstructure.MayCreatePath(testingFile) {
 		t.Fatal("Creation denied while it should be allowed!")
 	}
@@ -38,7 +39,10 @@ func TestExistingPathsDenial(t *testing.T) {
 	})
 	if _, err := os.Stat(folderstructure.OutputFolderName); !os.IsNotExist(err) {
 		// Folder already exists. Removing it in order to check generation.
-		os.RemoveAll(folderstructure.OutputFolderName)
+		err = os.RemoveAll(folderstructure.OutputFolderName)
+		if err != nil {
+			t.Fatal("Could not remove existing output folder!")
+		}
 	}
 
 	os.Setenv(folderstructure.SkipExistingEnv, "1")
@@ -51,10 +55,11 @@ func TestExistingPathsDenial(t *testing.T) {
 	if !folderstructure.MayCreatePath(testingFile) {
 		t.Fatal("Creation denied while it should be allowed!")
 	}
-	_, err = os.Create(testingFile)
+	fbuffer, err := os.Create(testingFile)
 	if err != nil {
 		t.Fatal("Error creating file", err)
 	}
+	defer fbuffer.Close()
 	if folderstructure.MayCreatePath(testingFile) {
 		t.Fatal("Creation allowed while it should be denied!")
 	}

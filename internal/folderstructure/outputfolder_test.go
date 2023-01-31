@@ -52,7 +52,10 @@ func TestGetAndCreateOutputFolder(t *testing.T) {
 	})
 	if _, err := os.Stat(folderstructure.OutputFolderName); !os.IsNotExist(err) {
 		// Folder already exists. Removing it in order to check generation.
-		os.RemoveAll(folderstructure.OutputFolderName)
+		err = os.RemoveAll(folderstructure.OutputFolderName)
+		if err != nil {
+			t.Fatal("Could not remove existing output folder!")
+		}
 	}
 
 	experiments := []experiment.Experiment{

@@ -237,15 +237,16 @@ func (c Core) Generate(exp experiment.Experiment) {
 		return
 	}
 	outputFilePath := filepath.Join(outputFolder, "core.xml")
-	logger.Tracef("Opening file \"%s\"", outputFilePath)
 	if !folderstructure.MayCreatePath(outputFilePath) {
 		logger.Error("Not allowed to write output file!")
 		return
 	}
+	logger.Tracef("Opening file \"%s\"", outputFilePath)
 	fbuffer, err := os.Create(outputFilePath)
 	if err != nil {
 		logger.Error("Error creating output file:", err)
 	}
+	defer fbuffer.Close()
 
 	networks, networkMapping, err := c.buildNetworks(exp)
 	if err != nil {
