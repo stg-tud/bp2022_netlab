@@ -1,7 +1,6 @@
 package experiment
 
 import (
-	
 	"os"
 	"strconv"
 	"strings"
@@ -23,7 +22,7 @@ func LoadFromFile(file string) Experiment {
 	node := "[[NodeGroups]]"
 	copy := data
 	var tmp Experiment
-	noNodegroups := strings.Count(data,node)
+	noNodegroups := strings.Count(data, node)
 	for k := 0; k < noNodegroups; k++ {
 
 		//delete everything before the next MovementModel
@@ -37,7 +36,6 @@ func LoadFromFile(file string) Experiment {
 		//movementmodel is between
 		movementSet := copy[27:next]
 
-		
 		data = strings.Replace(data, movementSet, "", -1)
 
 		if strings.TrimSpace(movementSet) == "" {
@@ -48,7 +46,6 @@ func LoadFromFile(file string) Experiment {
 
 		} else {
 
-		
 			maxpause := movementSet[strings.Index(movementSet, "MaxPause=")+9:]
 
 			Maxpause, err := strconv.Atoi(strings.TrimSpace(maxpause))
@@ -77,27 +74,26 @@ func LoadFromFile(file string) Experiment {
 					MaxPause: Maxpause,
 				},
 			})
-			
+
 		}
-		if next !=len(copy) {
+		if next != len(copy) {
 			//delete before the next nodegroup
 			copy = strings.Replace(copy, copy[0:strings.Index(copy, node)], "", -1)
 		}
 	}
-	
-	err := toml.Unmarshal([]byte(data),&exp)
-	if err != nil{
+
+	err := toml.Unmarshal([]byte(data), &exp)
+	if err != nil {
 		panic(err)
 	}
 	for i := 0; i < noNodegroups; i++ {
-		exp.NodeGroups[i].MovementModel=tmp.NodeGroups[i].MovementModel
+		exp.NodeGroups[i].MovementModel = tmp.NodeGroups[i].MovementModel
 	}
-	
+
 	for i := 0; i < len(exp.NodeGroups); i++ {
 
-		
 	}
-	
+
 	return exp
 
 }
