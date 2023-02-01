@@ -77,7 +77,12 @@ func (b Bonnmotion) execute(command []string) error {
 		logger.Error("Error opening step file:", err)
 		return err
 	}
-	defer stepFile.Close()
+	defer func() {
+		if cerr := stepFile.Close(); cerr != nil {
+			logger.Error("Error closing step file:", cerr)
+			err = cerr
+		}
+	}()
 	stepFile.WriteString(fmt.Sprintln(command))
 	execCommand := exec.Command(BonnMotionExecutable, command...)
 	execCommand.Dir = b.outputFolder

@@ -246,7 +246,12 @@ func (c Core) Generate(exp experiment.Experiment) {
 	if err != nil {
 		logger.Error("Error creating output file:", err)
 	}
-	defer fbuffer.Close()
+	defer func() {
+		if cerr := fbuffer.Close(); cerr != nil {
+			logger.Error("Error closing step file:", cerr)
+			err = cerr
+		}
+	}()
 
 	networks, networkMapping, err := c.buildNetworks(exp)
 	if err != nil {
