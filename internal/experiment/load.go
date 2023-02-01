@@ -1,7 +1,7 @@
 package experiment
 
 import (
-	"fmt"
+	
 	"os"
 	"strconv"
 	"strings"
@@ -92,45 +92,12 @@ func LoadFromFile(file string) Experiment {
 	for i := 0; i < noNodegroups; i++ {
 		exp.NodeGroups[i].MovementModel=tmp.NodeGroups[i].MovementModel
 	}
-	fmt.Println(exp.NodeGroups[3].MovementModel)
+	
 	for i := 0; i < len(exp.NodeGroups); i++ {
 
-		if exp.NodeGroups[i].IPv4Net == "" {
-			exp.NodeGroups[i].IPv4Net = defaultValues.IPv4Net
-		}
-		if exp.NodeGroups[i].IPv4Mask == 0 {
-			exp.NodeGroups[i].IPv4Mask = defaultValues.IPv4Mask
-		}
-		if exp.NodeGroups[i].IPv6Net == "" {
-			exp.NodeGroups[i].IPv6Net = defaultValues.IPv6Net
-		}
-		if exp.NodeGroups[i].IPv6Mask == 0 {
-			exp.NodeGroups[i].IPv6Mask = defaultValues.IPv6Mask
-		}
-		if exp.NodeGroups[i].NetworkType == "" {
-			exp.NodeGroups[i].NetworkType = defaultValues.NetworkType
-		}
-		if exp.NodeGroups[i].Range == 0 {
-			exp.NodeGroups[i].Range = defaultValues.Range
-		}
-		if exp.NodeGroups[i].Bandwidth == 0 {
-			exp.NodeGroups[i].Bandwidth = defaultValues.Bandwidth
-		}
-		if exp.NodeGroups[i].Jitter == 0 {
-			exp.NodeGroups[i].Jitter = defaultValues.Jitter
-		}
-		if exp.NodeGroups[i].Delay == 0 {
-			exp.NodeGroups[i].Delay = defaultValues.Delay
-		}
-		if exp.NodeGroups[i].Error == 0 {
-			exp.NodeGroups[i].Error = defaultValues.Error
-		}
-		if exp.NodeGroups[i].Promiscuous == 0 {
-			exp.NodeGroups[i].Promiscuous = defaultValues.Promiscuous
-		}
 		
 	}
-
+	
 	return exp
 
 }
