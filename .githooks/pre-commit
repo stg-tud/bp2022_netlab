@@ -23,8 +23,8 @@ echo -n "Running Go Vet... "
 go vet ./...
 echo "OK"
 
-echo -n "Running Staticcheck... "
-staticcheck ./...
+echo -n "Running golangci-lint... "
+golangci-lint run
 echo "OK"
 
 echo -n "Trying to build... "
