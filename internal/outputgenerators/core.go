@@ -232,7 +232,11 @@ func (c Core) Generate(exp experiment.Experiment) {
 
 	logger.Tracef("Creating folder \"%s\"", OutputFolder)
 	logger.Tracef("Opening file \"%s\"", filepath.Join(OutputFolder, "core.xml"))
-	os.Mkdir(OutputFolder, 0755)
+	err := os.Mkdir(OutputFolder, 0755)
+	if err != nil && !os.IsExist(err) {
+		logger.Error("Could not create output folder:", err)
+		return
+	}
 	fbuffer, err := os.Create(filepath.Join(OutputFolder, "core.xml"))
 	if err != nil {
 		logger.Error("Error creating output file:", err)
@@ -257,6 +261,10 @@ func (c Core) Generate(exp experiment.Experiment) {
 	if err != nil {
 		logger.Error("Error opening template file:", err)
 	}
-	xmlTemplate.Execute(fbuffer, replacements)
+	err = xmlTemplate.Execute(fbuffer, replacements)
+	if err != nil {
+		logger.Error("Could not execute XML template:", err)
+		return
+	}
 	logger.Trace("Finished generation")
 }

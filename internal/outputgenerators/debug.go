@@ -24,8 +24,16 @@ func (Debug) Generate(exp experiment.Experiment) {
 		return
 	}
 	logger.Tracef("Creating folder \"%s\"", OutputFolder)
-	os.Mkdir(OutputFolder, 0755)
+	err = os.Mkdir(OutputFolder, 0755)
+	if err != nil && !os.IsExist(err) {
+		logger.Error("Could not create output folder:", err)
+		return
+	}
 	logger.Tracef("Writing file \"%s\"", filepath.Join(OutputFolder, DebugOutputFile))
-	os.WriteFile(filepath.Join(OutputFolder, DebugOutputFile), b, 0644)
+	err = os.WriteFile(filepath.Join(OutputFolder, DebugOutputFile), b, 0644)
+	if err != nil {
+		logger.Error("Could not write output file:", err)
+		return
+	}
 	logger.Trace("Finished generation")
 }

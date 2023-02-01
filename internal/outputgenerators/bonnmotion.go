@@ -73,7 +73,11 @@ func (Bonnmotion) execute(command []string) error {
 		return err
 	}
 	defer stepFile.Close()
-	stepFile.WriteString(fmt.Sprintln(command))
+	_, err = stepFile.WriteString(fmt.Sprintln(command))
+	if err != nil {
+		logger.Error("Error writing step file:", err)
+		return err
+	}
 	execCommand := exec.Command(BonnMotionExecutable, command...)
 	execCommand.Dir = OutputFolder
 	// Check if the function is currently unit tested and do not execute actual BonnMotion command if so.
@@ -120,8 +124,16 @@ func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup ex
 // Generate generates output for the given Experiment with BonnMotion.
 func (b Bonnmotion) Generate(exp experiment.Experiment) {
 	logger.Info("Generating BonnMotion output")
-	os.Mkdir(OutputFolder, 0755)
-	os.Create(filepath.Join(OutputFolder, BonnMotionStepFile))
+	err := os.Mkdir(OutputFolder, 0755)
+	if err != nil && !os.IsExist(err) {
+		logger.Error("Could not create output folder:", err)
+		return
+	}
+	_, err = os.Create(filepath.Join(OutputFolder, BonnMotionStepFile))
+	if err != nil && !os.IsExist(err) {
+		logger.Error("Could not create step file:", err)
+		return
+	}
 	for _, nodeGroup := range exp.NodeGroups {
 		logger.Tracef("Processing NodeGroup \"%s\"", nodeGroup.Prefix)
 		switch nodeGroup.MovementModel.(type) {
