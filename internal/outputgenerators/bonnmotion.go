@@ -83,7 +83,11 @@ func (b Bonnmotion) execute(command []string) error {
 			err = cerr
 		}
 	}()
-	stepFile.WriteString(fmt.Sprintln(command))
+	_, err = stepFile.WriteString(fmt.Sprintln(command))
+	if err != nil {
+		logger.Error("Error writing step file:", err)
+		return err
+	}
 	execCommand := exec.Command(BonnMotionExecutable, command...)
 	execCommand.Dir = b.outputFolder
 	// Check if the function is currently unit tested and do not execute actual BonnMotion command if so.

@@ -35,6 +35,10 @@ func (Debug) Generate(exp experiment.Experiment) {
 		return
 	}
 	logger.Tracef("Writing file \"%s\"", outputFilePath)
-	os.WriteFile(outputFilePath, b, 0644)
+	err = os.WriteFile(outputFilePath, b, 0644)
+	if err != nil {
+		logger.Error("Could not write output file:", err)
+		return
+	}
 	logger.Trace("Finished generation")
 }

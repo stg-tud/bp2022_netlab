@@ -272,6 +272,10 @@ func (c Core) Generate(exp experiment.Experiment) {
 	if err != nil {
 		logger.Error("Error opening template file:", err)
 	}
-	xmlTemplate.Execute(fbuffer, replacements)
+	err = xmlTemplate.Execute(fbuffer, replacements)
+	if err != nil {
+		logger.Error("Could not execute XML template:", err)
+		return
+	}
 	logger.Trace("Finished generation")
 }

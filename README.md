@@ -18,10 +18,10 @@ git config core.hooksPath .githooks
 
 Please make sure to use `gofmt` and `go test` (or use pre-commit hook instead) as tests will fail if your commits do not comply with the formatting style.
 
-### Staticcheck
+### golangci-lint
 
-We also use the tool [Staticcheck](https://staticcheck.io/) for some static code analysis. This is also part of our testing pipeline so please make sure to run those tests before commiting (or use pre-commit hook instead).
+We also use the tool [golangci-lint](https://golangci-lint.run/) for some static code analysis. This is also part of our testing pipeline so please make sure to run those tests before commiting (or use pre-commit hook instead).
 
-It can be installed as described [here](https://staticcheck.io/docs/getting-started/). Please make sure it is callable by `staticcheck` (e. g. by adding its path to the `$PATH` environment variable).
+It can be installed as described [here](https://golangci-lint.run/usage/install/#local-installation). Please make sure it is callable by `golangci-lint` (e. g. by adding its path to the `$PATH` environment variable).
 
-In case check errors should be intentionally be ignored please use linter directives as described [here](https://staticcheck.io/docs/configuration/#ignoring-problems).
+In case check errors should be intentionally be ignored please use linter directives as described [here](https://golangci-lint.run/usage/false-positives/#nolint-directive).
