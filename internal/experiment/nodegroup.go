@@ -12,7 +12,7 @@ type NodeGroup struct {
 	Prefix  string
 	NoNodes uint
 
-	MovementModel movementpatterns.MovementPattern 
+	MovementModel movementpatterns.MovementPattern
 
 	NodesType NodeType
 

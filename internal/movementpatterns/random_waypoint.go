@@ -9,4 +9,3 @@ type RandomWaypoint struct {
 func (RandomWaypoint) String() string {
 	return "Random Waypoint"
 }
-
