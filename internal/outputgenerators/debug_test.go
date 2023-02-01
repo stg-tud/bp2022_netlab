@@ -6,16 +6,19 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/outputgenerators"
 )
 
 func TestDebugGeneration(t *testing.T) {
 	t.Cleanup(func() {
-		os.RemoveAll(outputgenerators.OutputFolder)
+		os.RemoveAll(folderstructure.OutputFolderName)
 	})
 
 	og := outputgenerators.Debug{}
-	og.Generate(GetTestingExperiment())
+	testingExperiment := GetTestingExperiment()
+	outputFolder := folderstructure.GetOutputFolder(testingExperiment)
+	og.Generate(testingExperiment)
 
 	expected, err := os.ReadFile(filepath.Join(TestDataFolder, outputgenerators.DebugOutputFile))
 	if err != nil {
@@ -23,7 +26,7 @@ func TestDebugGeneration(t *testing.T) {
 	}
 	expectedClean := strings.ReplaceAll(string(expected), "\r\n", "\n")
 
-	actual, err := os.ReadFile(filepath.Join(outputgenerators.OutputFolder, outputgenerators.DebugOutputFile))
+	actual, err := os.ReadFile(filepath.Join(outputFolder, outputgenerators.DebugOutputFile))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}
