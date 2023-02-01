@@ -10,6 +10,7 @@ import (
 
 	logger "github.com/gookit/slog"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
+	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 )
 
@@ -20,7 +21,10 @@ const BonnMotionExecutable = "bonnmotion"
 const BonnMotionStepFile = "bonnmotion.steps"
 
 // The Bonnmotion output generator calles BonnMotion with the correct parameters.
-type Bonnmotion struct{}
+type Bonnmotion struct {
+	outputFolder string
+	stepFilePath string
+}
 
 // Returns the correct BonnMotion platform name for the given Target.
 func (Bonnmotion) platform(t experiment.Target) (bool, string) {
@@ -65,21 +69,27 @@ func (Bonnmotion) generalParameters(exp experiment.Experiment, nodeGroup experim
 }
 
 // Writes the command to the step file and executes it
-func (Bonnmotion) execute(command []string) error {
+func (b Bonnmotion) execute(command []string) error {
 	logger.Trace("Running command:", command)
-	stepFile, err := os.OpenFile(filepath.Join(OutputFolder, BonnMotionStepFile), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	logger.Tracef("Writing file \"%s\"", b.stepFilePath)
+	stepFile, err := os.OpenFile(b.stepFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		logger.Error("Error opening step file:", err)
 		return err
 	}
-	defer stepFile.Close()
+	defer func() {
+		if cerr := stepFile.Close(); cerr != nil {
+			logger.Error("Error closing step file:", cerr)
+			err = cerr
+		}
+	}()
 	_, err = stepFile.WriteString(fmt.Sprintln(command))
 	if err != nil {
 		logger.Error("Error writing step file:", err)
 		return err
 	}
 	execCommand := exec.Command(BonnMotionExecutable, command...)
-	execCommand.Dir = OutputFolder
+	execCommand.Dir = b.outputFolder
 	// Check if the function is currently unit tested and do not execute actual BonnMotion command if so.
 	if flag.Lookup("test.v") != nil {
 		logger.Debug("Detected test. Skipping actual command execution")
@@ -124,18 +134,25 @@ func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup ex
 // Generate generates output for the given Experiment with BonnMotion.
 func (b Bonnmotion) Generate(exp experiment.Experiment) {
 	logger.Info("Generating BonnMotion output")
-	err := os.Mkdir(OutputFolder, 0755)
-	if err != nil && !os.IsExist(err) {
-		logger.Error("Could not create output folder:", err)
+	outputFolder, err := folderstructure.GetAndCreateOutputFolder(exp, "movements")
+	if err != nil {
+		logger.Error("Could not create output folder!", err)
 		return
 	}
-	_, err = os.Create(filepath.Join(OutputFolder, BonnMotionStepFile))
-	if err != nil && !os.IsExist(err) {
-		logger.Error("Could not create step file:", err)
+	b.outputFolder = outputFolder
+
+	b.stepFilePath = filepath.Join(b.outputFolder, BonnMotionStepFile)
+	allowedToWriteStepFile := folderstructure.MayCreatePath(b.stepFilePath)
+	if !allowedToWriteStepFile {
+		logger.Error("Not allowed to write step file!")
 		return
 	}
 	for _, nodeGroup := range exp.NodeGroups {
 		logger.Tracef("Processing NodeGroup \"%s\"", nodeGroup.Prefix)
+		if !folderstructure.MayCreatePath(filepath.Join(b.outputFolder, fmt.Sprintf("%s.movements.gz", nodeGroup.Prefix))) {
+			logger.Error("Not allowed to write output file!")
+			return
+		}
 		switch nodeGroup.MovementModel.(type) {
 		case movementpatterns.RandomWaypoint:
 			b.generateRandomWaypointNodeGroup(exp, nodeGroup)

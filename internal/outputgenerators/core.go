@@ -10,6 +10,7 @@ import (
 	"github.com/korylprince/ipnetgen"
 	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
+	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
@@ -230,17 +231,27 @@ func (c Core) Generate(exp experiment.Experiment) {
 	scenarioIdCounter = ScenarioIdOffset
 	lastPosition = customtypes.Position{X: 0, Y: nodeSize}
 
-	logger.Tracef("Creating folder \"%s\"", OutputFolder)
-	logger.Tracef("Opening file \"%s\"", filepath.Join(OutputFolder, "core.xml"))
-	err := os.Mkdir(OutputFolder, 0755)
-	if err != nil && !os.IsExist(err) {
-		logger.Error("Could not create output folder:", err)
+	outputFolder, err := folderstructure.GetAndCreateOutputFolder(exp)
+	if err != nil {
+		logger.Error("Could not create output folder!", err)
 		return
 	}
-	fbuffer, err := os.Create(filepath.Join(OutputFolder, "core.xml"))
+	outputFilePath := filepath.Join(outputFolder, "core.xml")
+	if !folderstructure.MayCreatePath(outputFilePath) {
+		logger.Error("Not allowed to write output file!")
+		return
+	}
+	logger.Tracef("Opening file \"%s\"", outputFilePath)
+	fbuffer, err := os.Create(outputFilePath)
 	if err != nil {
 		logger.Error("Error creating output file:", err)
 	}
+	defer func() {
+		if cerr := fbuffer.Close(); cerr != nil {
+			logger.Error("Error closing step file:", cerr)
+			err = cerr
+		}
+	}()
 
 	networks, networkMapping, err := c.buildNetworks(exp)
 	if err != nil {
