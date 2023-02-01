@@ -10,6 +10,7 @@ import (
 	"github.com/korylprince/ipnetgen"
 	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
+	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
@@ -230,13 +231,27 @@ func (c Core) Generate(exp experiment.Experiment) {
 	scenarioIdCounter = ScenarioIdOffset
 	lastPosition = customtypes.Position{X: 0, Y: nodeSize}
 
-	logger.Tracef("Creating folder \"%s\"", OutputFolder)
-	logger.Tracef("Opening file \"%s\"", filepath.Join(OutputFolder, "core.xml"))
-	os.Mkdir(OutputFolder, 0755)
-	fbuffer, err := os.Create(filepath.Join(OutputFolder, "core.xml"))
+	outputFolder, err := folderstructure.GetAndCreateOutputFolder(exp)
+	if err != nil {
+		logger.Error("Could not create output folder!", err)
+		return
+	}
+	outputFilePath := filepath.Join(outputFolder, "core.xml")
+	if !folderstructure.MayCreatePath(outputFilePath) {
+		logger.Error("Not allowed to write output file!")
+		return
+	}
+	logger.Tracef("Opening file \"%s\"", outputFilePath)
+	fbuffer, err := os.Create(outputFilePath)
 	if err != nil {
 		logger.Error("Error creating output file:", err)
 	}
+	defer func() {
+		if cerr := fbuffer.Close(); cerr != nil {
+			logger.Error("Error closing step file:", cerr)
+			err = cerr
+		}
+	}()
 
 	networks, networkMapping, err := c.buildNetworks(exp)
 	if err != nil {
@@ -257,6 +272,10 @@ func (c Core) Generate(exp experiment.Experiment) {
 	if err != nil {
 		logger.Error("Error opening template file:", err)
 	}
-	xmlTemplate.Execute(fbuffer, replacements)
+	err = xmlTemplate.Execute(fbuffer, replacements)
+	if err != nil {
+		logger.Error("Could not execute XML template:", err)
+		return
+	}
 	logger.Trace("Finished generation")
 }
