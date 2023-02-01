@@ -24,9 +24,11 @@ Error = 0
 Promiscuous = 0
 
 [NodeGroups.MovementModel]
-MinSpeed = 123
-MaxSpeed = 456
-MaxPause = 0
+MinSpeed=11
+MaxSpeed=11
+
+MaxPause=11
+
 
 [[NodeGroups]]
 Prefix = 'b'
@@ -44,10 +46,10 @@ Error = 0
 Promiscuous = 0
 
 [NodeGroups.MovementModel]
-MinSpeed = 123
-MaxSpeed = 456
-MaxPause = 0
+MinSpeed=2
+MaxSpeed=2
 
+MaxPause=2
 [[NodeGroups]]
 Prefix = 'c'
 NoNodes = 3
@@ -64,11 +66,16 @@ Error = 0
 Promiscuous = 0
 
 [NodeGroups.MovementModel]
-MinSpeed = 123
-MaxSpeed = 456
-MaxPause = 0
+MinSpeed=33
+MaxSpeed=3
 
-# NodeGroup d without any given variables
+MaxPause=3
+
 [[NodeGroups]]
 Prefix = 'd'
 NoNodes = 4
+
+[NodeGroups.MovementModel]
+MinSpeed=4
+MaxSpeed=4
+MaxPause=4

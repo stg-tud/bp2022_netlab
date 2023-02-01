@@ -10,7 +10,7 @@ type NodeGroup struct {
 	Prefix  string
 	NoNodes int
 
-	MovementModel movementpatterns.MovementPattern
+	MovementModel movementpatterns.MovementPattern 
 
 	IPv4Net  string
 	IPv4Mask int
