@@ -1,17 +1,23 @@
 package outputgenerators
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"reflect"
 
+	logger "github.com/gookit/slog"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 )
 
-// The executable of BonnMotion to call.
-const EXECUTABLE = "bonnmotion"
+// The name of the executable to run BonnMotion.
+const BonnMotionExecutable = "bonnmotion"
+
+// The name of the file that the taken steps should be written into.
+const BonnMotionStepFile = "bonnmotion.steps"
 
 // The Bonnmotion output generator calles BonnMotion with the correct parameters.
 type Bonnmotion struct{}
@@ -19,10 +25,10 @@ type Bonnmotion struct{}
 // Returns the correct BonnMotion platform name for the given Target.
 func (Bonnmotion) platform(t experiment.Target) (bool, string) {
 	switch t {
-	case experiment.TARGET_THEONE:
+	case experiment.TargetTheOne:
 		return true, "TheONEFile"
 
-	case experiment.TARGET_CORE:
+	case experiment.TargetCore:
 		return true, "NSFile"
 
 	default:
@@ -54,58 +60,80 @@ func (Bonnmotion) generalParameters(exp experiment.Experiment, nodeGroup experim
 		fmt.Sprintf("-n%d", nodeGroup.NoNodes),
 		fmt.Sprintf("-x%d", exp.WorldSize.Width),
 		fmt.Sprintf("-y%d", exp.WorldSize.Height),
+		fmt.Sprintf("-R%d", exp.RandomSeed),
 	}
+}
+
+// Writes the command to the step file and executes it
+func (Bonnmotion) execute(command []string) error {
+	logger.Trace("Running command:", command)
+	stepFile, err := os.OpenFile(filepath.Join(OutputFolder, BonnMotionStepFile), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		logger.Error("Error opening step file:", err)
+		return err
+	}
+	defer stepFile.Close()
+	stepFile.WriteString(fmt.Sprintln(command))
+	execCommand := exec.Command(BonnMotionExecutable, command...)
+	execCommand.Dir = OutputFolder
+	// Check if the function is currently unit tested and do not execute actual BonnMotion command if so.
+	if flag.Lookup("test.v") != nil {
+		logger.Debug("Detected test. Skipping actual command execution")
+		return nil
+	}
+	_, err = execCommand.Output()
+	return err
 }
 
 // Calls BonnMotion to generate the Random Waypoint data for a given NodeGroup inside an Experiment.
 func (b Bonnmotion) generateRandomWaypointNodeGroup(exp experiment.Experiment, nodeGroup experiment.NodeGroup) {
+	logger.Trace("Generating Random Waypoint movements")
 	command := []string{
 		fmt.Sprintf("-f%s", nodeGroup.Prefix),
 	}
 	command = append(command, b.randomWaypointParameters(exp, nodeGroup)...)
 	command = append(command, b.generalParameters(exp, nodeGroup)...)
-	fmt.Printf("Random Waypoint. Running: %v\n", command)
-	execCommand := exec.Command(EXECUTABLE, command...)
-	execCommand.Dir = OUTPUT_FOLDER
-	_, err := execCommand.Output()
+	err := b.execute(command)
 	if err != nil {
-		panic(err)
+		logger.Error("Error running command:", err)
 	}
 }
 
 // Calls BonnMotion to convert the BonnMotion output to the given Target's format for a given NodeGroup.
 func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup experiment.NodeGroup) {
+	logger.Tracef("Converting to target format \"%s\"", target.String())
 	supported, model := b.platform(target)
 	if !supported {
-		fmt.Printf("Target platform \"%s\" is currently not supported.\n", target.String())
+		logger.Debug("Target platform is currently not supported. Skipping\n")
 		return
 	}
 	command := []string{
 		model,
 		fmt.Sprintf("-f%s", nodeGroup.Prefix),
 	}
-	execCommand := exec.Command(EXECUTABLE, command...)
-	execCommand.Dir = OUTPUT_FOLDER
-	_, err := execCommand.Output()
+	err := b.execute(command)
 	if err != nil {
-		panic(err)
+		logger.Error("Error running command:", err)
 	}
 }
 
 // Generate generates output for the given Experiment with BonnMotion.
 func (b Bonnmotion) Generate(exp experiment.Experiment) {
-	os.Mkdir(OUTPUT_FOLDER, 0755)
-	for i := 0; i < len(exp.NodeGroups); i++ {
-		nodeGroup := exp.NodeGroups[i]
+	logger.Info("Generating BonnMotion output")
+	os.Mkdir(OutputFolder, 0755)
+	os.Create(filepath.Join(OutputFolder, BonnMotionStepFile))
+	for _, nodeGroup := range exp.NodeGroups {
+		logger.Tracef("Processing NodeGroup \"%s\"", nodeGroup.Prefix)
 		switch nodeGroup.MovementModel.(type) {
 		case movementpatterns.RandomWaypoint:
 			b.generateRandomWaypointNodeGroup(exp, nodeGroup)
 		default:
-			fmt.Printf("Movement model \"%s\" is currently not supported.\n", reflect.TypeOf(nodeGroup.MovementModel))
+			logger.Debugf("Movement model \"%s\" is currently not supported. Skipping", reflect.TypeOf(nodeGroup.MovementModel))
 			continue
 		}
-		for y := 0; y < len(exp.Targets); y++ {
-			b.convertToTargetFormat(exp.Targets[y], nodeGroup)
+		for _, target := range exp.Targets {
+			b.convertToTargetFormat(target, nodeGroup)
 		}
 	}
+	logger.Trace("Finished generation")
 }

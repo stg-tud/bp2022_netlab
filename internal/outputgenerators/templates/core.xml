@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<scenario name="{{ .ScenarioName }}">
+  <networks>
+    {{- range .Networks}}
+    <network id="{{ .Id }}" name="net_{{ .Name }}" icon="" canvas="1" {{if eq .Name "EMANE" -}}model="emane_bypass" {{ end -}} type="{{ .TypeName }}">
+      <position x="{{ .Position.X }}" y="{{ .Position.Y }}"/>
+      {{- if eq .TypeName "WIRELESS"}}
+      <wireless>
+        <configuration name="movement" value="{{ if .Type.Movement }}1{{ else }}0{{ end }}"/>
+        <configuration name="max-range" value="{{ .Type.Range }}"/>
+        <configuration name="bandwidth" value="{{ .Type.Bandwidth }}"/>
+        <configuration name="delay" value="{{ .Type.Delay }}"/>
+        <configuration name="jitter" value="{{ .Type.Jitter }}"/>
+        <configuration name="loss-range" value="{{ .Type.LossStartRange }}"/>
+        <configuration name="loss-factor" value="{{ .Type.LossFactor }}"/>
+        <configuration name="loss" value="{{ .Type.LossInitial }}"/>
+      </wireless>
+      {{- end}}
+    </network>
+    {{- end}}
+  </networks>
+  <devices>
+    {{- range .Devices}}
+    <device id="{{ .Id }}" name="{{ .Name }}" icon="" canvas="1" type="{{ .Type }}" class="" image="">
+      <position x="{{ .Position.X }}" y="{{ .Position.Y }}"/>
+      {{- if eq .Type "router"}}
+      <configservices>
+        <service name="zebra"/>
+        <service name="OSPFv2"/>
+        <service name="OSPFv3"/>
+        <service name="IPForward"/>
+      </configservices>
+      {{- else if eq .Type "PC"}}
+      <configservices>
+        <service name="DefaultRoute"/>
+      </configservices>
+      {{- end}}
+    </device>
+    {{- end}}
+  </devices>
+  <links>
+    {{- range $index, $device := .Devices}}
+    {{- range $ifaceId, $iface := .Interfaces }}
+    <link node1="{{ $device.Id }}" node2="{{ $iface.Network.Id }}">
+      <iface1 id="{{ $ifaceId }}" name="eth{{ $ifaceId }}" mac="{{ $iface.Mac }}" ip4="{{ $iface.IPv4 }}" ip4_mask="{{ $iface.Network.IPv4Mask }}" ip6="{{ $iface.IPv6 }}" ip6_mask="{{ $iface.Network.IPv6Mask }}"/>
+      {{- if eq $iface.Network.TypeName "WIRELESS_LAN"}}
+      <options delay="{{ $iface.Network.Type.Delay }}" bandwidth="{{ $iface.Network.Type.Bandwidth }}" loss="{{ $iface.Network.Type.Loss }}" dup="0" jitter="{{ $iface.Network.Type.Jitter }}" unidirectional="0" buffer="0"/>
+      {{- else if eq $iface.Network.TypeName "SWITCH" "HUB"}}
+      <iface2 id="{{ $iface.IdInNetwork }}" name="veth{{ $iface.Network.Id }}.{{ $iface.IdInNetwork }}.1"/>
+      <options delay="0" bandwidth="0" loss="0.0" dup="0" jitter="0" unidirectional="0" buffer="0"/>
+      {{- end}}
+    </link>
+    {{- end }}
+    {{- end}}
+  </links>
+  <mobility_configurations>
+    {{- range .Networks}}
+    {{- if eq .TypeName "WIRELESS_LAN"}}
+    <mobility_configuration node="{{ .Id }}" model="basic_range">
+      <configuration name="range" value="{{ .Type.Range }}"/>
+      <configuration name="bandwidth" value="{{ .Type.Bandwidth }}"/>
+      <configuration name="jitter" value="{{ .Type.Jitter }}"/>
+      <configuration name="delay" value="{{ .Type.Delay }}"/>
+      <configuration name="error" value="{{ .Type.Loss }}"/>
+      <configuration name="promiscuous" value="{{if .Type.Promiscuous}}1{{else}}0{{end}}"/>
+    </mobility_configuration>
+    {{- end}}
+    {{- end}}
+  </mobility_configurations>
+  <configservice_configurations>
+    {{- range .Devices}}
+    {{- if eq .Type "router"}}
+    <service name="zebra" node="{{ .Id }}"/>
+    <service name="OSPFv2" node="{{ .Id }}"/>
+    <service name="OSPFv3" node="{{ .Id }}"/>
+    <service name="IPForward" node="{{ .Id }}"/>
+    {{- else if eq .Type "PC"}}
+    <service name="DefaultRoute" node="{{ .Id }}"/>
+    {{- end}}
+    {{- end}}
+  </configservice_configurations>
+  <session_origin lat="47.579166412353516" lon="-122.13232421875" alt="2.0" scale="150.0"/>
+  <session_options>
+    <configuration name="controlnet" value=""/>
+    <configuration name="controlnet0" value=""/>
+    <configuration name="controlnet1" value=""/>
+    <configuration name="controlnet2" value=""/>
+    <configuration name="controlnet3" value=""/>
+    <configuration name="controlnet_updown_script" value=""/>
+    <configuration name="enablerj45" value="1"/>
+    <configuration name="preservedir" value="0"/>
+    <configuration name="enablesdt" value="0"/>
+    <configuration name="sdturl" value="tcp://127.0.0.1:50000/"/>
+    <configuration name="ovs" value="0"/>
+    <configuration name="platform_id_start" value="1"/>
+    <configuration name="nem_id_start" value="1"/>
+    <configuration name="link_enabled" value="1"/>
+    <configuration name="loss_threshold" value="30"/>
+    <configuration name="link_interval" value="1"/>
+    <configuration name="link_timeout" value="4"/>
+    <configuration name="mtu" value="0"/>
+  </session_options>
+  <session_metadata>
+    <configuration name="shapes" value="[]"/>
+    <configuration name="edges" value="[]"/>
+    <configuration name="hidden" value="[]"/>
+    <configuration name="canvas" value="{&quot;gridlines&quot;: true, &quot;canvases&quot;: [{&quot;id&quot;: 1, &quot;wallpaper&quot;: null, &quot;wallpaper_style&quot;: 1, &quot;fit_image&quot;: false, &quot;dimensions&quot;: [{{ .WorldSize.Width }}, {{ .WorldSize.Height }}]}]}"/>
+  </session_metadata>
+  <default_services>
+    <node type="mdr">
+      <service name="zebra"/>
+      <service name="OSPFv3MDR"/>
+      <service name="IPForward"/>
+    </node>
+    <node type="PC">
+      <service name="DefaultRoute"/>
+    </node>
+    <node type="prouter"/>
+    <node type="router">
+      <service name="zebra"/>
+      <service name="OSPFv2"/>
+      <service name="OSPFv3"/>
+      <service name="IPForward"/>
+    </node>
+    <node type="host">
+      <service name="DefaultRoute"/>
+      <service name="SSH"/>
+    </node>
+  </default_services>
+</scenario>

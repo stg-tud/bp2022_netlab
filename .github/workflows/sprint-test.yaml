@@ -1,6 +1,9 @@
-name: Unit tests & static analysis
+name: Sprint tests
 
-on: [push]
+on:
+  schedule:
+    # Run every tuesday on 10:00 UTC (11:00 CET)
+    - cron: "0 10 * * 2"
 
 jobs:
   static-analysis:
@@ -26,8 +29,13 @@ jobs:
           version: "2022.1.3"
           install-go: false
 
+      - name: Coverage
+        run: >
+          go test -v -coverpkg=./... -coverprofile=profile.cov ./...
+          go tool cover -func profile.cov
+
   build-test:
-    name: Build & test
+    name: "Build & test"
     strategy:
       fail-fast: false
       matrix:
@@ -41,8 +49,11 @@ jobs:
         with:
           go-version: 1.19
 
+      - name: Formatter
+        run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
+
       - name: Build
         run: go build -v ./...
 
-      - name: Test
+      - name: Unit Tests
         run: go test -v ./...
