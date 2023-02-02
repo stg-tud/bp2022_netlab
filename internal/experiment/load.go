@@ -34,9 +34,9 @@ func LoadFromFile(file string) Experiment {
 			next = len(copy)
 		}
 		//movementmodel is between
-		movementSet := copy[27:next]
+		movementSet := copy[26:next]
 
-		data = strings.Replace(data, movementSet, "", -1)
+		data = strings.Replace(data, movementSet, "\n", -1)
 
 		if strings.TrimSpace(movementSet) == "" {
 
