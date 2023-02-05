@@ -1,99 +1,78 @@
 package experiment
 
 import (
+	"fmt"
 	"os"
-	"strconv"
-	"strings"
 
 	"github.com/pelletier/go-toml/v2"
-	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
+	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
+	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
+type ExpConf struct {
+	Name string
+	Runs uint
+	Networks []NT
+	RandomSeed int64
+	Duration uint
+	WorldSize customtypes.Area
+	NodeGroups []Nodes
+	Targets []Target
+
+}
+type NT struct{
+	Name string
+	Bandwidth int
+	Range int
+	Jitter int
+	Delay int
+	Loss float32
+	Promiscuous bool
+	Movement bool
+	
+	LossInitial float32
+	LossFactor float32
+	LossStartRange float32
+}
+
+type Nodes struct{
+	Prefix string
+	NoNodes uint
+	MovementModel Movement
+	NodesType NodeType
+	Networks []NT
+}
+type Movement struct{
+	Model string
+	MinSpeed int
+	MaxSpeed int
+	MaxPause int
+}
 // Loads the path string with toml file into experiment
 func LoadFromFile(file string) Experiment {
-	var exp Experiment
+	var exp ExpConf
+	experiment:= Experiment{
+		Networks: []Network{
+			
+		},
+	}
 	buf, e := os.ReadFile(file)
 	if e != nil {
 		panic(e)
 	}
-
-	data := string(buf)
-	move := "[NodeGroups.MovementModel]" //27 char
-	node := "[[NodeGroups]]"
-	copy := data
-	var tmp Experiment
-	noNodegroups := strings.Count(data, node)
-	for k := 0; k < noNodegroups; k++ {
-
-		//delete everything before the next MovementModel
-		copy = strings.Replace(copy, copy[0:strings.Index(copy, move)], "", -1)
-
-		//next index with Nodegroup
-		next := strings.Index(copy, node)
-		if next < 0 {
-			next = len(copy)
-		}
-		//movementmodel is between
-		movementSet := copy[27:next]
-
-		data = strings.Replace(data, movementSet, "", -1)
-
-		if strings.TrimSpace(movementSet) == "" {
-
-			tmp.NodeGroups = append(exp.NodeGroups, NodeGroup{
-				MovementModel: movementpatterns.Static{},
-			})
-
-		} else {
-
-			maxpause := movementSet[strings.Index(movementSet, "MaxPause=")+9:]
-
-			Maxpause, err := strconv.Atoi(strings.TrimSpace(maxpause))
-			if err != nil {
-				panic(e)
-			}
-
-			minspeed := movementSet[strings.Index(movementSet, "MinSpeed=")+9 : strings.Index(movementSet, "MaxSpeed")]
-
-			Minspeed, err := strconv.Atoi(strings.TrimSpace(minspeed))
-			if err != nil {
-				panic(e)
-			}
-
-			maxspeed := movementSet[strings.Index(movementSet, "MaxSpeed=")+9 : strings.Index(movementSet, "MaxPause")]
-
-			Maxspeed, err := strconv.Atoi(strings.TrimSpace(maxspeed))
-			if err != nil {
-				panic(e)
-			}
-
-			tmp.NodeGroups = append(tmp.NodeGroups, NodeGroup{
-				MovementModel: movementpatterns.RandomWaypoint{
-					MinSpeed: Minspeed,
-					MaxSpeed: Maxspeed,
-					MaxPause: Maxpause,
-				},
-			})
-
-		}
-		if next != len(copy) {
-			//delete before the next nodegroup
-			copy = strings.Replace(copy, copy[0:strings.Index(copy, node)], "", -1)
-		}
-	}
-
-	err := toml.Unmarshal([]byte(data), &exp)
+	
+	err := toml.Unmarshal(buf, &exp)
 	if err != nil {
-		panic(err)
-	}
-	for i := 0; i < noNodegroups; i++ {
-		exp.NodeGroups[i].MovementModel = tmp.NodeGroups[i].MovementModel
+		fmt.Println(err)
 	}
 
-	for i := 0; i < len(exp.NodeGroups); i++ {
+	
+	typ:=networktypes.Emane{
 
 	}
+	experiment.Networks[0].Type=typ
+	fmt.Println(experiment.Networks[1].Name)
 
-	return exp
+	return experiment
 
 }

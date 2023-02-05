@@ -8,6 +8,7 @@ import (
 
 func TestLoad(t *testing.T) {
 
-	exp := experiment.LoadFromFile("testdata/format.toml")
+	exp := experiment.LoadFromFile("testdata/example.toml")
 	exp.Duration = 1
+	t.Error()
 }
