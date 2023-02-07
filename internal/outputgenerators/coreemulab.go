@@ -67,8 +67,13 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 
 	confTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "experiment.conf"))
 	if err != nil {
-		panic(err)
+		logger.Error("Error opening template file:", err)
 	}
-	confTemplate.Execute(fbuffer, replace)
+	err = confTemplate.Execute(fbuffer, replace)
+	if err != nil {
+		logger.Error("Could not execute XML template:", err)
+		return
+	}
+	logger.Trace("Finished generation")
 
 }
