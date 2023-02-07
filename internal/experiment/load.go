@@ -1,8 +1,6 @@
 package experiment
 
 import (
-	
-
 	"os"
 
 	"github.com/pelletier/go-toml/v2"
@@ -118,7 +116,6 @@ func LoadFromFile(file string) Experiment {
 
 	}
 
-	
 	return exp
 
 }

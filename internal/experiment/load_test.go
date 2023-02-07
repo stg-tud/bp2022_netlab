@@ -10,14 +10,14 @@ func TestLoad(t *testing.T) {
 
 	exp := experiment.LoadFromFile("testdata/example.toml")
 
-	if (exp.Duration!=132){
+	if exp.Duration != 132 {
 		t.Error()
 	}
-	if (exp.Networks[0].Name!="wireless_lan"){
+	if exp.Networks[0].Name != "wireless_lan" {
 		t.Error()
 	}
-	
-	if (exp.Networks[2].Name!="changed_wifi"){
+
+	if exp.Networks[2].Name != "changed_wifi" {
 		t.Error()
 	}
 }
