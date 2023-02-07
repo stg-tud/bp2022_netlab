@@ -33,11 +33,29 @@ type data struct {
 
 // generates a XML and a conf configuartion for CoreEmulab with a given experiment
 func (c CoreEmulab) Generate(exp experiment.Experiment) {
-	logger.Info("Generating CORE output")
+	logger.Info("Generating CoreEmulab output")
 	outputFolder, err := folderstructure.GetAndCreateOutputFolder(exp)
-	os.Mkdir(outputFolder, 0755)
+	if err != nil {
+		logger.Error("Could not create output folder!", err)
+		return
+	}
+	outputFilePath := filepath.Join(outputFolder, "experiment.conf")
+	if !folderstructure.MayCreatePath(outputFilePath) {
+		logger.Error("Not allowed to write output file!")
+		return
+	}
+	logger.Tracef("Opening file \"%s\"", outputFilePath)
+	fbuffer, err := os.Create(outputFilePath)
+	if err != nil {
+		logger.Error("Error creating output file:", err)
+	}
+	defer func() {
+		if cerr := fbuffer.Close(); cerr != nil {
+			logger.Error("Error closing step file:", cerr)
+			err = cerr
+		}
+	}()
 
-	fbuffer, err := os.Create(filepath.Join(outputFolder, "experiment.conf"))
 	if err != nil {
 		panic(err)
 	}
