@@ -7,7 +7,7 @@ const (
 	// Target: Core
 	TargetCore Target = iota
 	//
-	TargetCoreEmulab 
+	TargetCoreEmulab
 	// Target: The ONE
 	TargetTheOne
 )
