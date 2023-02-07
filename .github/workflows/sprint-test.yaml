@@ -1,6 +1,9 @@
-name: Unit tests & static analysis
+name: Sprint tests
 
-on: [push]
+on:
+  schedule:
+    # Run every tuesday on 10:00 UTC (11:00 CET)
+    - cron: "0 10 * * 2"
 
 jobs:
   static-analysis:
@@ -25,8 +28,11 @@ jobs:
         with:
           version: latest
 
+      - name: Coverage
+        run: go test -v -coverpkg=./... -coverprofile=profile.cov ./... && go tool cover -func profile.cov
+
   build-test:
-    name: Build & test
+    name: "Build & test"
     strategy:
       fail-fast: false
       matrix:
@@ -43,5 +49,5 @@ jobs:
       - name: Build
         run: go build -v ./...
 
-      - name: Test
+      - name: Unit Tests
         run: go test -v ./...

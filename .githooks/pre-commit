@@ -1,8 +1,15 @@
 #!/bin/bash
 set -e
 
-echo -n "Checking format... "
 changed_go_files=`git diff --cached --name-only *.go`
+
+echo -n "Formatting files... "
+if [[ -n "$changed_go_files" ]] ; then
+    gofmt -w $changed_go_files
+fi
+echo "OK"
+
+echo -n "Checking format... "
 if [[ -n "$changed_go_files"  && "$(gofmt -s -l ${changed_go_files} | wc -l)" -gt 0 ]]; then
     echo "FAIL"
     echo ""
@@ -12,10 +19,20 @@ if [[ -n "$changed_go_files"  && "$(gofmt -s -l ${changed_go_files} | wc -l)" -g
 fi
 echo "OK"
 
-echo "Trying to build..."
+echo -n "Running Go Vet... "
+go vet ./...
+echo "OK"
+
+echo -n "Running golangci-lint... "
+golangci-lint run
+echo "OK"
+
+echo -n "Trying to build... "
 go build ./...
+echo "OK"
 
 echo "Running tests..."
 go test ./...
+echo "OK"
 
 echo "Ready to commit!"
