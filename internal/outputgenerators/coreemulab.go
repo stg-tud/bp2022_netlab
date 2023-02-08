@@ -63,6 +63,7 @@ func (CoreEmulab) Generate(exp experiment.Experiment) {
 		Name: exp.Name,
 
 		Runtime: int(exp.Duration),
+		Warmup:  int(exp.Warmup),
 	}
 
 	confTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "experiment.conf"))
