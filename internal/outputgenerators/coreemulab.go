@@ -46,7 +46,6 @@ var defaultValues = data{
 	Contacts:      1,
 	ContactsParam: 5,
 	Shutdown:      "",
-	Warmup:        0,
 }
 
 // generates a XML and a conf configuartion for CoreEmulab with a given experiment
@@ -79,6 +78,7 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 	}
 	replace := defaultValues
 	replace.Name = exp.Name
+	replace.Warmup = int(exp.Warmup)
 	replace.Runtime = int(exp.Duration)
 
 	confTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "experiment.conf"))

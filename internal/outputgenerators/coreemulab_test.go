@@ -11,9 +11,9 @@ import (
 )
 
 func TestCoreemulab(t *testing.T) {
-	/*t.Cleanup(func() {
+	t.Cleanup(func() {
 		os.RemoveAll(folderstructure.OutputFolderName)
-	})*/
+	})
 	coreemulab := outputgenerators.CoreEmulab{}
 	testingExperiment := GetTestingExperiment()
 	outputFolder := folderstructure.GetOutputFolder(testingExperiment)
