@@ -78,8 +78,8 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 		panic(err)
 	}
 	replace := defaultValues
-	replace.Name=exp.Name
-	replace.Runtime=int(exp.Duration)
+	replace.Name = exp.Name
+	replace.Runtime = int(exp.Duration)
 
 	confTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "experiment.conf"))
 	if err != nil {
