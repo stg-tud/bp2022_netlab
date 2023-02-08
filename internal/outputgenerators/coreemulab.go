@@ -18,7 +18,7 @@ type data struct {
 	Automator string
 
 	GUI           int
-	PidStat       string
+	PidStat       int
 	PidParam      string
 	Net           int
 	NetParam      string
@@ -29,6 +29,24 @@ type data struct {
 	Shutdown      string
 	Warmup        int
 	Runtime       int
+}
+
+var defaultValues = data{
+
+	Scenario:  "core.xml",
+	Automator: "",
+
+	GUI:           0,
+	PidStat:       0,
+	PidParam:      "vnoded",
+	Net:           0,
+	NetParam:      "eth0",
+	XY:            1,
+	XYParam:       5,
+	Contacts:      1,
+	ContactsParam: 5,
+	Shutdown:      "",
+	Warmup:        0,
 }
 
 // generates a XML and a conf configuartion for CoreEmulab with a given experiment
@@ -59,11 +77,9 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 	if err != nil {
 		panic(err)
 	}
-	replace := data{
-		Name: exp.Name,
-
-		Runtime: int(exp.Duration),
-	}
+	replace := defaultValues
+	replace.Name=exp.Name
+	replace.Runtime=int(exp.Duration)
 
 	confTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "experiment.conf"))
 	if err != nil {
