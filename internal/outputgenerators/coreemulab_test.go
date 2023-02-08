@@ -38,7 +38,7 @@ func TestCoreemulab(t *testing.T) {
 		Name:     "Automator",
 		Duration: 245,
 	}
-	core.Generate(exp)
+	coreemulab.Generate(exp)
 
 	t.Cleanup(func() {
 		os.RemoveAll(folderstructure.OutputFolderName)
