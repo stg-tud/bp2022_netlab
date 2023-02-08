@@ -36,7 +36,7 @@ var defaultValues = data{
 	Scenario:  "core.xml",
 	Automator: "",
 
-	GUI:           0,
+	GUI:           1,
 	PidStat:       0,
 	PidParam:      "vnoded",
 	Net:           0,
