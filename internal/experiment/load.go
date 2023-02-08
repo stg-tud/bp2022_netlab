@@ -141,7 +141,7 @@ func setDefaultNet(s string, net NT) (networkType networktypes.NetworkType) {
 		if net.Jitter != 0 {
 			wirelesslan.Jitter = net.Jitter
 		}
-		if net.Promiscuous == true {
+		if net.Promiscuous {
 			wirelesslan.Promiscuous = true
 		}
 
@@ -169,7 +169,7 @@ func setDefaultNet(s string, net NT) (networkType networktypes.NetworkType) {
 		if net.Jitter != 0 {
 			wireless.Jitter = net.Jitter
 		}
-		if net.Movement == false {
+		if !net.Movement {
 			wireless.Movement = false
 		}
 
