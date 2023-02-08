@@ -31,8 +31,8 @@ type data struct {
 	Runtime       int
 }
 
-// generates a XML and a conf configuartion for CoreEmulab with a given experiment
-func (c CoreEmulab) Generate(exp experiment.Experiment) {
+// generates conf configuration for CoreEmulab with a given experiment
+func (CoreEmulab) Generate(exp experiment.Experiment) {
 	logger.Info("Generating CoreEmulab output")
 	outputFolder, err := folderstructure.GetAndCreateOutputFolder(exp)
 	if err != nil {
@@ -71,7 +71,7 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 	}
 	err = confTemplate.Execute(fbuffer, replace)
 	if err != nil {
-		logger.Error("Could not execute XML template:", err)
+		logger.Error("Could not execute conf template:", err)
 		return
 	}
 	logger.Trace("Finished generation")
