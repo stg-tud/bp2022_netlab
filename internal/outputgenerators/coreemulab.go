@@ -31,6 +31,15 @@ type data struct {
 	Runtime       uint
 }
 
+// The name of the template to generate the config
+const CoreEmulabTemplate = "experiment.conf"
+
+// The name of the file that should be written to
+const CoreEmulabOutput = "experiment.conf"
+
+// The name of the file where the testdata is
+const CoreEmulabTestdata = "experiment.conf"
+
 // The default values fpr experiment.conf
 var defaultValues = data{
 
@@ -57,7 +66,7 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 		logger.Error("Could not create output folder!", err)
 		return
 	}
-	outputFilePath := filepath.Join(outputFolder, "experiment.conf")
+	outputFilePath := filepath.Join(outputFolder, CoreEmulabOutput)
 	if !folderstructure.MayCreatePath(outputFilePath) {
 		logger.Error("Not allowed to write output file!")
 		return

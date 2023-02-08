@@ -18,12 +18,12 @@ func TestCoreemulabGeneration(t *testing.T) {
 	outputFolder := folderstructure.GetOutputFolder(testingExperiment)
 	coreemulab.Generate(testingExperiment)
 
-	expected, err := os.ReadFile(filepath.Join(TestDataFolder, "experiment.conf"))
+	expected, err := os.ReadFile(filepath.Join(TestDataFolder, outputgenerators.CoreEmulabTestdata))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}
 
-	actual, err := os.ReadFile(filepath.Join(outputFolder, "experiment.conf"))
+	actual, err := os.ReadFile(filepath.Join(outputFolder, outputgenerators.CoreEmulabOutput))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}
