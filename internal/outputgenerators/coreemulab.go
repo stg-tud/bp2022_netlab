@@ -17,20 +17,21 @@ type data struct {
 	Scenario  string
 	Automator string
 
-	GUI           int
-	PidStat       int
+	GUI           uint
+	PidStat       uint
 	PidParam      string
-	Net           int
+	Net           uint
 	NetParam      string
-	XY            int
-	XYParam       int
-	Contacts      int
-	ContactsParam int
+	XY            uint
+	XYParam       uint
+	Contacts      uint
+	ContactsParam uint
 	Shutdown      string
-	Warmup        int
-	Runtime       int
+	Warmup        uint
+	Runtime       uint
 }
 
+// The default values fpr experiment.conf
 var defaultValues = data{
 
 	Scenario:  "core.xml",
@@ -78,8 +79,8 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 	}
 	replace := defaultValues
 	replace.Name = exp.Name
-	replace.Warmup = int(exp.Warmup)
-	replace.Runtime = int(exp.Duration)
+	replace.Warmup = exp.Warmup
+	replace.Runtime = exp.Duration
 
 	confTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "experiment.conf"))
 	if err != nil {

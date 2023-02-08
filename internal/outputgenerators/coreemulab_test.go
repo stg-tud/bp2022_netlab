@@ -5,12 +5,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/outputgenerators"
 )
 
-func TestCoreemulab(t *testing.T) {
+func TestCoreemulabGeneration(t *testing.T) {
 	t.Cleanup(func() {
 		os.RemoveAll(folderstructure.OutputFolderName)
 	})
@@ -33,15 +32,5 @@ func TestCoreemulab(t *testing.T) {
 		println(expected)
 		t.Fatal("Output does not match expected output!")
 	}
-
-	exp := experiment.Experiment{
-		Name:     "Automator",
-		Duration: 245,
-	}
-	coreemulab.Generate(exp)
-
-	t.Cleanup(func() {
-		os.RemoveAll(folderstructure.OutputFolderName)
-	})
 
 }
