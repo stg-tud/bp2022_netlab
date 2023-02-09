@@ -18,7 +18,7 @@ func TestCoreemulabGeneration(t *testing.T) {
 	outputFolder := folderstructure.GetOutputFolder(testingExperiment)
 	coreemulab.Generate(testingExperiment)
 
-	expected, err := os.ReadFile(filepath.Join(TestDataFolder, outputgenerators.CoreEmulabTestdata))
+	expected, err := os.ReadFile(filepath.Join(TestDataFolder, outputgenerators.CoreEmulabOutput))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}

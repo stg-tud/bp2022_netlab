@@ -18,6 +18,7 @@ type data struct {
 	Automator string
 
 	GUI           uint
+	RandomSeed    int64
 	PidStat       uint
 	PidParam      string
 	Net           uint
@@ -37,11 +38,8 @@ const CoreEmulabTemplate = "experiment.conf"
 // The name of the file that should be written to
 const CoreEmulabOutput = "experiment.conf"
 
-// The name of the file where the testdata is
-const CoreEmulabTestdata = "experiment.conf"
-
-// The default values fpr experiment.conf
-var defaultValues = data{
+// The default values for experiment.conf
+var defaultValuesCoreEmulab = data{
 
 	Scenario:  "core.xml",
 	Automator: "",
@@ -58,7 +56,7 @@ var defaultValues = data{
 	Shutdown:      "",
 }
 
-// generates a XML and a conf configuartion for CoreEmulab with a given experiment
+// generates a conf configuartion for CoreEmulab with a given experiment
 func (c CoreEmulab) Generate(exp experiment.Experiment) {
 	logger.Info("Generating CoreEmulab output")
 	outputFolder, err := folderstructure.GetAndCreateOutputFolder(exp)
@@ -78,7 +76,7 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 	}
 	defer func() {
 		if cerr := fbuffer.Close(); cerr != nil {
-			logger.Error("Error closing step file:", cerr)
+			logger.Error("Error closing output file:", cerr)
 			err = cerr
 		}
 	}()
@@ -86,8 +84,9 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 	if err != nil {
 		panic(err)
 	}
-	replace := defaultValues
-	replace.Name = exp.Name
+	replace := defaultValuesCoreEmulab
+	replace.Name = folderstructure.FileSystemEscape(exp.Name)
+	replace.RandomSeed = exp.RandomSeed
 	replace.Warmup = exp.Warmup
 	replace.Runtime = exp.Duration
 
