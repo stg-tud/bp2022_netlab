@@ -3,14 +3,14 @@
 #
 
 ## Scenario settings
-Scenario.name = "{{ .ScenarioName}}"
-RandomSeed = {{ .RandomSeed}}
-Scenario.simulateConnections = {{ .ScenarioSimulateConnections}}
-Scenario.updateInterval = {{ .ScenarioUpdateInterval}}
+Scenario.name = "Testing_Experiment"
+RandomSeed = 1673916419715
+Scenario.simulateConnections = true
+Scenario.updateInterval = 0.1
 # 43k ~= 12h
-Scenario.endTime = {{ .ScenarioEndTime}}
+Scenario.endTime = 43k
 
-firstinterface.type = {{ .FirstinterfaceType}}
+firstinterface.type = 
 # transmit speed of 2 Mbps = 250kBps
 firstinterface.transmitSpeed = 250k
 firstinterface.transmitRange = 10
