@@ -16,7 +16,6 @@ func TestLoad(t *testing.T) {
 	})
 
 	actual := experiment.LoadFromFile("testdata/example.toml")
-
 	if actual.Duration != 123456 {
 		t.Fatal("Wrong duration")
 	}

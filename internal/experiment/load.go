@@ -127,23 +127,23 @@ func setDefaultNet(name string, net network) (networkType networktypes.NetworkTy
 	switch name {
 	case "wireless_lan":
 		wirelesslan := networktypes.WirelessLAN{}.Default()
-		if net.Bandwidth!=54000000 {
-			wirelesslan.Bandwidth=net.Bandwidth
+		if net.Bandwidth != 54000000 {
+			wirelesslan.Bandwidth = net.Bandwidth
 		}
-		if net.Range !=275{
-			wirelesslan.Range=net.Range
+		if net.Range != 275 {
+			wirelesslan.Range = net.Range
 		}
-		if net.Jitter != 0{
-			wirelesslan.Jitter=net.Jitter
+		if net.Jitter != 0 {
+			wirelesslan.Jitter = net.Jitter
 		}
-		if net.Delay != 5000{
-			wirelesslan.Delay=net.Delay
+		if net.Delay != 5000 {
+			wirelesslan.Delay = net.Delay
 		}
-		if net.Loss != 0.0{
-			wirelesslan.Loss=net.Loss
+		if net.Loss != 0.0 {
+			wirelesslan.Loss = net.Loss
 		}
 		if net.Promiscuous {
-			wirelesslan.Promiscuous=net.Promiscuous
+			wirelesslan.Promiscuous = net.Promiscuous
 		}
 		return wirelesslan
 	case "wireless":
@@ -172,7 +172,6 @@ func setDefaultNet(name string, net network) (networkType networktypes.NetworkTy
 		if !net.Movement {
 			wireless.Movement = net.Promiscuous
 		}
-
 		return wireless
 	case "emane":
 		return networktypes.Emane{}.Default()
@@ -182,6 +181,6 @@ func setDefaultNet(name string, net network) (networkType networktypes.NetworkTy
 		return networktypes.Switch{}.Default()
 	default:
 		logger.Error("While generating Experiments, could not find networktype")
-		return 
+		return
 	}
 }
