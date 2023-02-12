@@ -8,7 +8,7 @@ RandomSeed = {{ .RandomSeed}}
 Scenario.simulateConnections = {{ .ScenarioSimulateConnections}}
 Scenario.updateInterval = {{ .ScenarioUpdateInterval}}
 # 43k ~= 12h
-Scenario.endTime = {{ .ScenarioEndTime}}
+Scenario.endTime = {{ .Runtime}}k
 
 {{- range $index, $interfaces:=.Interfaces}}
 {{$interfaces.Name}}.type = SimpleBroadcastInterface

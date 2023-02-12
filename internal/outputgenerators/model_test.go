@@ -75,7 +75,7 @@ func GetTestingExperiment() experiment.Experiment {
 
 		RandomSeed: 1673916419715,
 		Warmup:     5,
-		Duration:   123456,
+		Duration:   43,
 		WorldSize: customtypes.Area{
 			Height: 170,
 			Width:  240,
