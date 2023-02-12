@@ -34,7 +34,7 @@ type data struct {
 }
 
 type networkInterFace struct {
-	Name string
+	Name      string
 	Bandwidth int
 	Range     int
 }
@@ -64,18 +64,19 @@ func (t Theone) BuildGroups(exp experiment.Experiment) []groups {
 	return groupInterface
 }
 
-func (t Theone)BuildNetworks(exp experiment.Experiment) (networks []networkInterFace){
+func (t Theone) BuildNetworks(exp experiment.Experiment) (networks []networkInterFace) {
 
 	logger.Trace("Building Interfaces")
 	for i := 0; i < len(exp.Networks); i++ {
-		nt:=networkInterFace{
+		nt := networkInterFace{
 			Name: exp.Networks[i].Name,
 		}
 		networks = append(networks, nt)
 	}
-	
-return networks
+
+	return networks
 }
+
 // generates a txt for Theone with a given experiment
 func (t Theone) Generate(exp experiment.Experiment) {
 	logger.Info("Generating Theone output")
@@ -117,7 +118,6 @@ func (t Theone) Generate(exp experiment.Experiment) {
 	replace.Groups = t.BuildGroups(exp)
 
 	replace.Interfaces = t.BuildNetworks(exp)
-
 
 	txtTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "cluster_settings.txt"))
 	if err != nil {
