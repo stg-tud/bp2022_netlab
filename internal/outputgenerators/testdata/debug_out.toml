@@ -11,6 +11,7 @@ Width = 240
 
 [[Networks]]
 Name = 'wireless_lan'
+NrofInterfaces = 1
 
 [Networks.Type]
 Bandwidth = 54000000
@@ -22,11 +23,13 @@ Promiscuous = false
 
 [[Networks]]
 Name = 'switch'
+NrofInterfaces = 1
 
 [Networks.Type]
 
 [[Networks]]
 Name = 'changed_wifi'
+NrofInterfaces = 1
 
 [Networks.Type]
 Bandwidth = 17
@@ -38,16 +41,19 @@ Promiscuous = true
 
 [[Networks]]
 Name = 'hub'
+NrofInterfaces = 2
 
 [Networks.Type]
 
 [[Networks]]
 Name = 'emane'
+NrofInterfaces = 2
 
 [Networks.Type]
 
 [[Networks]]
 Name = 'wireless'
+NrofInterfaces = 3
 
 [Networks.Type]
 Movement = true
@@ -71,6 +77,7 @@ MaxPause = 0
 
 [[NodeGroups.Networks]]
 Name = 'wireless_lan'
+NrofInterfaces = 1
 
 [NodeGroups.Networks.Type]
 Bandwidth = 54000000
@@ -92,6 +99,7 @@ MaxPause = 0
 
 [[NodeGroups.Networks]]
 Name = 'wireless_lan'
+NrofInterfaces = 1
 
 [NodeGroups.Networks.Type]
 Bandwidth = 54000000
@@ -103,6 +111,7 @@ Promiscuous = false
 
 [[NodeGroups.Networks]]
 Name = 'switch'
+NrofInterfaces = 1
 
 [NodeGroups.Networks.Type]
 
@@ -115,6 +124,7 @@ NodesType = 0
 
 [[NodeGroups.Networks]]
 Name = 'switch'
+NrofInterfaces = 1
 
 [NodeGroups.Networks.Type]
 
@@ -130,6 +140,7 @@ MaxPause = 0
 
 [[NodeGroups.Networks]]
 Name = 'changed_wifi'
+NrofInterfaces = 1
 
 [NodeGroups.Networks.Type]
 Bandwidth = 17
@@ -148,6 +159,7 @@ NodesType = 1
 
 [[NodeGroups.Networks]]
 Name = 'hub'
+NrofInterfaces = 2
 
 [NodeGroups.Networks.Type]
 
@@ -163,6 +175,7 @@ MaxPause = 17
 
 [[NodeGroups.Networks]]
 Name = 'emane'
+NrofInterfaces = 2
 
 [NodeGroups.Networks.Type]
 
@@ -178,6 +191,7 @@ MaxPause = 0
 
 [[NodeGroups.Networks]]
 Name = 'wireless'
+NrofInterfaces = 3
 
 [NodeGroups.Networks.Type]
 Movement = true
