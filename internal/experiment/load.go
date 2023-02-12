@@ -3,6 +3,7 @@ package experiment
 import (
 	"os"
 
+	logger "github.com/gookit/slog"
 	"github.com/pelletier/go-toml/v2"
 	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
@@ -10,18 +11,19 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
-type ExpConf struct {
+type expConf struct {
 	Name       string
 	Runs       uint
-	Networks   []NT
+	Networks   []network
 	RandomSeed int64
 	Duration   uint
 	WorldSize  customtypes.Area
-	NodeGroups []Nodes
+	NodeGroups []node
 	Targets    []Target
 }
-type NT struct {
+type network struct {
 	Name        string
+	Type        string
 	Bandwidth   int
 	Range       int
 	Jitter      int
@@ -35,12 +37,12 @@ type NT struct {
 	LossStartRange float32
 }
 
-type Nodes struct {
+type node struct {
 	Prefix        string
 	NoNodes       uint
 	MovementModel Movement
 	NodesType     NodeType
-	Networks      []*NT
+	Networks      []uint
 }
 type Movement struct {
 	Model    string
@@ -49,18 +51,19 @@ type Movement struct {
 	MaxPause int
 }
 
-// Loads the path string with toml file into experiment
+// parse toml file into experiment struct
 func LoadFromFile(file string) Experiment {
-	var conf ExpConf
+	logger.Info("Generate experiment")
+	var conf expConf
 
 	buf, e := os.ReadFile(file)
 	if e != nil {
-		panic(e)
+		logger.Error("could not find toml file")
 	}
 
 	err := toml.Unmarshal(buf, &conf)
 	if err != nil {
-		panic(err)
+		logger.Error("Error parsing toml into struct")
 	}
 	// actual experiment
 	exp := Experiment{}
@@ -74,38 +77,36 @@ func LoadFromFile(file string) Experiment {
 	nets := conf.Networks
 	for i := 0; i < len(nets); i++ {
 
-		netType := setDefaultNet(nets[i].Name, nets[i])
+		netType := setDefaultNet(nets[i].Type, nets[i])
 
-		net, _ := NewNetwork(nets[i].Name, netType)
-
+		net, err := NewNetwork(nets[i].Name, netType)
+		if err != nil {
+			logger.Error("Error creating new Networks")
+		}
 		exp.Networks = append(exp.Networks, net)
 
 	}
 	// nodegroups slices
 	nodes := conf.NodeGroups
 	for i := 0; i < len(nodes); i++ {
-
-		node, _ := NewNodeGroup(nodes[i].Prefix, nodes[i].NoNodes)
+		node, err := NewNodeGroup(nodes[i].Prefix, nodes[i].NoNodes)
+		if err != nil {
+			logger.Error("Error creating new Nodegroups")
+		}
 		node.NodesType = nodes[i].NodesType
 		exp.NodeGroups = append(exp.NodeGroups, node)
 		nets := nodes[i].Networks
 
 		//networks of nodegroups
 		for k := 0; k < len(nets); k++ {
-			netType := setDefaultNet(nets[k].Name, *nets[k])
-
-			net, _ := NewNetwork(nets[k].Name, netType)
-
-			exp.NodeGroups[i].Networks = append(exp.NodeGroups[i].Networks, &net)
+			exp.NodeGroups[i].Networks = append(exp.NodeGroups[i].Networks, &exp.Networks[nets[k]])
 		}
-
 		//movementmodel of nodegroups
 		model := nodes[i].MovementModel.Model
 
 		if model == "Static" {
 			exp.NodeGroups[i].MovementModel = movementpatterns.Static{}
 		}
-
 		if model == "custom" {
 			exp.NodeGroups[i].MovementModel = movementpatterns.RandomWaypoint{
 				MinSpeed: nodes[i].MovementModel.MinSpeed,
@@ -115,72 +116,72 @@ func LoadFromFile(file string) Experiment {
 		}
 
 	}
-
+	logger.Trace("Finished generation")
 	return exp
 
 }
 
 // return a networktype with the given name and sets them to deafault/ custom
-func setDefaultNet(s string, net NT) (networkType networktypes.NetworkType) {
+func setDefaultNet(name string, net network) (networkType networktypes.NetworkType) {
 
-	switch {
-	case s == "wireless_lan":
+	switch name {
+	case "wireless_lan":
 		wirelesslan := networktypes.WirelessLAN{}.Default()
-		if net.Bandwidth != 0 {
-			wirelesslan.Bandwidth = net.Bandwidth
+		if net.Bandwidth!=54000000 {
+			wirelesslan.Bandwidth=net.Bandwidth
 		}
-		if net.Range != 0 {
-			wirelesslan.Range = net.Range
+		if net.Range !=275{
+			wirelesslan.Range=net.Range
 		}
-		if net.Delay != 0 {
-			wirelesslan.Bandwidth = net.Delay
+		if net.Jitter != 0{
+			wirelesslan.Jitter=net.Jitter
 		}
-		if net.Loss != 0 {
-			wirelesslan.Loss = net.Loss
+		if net.Delay != 5000{
+			wirelesslan.Delay=net.Delay
 		}
-		if net.Jitter != 0 {
-			wirelesslan.Jitter = net.Jitter
+		if net.Loss != 0.0{
+			wirelesslan.Loss=net.Loss
 		}
 		if net.Promiscuous {
-			wirelesslan.Promiscuous = true
+			wirelesslan.Promiscuous=net.Promiscuous
 		}
-
 		return wirelesslan
-	case s == "wireless":
+	case "wireless":
 		wireless := networktypes.Wireless{}.Default()
-		if net.Bandwidth != 0 {
+		if net.Bandwidth != 54000000 {
 			wireless.Bandwidth = net.Bandwidth
 		}
-		if net.Range != 0 {
+		if net.Range != 400 {
 			wireless.Range = net.Range
 		}
-		if net.Delay != 0 {
+		if net.Delay != 5000 {
 			wireless.Bandwidth = net.Delay
 		}
-		if net.LossInitial != 0 {
+		if net.LossInitial != 0.0 {
 			wireless.LossInitial = net.Loss
 		}
-		if net.LossFactor != 0 {
+		if net.LossFactor != 1.0 {
 			wireless.LossFactor = net.Loss
 		}
-		if net.LossStartRange != 0 {
+		if net.LossStartRange != 300.0 {
 			wireless.LossStartRange = net.Loss
 		}
 		if net.Jitter != 0 {
 			wireless.Jitter = net.Jitter
 		}
 		if !net.Movement {
-			wireless.Movement = false
+			wireless.Movement = net.Promiscuous
 		}
 
 		return wireless
-	case s == "emane":
+	case "emane":
 		return networktypes.Emane{}.Default()
-	case s == "hub":
+	case "hub":
 		return networktypes.Hub{}.Default()
-	case s == "switch":
+	case "switch":
 		return networktypes.Switch{}.Default()
 	default:
-		return networktypes.WirelessLAN{}.Default()
+		logger.Error("While generating Experiments, could not find networktype")
+		return 
 	}
 }

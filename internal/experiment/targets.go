@@ -6,7 +6,6 @@ type Target uint
 const (
 	// Target: Core
 	TargetCore Target = iota
-
 	// Target: The ONE
 	TargetTheOne
 )
