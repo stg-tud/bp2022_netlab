@@ -7,7 +7,6 @@ import (
 
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/outputgenerators"
-	
 )
 
 func TestTheone(t *testing.T) {
