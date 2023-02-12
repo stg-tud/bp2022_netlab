@@ -39,16 +39,12 @@ Group.nrofApplications = 0
 {{- range $index, $group:= .Groups}}
 Group{{$index}}.groupID = {{$group.Id}}
 Group{{$index}}.nrofHosts = {{$group.NrofHosts}}
+Group{{$index}}.nrofInterfaces = {{$group.NrofInterfaces}}
+Group{{$index}}.interface = {{$group.Interface}}
+Group{{$index}}.movementModel = {{$group.MovementModel}}
 
 
 {{end}}
-
-
-# The Tram groups
-Group4.groupID = s
-
-Group4.interface1 = firstinterface
-
 
 
 

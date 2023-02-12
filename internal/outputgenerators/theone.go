@@ -8,14 +8,18 @@ import (
 	logger "github.com/gookit/slog"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
+	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
+	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
 type Theone struct{}
 
 type groups struct {
-	Id        string
-	NrofHosts uint
-	Interface string
+	Id             string
+	NrofHosts      uint
+	NrofInterfaces uint
+	Interface      networktypes.NetworkType
+	MovementModel  movementpatterns.MovementPattern
 }
 
 type data struct {
@@ -47,16 +51,20 @@ var defaultValuesTheone = data{
 
 	ScenarioSimulateConnections: true,
 	ScenarioUpdateInterval:      0.1,
-	ScenarioEndTime:             "43k",
 }
 
+// generates the groups for theone.txt
 func (t Theone) BuildGroups(exp experiment.Experiment) []groups {
 	logger.Trace("Building Groups")
 	groupInterface := []groups{}
-	for i := 0; i < len(exp.NodeGroups); i++ {
+	for i := 0; i < len(exp.NodeGroups)-1; i++ {
+		expNetwork := &exp.Networks[i]
 		group := groups{
-			Id:        exp.NodeGroups[i].Prefix,
-			NrofHosts: exp.NodeGroups[i].NoNodes,
+			Id:             exp.NodeGroups[i].Prefix,
+			NrofHosts:      exp.NodeGroups[i].NoNodes,
+			NrofInterfaces: expNetwork.NrofInterfaces,
+			Interface:      expNetwork.Type,
+			MovementModel:  exp.NodeGroups[i].MovementModel,
 		}
 		groupInterface = append(groupInterface, group)
 
@@ -64,6 +72,7 @@ func (t Theone) BuildGroups(exp experiment.Experiment) []groups {
 	return groupInterface
 }
 
+// generates the networks for theone.txt
 func (t Theone) BuildNetworks(exp experiment.Experiment) (networks []networkInterFace) {
 
 	logger.Trace("Building Interfaces")

@@ -60,45 +60,51 @@ Group.nrofApplications = 0
 # group1 (pedestrians) specific settings
 Group0.groupID = a
 Group0.nrofHosts = 1
+Group0.nrofInterfaces = 1
+Group0.interface = Wireless LAN
+Group0.movementModel = Random Waypoint
 
 
 
 Group1.groupID = b
 Group1.nrofHosts = 2
+Group1.nrofInterfaces = 1
+Group1.interface = Switch
+Group1.movementModel = Random Waypoint
 
 
 
 Group2.groupID = c
 Group2.nrofHosts = 3
+Group2.nrofInterfaces = 1
+Group2.interface = Wireless LAN
+Group2.movementModel = Static
 
 
 
 Group3.groupID = d
 Group3.nrofHosts = 4
+Group3.nrofInterfaces = 2
+Group3.interface = Hub
+Group3.movementModel = Random Waypoint
 
 
 
 Group4.groupID = e
 Group4.nrofHosts = 5
+Group4.nrofInterfaces = 2
+Group4.interface = Emane
+Group4.movementModel = Static
 
 
 
 Group5.groupID = f
 Group5.nrofHosts = 6
+Group5.nrofInterfaces = 3
+Group5.interface = Wireless
+Group5.movementModel = Random Waypoint
 
 
-
-Group6.groupID = g
-Group6.nrofHosts = 7
-
-
-
-
-
-# The Tram groups
-Group4.groupID = s
-
-Group4.interface1 = firstinterface
 
 
 
