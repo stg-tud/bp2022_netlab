@@ -12,27 +12,31 @@ import (
 
 type Theone struct{}
 
+type groups struct {
+	Id        string
+	NrofHosts uint
+	Interface string
+}
+
 type data struct {
 	ScenarioName                string
 	ScenarioSimulateConnections bool
 	ScenarioUpdateInterval      float64
 	ScenarioEndTime             string
+	WorldSizeHeight             uint
+	WorldSizeWidth              uint
+	NrofHostGroups              int
+	Groups                      []groups
+	Interfaces                  []networkInterFace
+	RandomSeed                  int64
+	Warmup                      uint
+	Runtime                     uint
+}
 
-	FirstinterfaceType string
-
-	GUI           uint
-	RandomSeed    int64
-	PidStat       uint
-	PidParam      string
-	Net           uint
-	NetParam      string
-	XY            uint
-	XYParam       uint
-	Contacts      uint
-	ContactsParam uint
-	Shutdown      string
-	Warmup        uint
-	Runtime       uint
+type networkInterFace struct {
+	Name string
+	Bandwidth int
+	Range     int
 }
 
 // The name of the file that should be written to
@@ -44,21 +48,36 @@ var defaultValuesTheone = data{
 	ScenarioSimulateConnections: true,
 	ScenarioUpdateInterval:      0.1,
 	ScenarioEndTime:             "43k",
-
-	GUI:           1,
-	PidStat:       0,
-	PidParam:      "vnoded",
-	Net:           0,
-	NetParam:      "eth0",
-	XY:            1,
-	XYParam:       5,
-	Contacts:      1,
-	ContactsParam: 5,
-	Shutdown:      "",
 }
 
+func (t Theone) BuildGroups(exp experiment.Experiment) []groups {
+	logger.Trace("Building Groups")
+	groupInterface := []groups{}
+	for i := 0; i < len(exp.NodeGroups); i++ {
+		group := groups{
+			Id:        exp.NodeGroups[i].Prefix,
+			NrofHosts: exp.NodeGroups[i].NoNodes,
+		}
+		groupInterface = append(groupInterface, group)
+
+	}
+	return groupInterface
+}
+
+func (t Theone)BuildNetworks(exp experiment.Experiment) (networks []networkInterFace){
+
+	logger.Trace("Building Interfaces")
+	for i := 0; i < len(exp.Networks); i++ {
+		nt:=networkInterFace{
+			Name: exp.Networks[i].Name,
+		}
+		networks = append(networks, nt)
+	}
+	
+return networks
+}
 // generates a txt for Theone with a given experiment
-func (Theone) Generate(exp experiment.Experiment) {
+func (t Theone) Generate(exp experiment.Experiment) {
 	logger.Info("Generating Theone output")
 	outputFolder, err := folderstructure.GetAndCreateOutputFolder(exp)
 	if err != nil {
@@ -88,8 +107,17 @@ func (Theone) Generate(exp experiment.Experiment) {
 	replace := defaultValuesTheone
 	replace.ScenarioName = folderstructure.FileSystemEscape(exp.Name)
 	replace.RandomSeed = exp.RandomSeed
-	replace.Warmup = exp.Warmup
+	replace.Warmup = exp.Warmup * 200
 	replace.Runtime = exp.Duration
+	replace.NrofHostGroups = len(exp.NodeGroups)
+
+	replace.WorldSizeHeight = uint(exp.WorldSize.Height * 20)
+	replace.WorldSizeWidth = uint(exp.WorldSize.Width * 20)
+
+	replace.Groups = t.BuildGroups(exp)
+
+	replace.Interfaces = t.BuildNetworks(exp)
+
 
 	txtTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "cluster_settings.txt"))
 	if err != nil {
