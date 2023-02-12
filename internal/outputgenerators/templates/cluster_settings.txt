@@ -40,7 +40,7 @@ Group.nrofApplications = 0
 Group{{$index}}.groupID = {{$group.Id}}
 Group{{$index}}.nrofHosts = {{$group.NrofHosts}}
 Group{{$index}}.nrofInterfaces = {{$group.NrofInterfaces}}
-Group{{$index}}.interface = {{$group.Interface}}
+Group{{$index}}.interface{{$index}}= {{$group.Interface}}
 Group{{$index}}.movementModel = {{$group.MovementModel}}
 
 
