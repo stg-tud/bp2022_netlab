@@ -17,6 +17,10 @@ import (
 // The Core output generator generates a XML configuration file for CORE.
 type Core struct{}
 
+func (Core) String() string {
+	return "Core"
+}
+
 type coreData struct {
 	ScenarioName string
 	Devices      []device

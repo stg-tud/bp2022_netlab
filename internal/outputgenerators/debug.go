@@ -16,6 +16,10 @@ type Debug struct{}
 // The name of the file where the debug output should be dumped to
 const DebugOutputFile = "debug_out.toml"
 
+func (Debug) String() string {
+	return "Debug"
+}
+
 // Generate outputs the given Experiment as TOML to the file debug_out.toml
 func (Debug) Generate(exp experiment.Experiment) {
 	logger.Info("Generating debug output")

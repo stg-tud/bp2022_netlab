@@ -14,12 +14,19 @@ import (
 const FileName = "app.log"
 
 // Init initializes the Logger for use
-func Init() {
+func Init(debugLogging bool) {
+	logLevels := slog.DangerLevels
+	minLevel := slog.WarnLevel
+	if debugLogging {
+		logLevels = append(logLevels, slog.InfoLevel, slog.NoticeLevel, slog.DebugLevel)
+		minLevel = slog.DebugLevel
+	}
+
 	consoleFormatter := slog.NewTextFormatter()
 	consoleFormatter.EnableColor = true
 	consoleFormatter.SetTemplate("[{{level}}] ({{caller}}) {{message}} {{data}} {{extra}}\n")
 
-	consoleHandler := handler.NewConsoleHandler(append(slog.DangerLevels, slog.InfoLevel))
+	consoleHandler := handler.NewConsoleHandler(logLevels)
 	consoleHandler.SetFormatter(consoleFormatter)
 
 	fileFormatter := slog.NewTextFormatter()
@@ -34,7 +41,7 @@ func Init() {
 	if err != nil {
 		panic(err)
 	}
-	fileHandler := handler.NewSimple(fileStream, slog.TraceLevel)
+	fileHandler := handler.NewSimple(fileStream, minLevel)
 	fileHandler.SetFormatter(fileFormatter)
 
 	slog.Std().ResetHandlers()

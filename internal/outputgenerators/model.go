@@ -16,6 +16,7 @@ type OutputGenerator interface {
 	// Generate takes a Experiment and generates the output in the given format
 	// and writes in the appropriate files or executes the correct function call.
 	Generate(experiment.Experiment)
+	String() string
 }
 
 // GetTemplatesFolder returns the absolute path of the folder containing the template files.
