@@ -188,3 +188,35 @@ Delay = 5000
 LossInitial = 0.0
 LossFactor = 1.0
 LossStartRange = 300.0
+
+[[EventGenerators]]
+Name = 'MessageEventGenerator'
+
+[EventGenerators.Type]
+Class = 'MessageEventGenerator'
+Interval = 20
+Prefix = 'M'
+
+[EventGenerators.Type.Size]
+Height = 80
+Width = 120
+
+[EventGenerators.Type.Hosts]
+Height = 5
+Width = 15
+
+[[EventGenerators]]
+Name = 'changedBurst'
+
+[EventGenerators.Type]
+Class = 'MessageBurstGenerator'
+Interval = 25
+Prefix = 'M'
+
+[EventGenerators.Type.Size]
+Height = 80
+Width = 120
+
+[EventGenerators.Type.Hosts]
+Height = 5
+Width = 15

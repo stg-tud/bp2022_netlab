@@ -15,7 +15,7 @@ func GetExampleExperiment() Experiment {
 	networks = append(networks, net)
 	net, _ = NewNetwork("bluetooth", networktypes.Wireless{}.Default())
 	networks = append(networks, net)
-
+	
 	var nodegroups []NodeGroup
 	ng, _ := NewNodeGroup("n", 1)
 	ng.Networks = append(ng.Networks, &networks[0])

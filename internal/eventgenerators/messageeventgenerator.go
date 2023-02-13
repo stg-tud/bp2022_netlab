@@ -19,7 +19,7 @@ func (MessageEventGenerator) String() string {
 	return "MessageEventGenerator"
 }
 
-// Returns a new configuration of Wireless with default values applied.
+// Returns a new configuration of Messageeventgenerator with default values applied.
 func (MessageEventGenerator) Default() MessageEventGenerator {
 	return MessageEventGenerator{
 		Class:    "MessageEventGenerator",

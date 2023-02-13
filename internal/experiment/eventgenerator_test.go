@@ -23,7 +23,7 @@ func TestNewEventGenerator(t *testing.T) {
 		eventgenerators.MessageEventGenerator{}.Default(),
 	}
 	for _, eventGenerator := range eventGenerator {
-		eventGeneratorName := fmt.Sprintf("network_under_test_%s", strings.ToLower(eventGenerator.String()))
+		eventGeneratorName := fmt.Sprintf("eventGenerator_under_test_%s", strings.ToLower(eventGenerator.String()))
 		eventGenerator_under_test, err := experiment.NewNetwork(eventGeneratorName, eventGenerator)
 		if err != nil {
 			t.Fatalf("Error creating new '%s' EventGenerator: %s", eventGenerator.String(), err)
