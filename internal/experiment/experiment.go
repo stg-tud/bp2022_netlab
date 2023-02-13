@@ -12,9 +12,9 @@ type Experiment struct {
 	Targets []Target
 
 	RandomSeed int64
-
-	Duration  uint
-	WorldSize customtypes.Area
+	Warmup     uint
+	Duration   uint
+	WorldSize  customtypes.Area
 
 	Networks   []Network
 	NodeGroups []NodeGroup
