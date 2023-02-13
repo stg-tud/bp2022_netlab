@@ -12,6 +12,10 @@ import (
 
 type CoreEmulab struct{}
 
+func (CoreEmulab) String() string {
+	return "coreemu-lab"
+}
+
 type data struct {
 	Name      string
 	Scenario  string

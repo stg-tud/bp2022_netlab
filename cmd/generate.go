@@ -17,13 +17,14 @@ var overwriteExisting bool
 var targetsOverwrite []string
 
 var generateCmd = &cobra.Command{
-	Use:     "generate",
+	Use:     "generate [filename]",
 	Aliases: []string{"gen"},
 	Short:   "Loads the given TOML file and generates output files",
 	Long: `test will run some tests on the given TOML file. It will try to
 parse the file and echo syntactical errors as well as invalid values. No
 further steps are taken, e.g. no output files will be generated.`,
-	Run: generate,
+	Args: cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
+	Run:  generate,
 }
 
 func init() {
@@ -40,6 +41,9 @@ func stringTargetMapping(input string) (experiment.Target, error) {
 
 	case "core", "coreemu":
 		return experiment.TargetCore, nil
+
+	case "coreemulab", "core-emulab", "coreemu-lab", "clab":
+		return experiment.TargetCoreEmulab, nil
 
 	default:
 		return 0, errors.New("no matching target found")
@@ -68,6 +72,9 @@ func targetOutputGeneratorMapping(input experiment.Target) (outputgenerators.Out
 	case experiment.TargetCore:
 		return outputgenerators.Core{}, nil
 
+	case experiment.TargetCoreEmulab:
+		return outputgenerators.CoreEmulab{}, nil
+
 	default:
 		return outputgenerators.Debug{}, errors.New("no matching output generator found")
 	}
@@ -81,6 +88,10 @@ func buildOutputGenerators(exp experiment.Experiment) []outputgenerators.OutputG
 			continue
 		}
 		outputGenerators = append(outputGenerators, outputGenerator)
+		if target == experiment.TargetCoreEmulab {
+			logger.Debug("Output generator \"coreemu-lab\" implies \"CORE\", therefore adding it")
+			outputGenerators = append(outputGenerators, outputgenerators.Core{})
+		}
 	}
 	for _, nodeGroup := range exp.NodeGroups {
 		supported := outputgenerators.Bonnmotion{}.MovementPatternIsSupported(nodeGroup.MovementModel)
@@ -94,8 +105,19 @@ func buildOutputGenerators(exp experiment.Experiment) []outputgenerators.OutputG
 		logger.Debugf("Selecting Debug output generator because debug logging is active")
 		outputGenerators = append(outputGenerators, outputgenerators.Debug{})
 	}
-	logger.Debug("Generating output for following output generators:", outputGenerators)
-	return outputGenerators
+
+	// Making sure no OutputGenerator appears more than once
+	unique := make(map[outputgenerators.OutputGenerator]bool)
+	cleanedOutputGenerators := []outputgenerators.OutputGenerator{}
+	for _, outputGenerator := range outputGenerators {
+		if _, present := unique[outputGenerator]; !present {
+			unique[outputGenerator] = true
+			cleanedOutputGenerators = append(cleanedOutputGenerators, outputGenerator)
+		}
+	}
+
+	logger.Debug("Generating output for following output generators:", cleanedOutputGenerators)
+	return cleanedOutputGenerators
 }
 
 func generate(cmd *cobra.Command, args []string) {

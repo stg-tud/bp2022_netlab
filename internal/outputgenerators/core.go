@@ -18,7 +18,7 @@ import (
 type Core struct{}
 
 func (Core) String() string {
-	return "Core"
+	return "CORE"
 }
 
 type coreData struct {

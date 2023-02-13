@@ -11,7 +11,7 @@ import (
 )
 
 // The name of the log file to write
-const FileName = "app.log"
+const FileName = "netlab.log"
 
 // Init initializes the Logger for use
 func Init(debugLogging bool) {

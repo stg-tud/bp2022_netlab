@@ -8,6 +8,8 @@ const (
 	TargetCore Target = iota
 	// Target: The ONE
 	TargetTheOne
+	// Target: coreemu-lab
+	TargetCoreEmulab
 )
 
 func (t Target) String() string {
@@ -17,6 +19,9 @@ func (t Target) String() string {
 
 	case TargetTheOne:
 		return "The ONE"
+
+	case TargetCoreEmulab:
+		return "coreemu-lab"
 
 	default:
 		return "Unknown target"
