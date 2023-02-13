@@ -40,14 +40,14 @@ type data struct {
 	RandomSeed                  int64
 	Warmup                      uint
 	Runtime                     uint
-	NoEventGenerator int
+	NoEventGenerator            int
 }
 type eventGeneraTor struct {
-	Name             string
-	Interval         uint
-	Size             customtypes.Area
-	Hosts            customtypes.Area
-	Prefix           string
+	Name     string
+	Interval uint
+	Size     customtypes.Area
+	Hosts    customtypes.Area
+	Prefix   string
 }
 type networkInterFace struct {
 	Name      string
@@ -119,7 +119,7 @@ func (t Theone) BuildEventGenerator(exp experiment.Experiment) (eventGenerator [
 	logger.Trace("Building Event Generators")
 	for i := 0; i < len(exp.EventGenerators); i++ {
 		evg := eventGeneraTor{
-			Name:             exp.EventGenerators[i].Name,
+			Name: exp.EventGenerators[i].Name,
 		}
 		eventGenerator = append(eventGenerator, evg)
 	}

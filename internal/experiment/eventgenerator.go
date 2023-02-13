@@ -6,10 +6,10 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/eventgenerators"
 )
 
-// A EventGenerator generates events 
+// A EventGenerator generates events
 type EventGenerator struct {
-	Name string
-	Type eventgenerators.EventGenerator
+	Name             string
+	Type             eventgenerators.EventGenerator
 	NoEventGenerator uint
 }
 
@@ -19,8 +19,8 @@ func NewEventGenerator(name string, eventGenerator eventgenerators.EventGenerato
 		return EventGenerator{}, errors.New("name of the EventGenerator must consist of at least on character")
 	}
 	return EventGenerator{
-		Name: name,
-		Type: eventGenerator,
+		Name:             name,
+		Type:             eventGenerator,
 		NoEventGenerator: NoEventGenerator,
 	}, nil
 }
