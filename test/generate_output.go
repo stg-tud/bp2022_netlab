@@ -19,6 +19,7 @@ func main() {
 		outputgenerators.Core{},
 		outputgenerators.Bonnmotion{},
 		outputgenerators.Debug{},
+		outputgenerators.CoreEmulab{},
 	}
 
 	for _, outputGenerator := range outputGenerators {
