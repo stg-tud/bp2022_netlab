@@ -16,7 +16,6 @@ func (t Target) String() string {
 	switch t {
 	case TargetCore:
 		return "Core"
-
 	case TargetTheOne:
 		return "The ONE"
 
