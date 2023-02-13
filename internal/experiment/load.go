@@ -115,7 +115,7 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 		if model == "Static" {
 			exp.NodeGroups[i].MovementModel = movementpatterns.Static{}
 		}
-		if model == "custom" {
+		if model == "RandomWaypoint" {
 			exp.NodeGroups[i].MovementModel = movementpatterns.RandomWaypoint{
 				MinSpeed: nodes[i].MovementModel.MinSpeed,
 				MaxSpeed: nodes[i].MovementModel.MaxSpeed,
