@@ -1,4 +1,4 @@
-package outputgenerators_test
+package experiment_test
 
 import (
 	"os"
@@ -15,7 +15,10 @@ func TestLoad(t *testing.T) {
 		os.RemoveAll(folderstructure.OutputFolderName)
 	})
 
-	actual := experiment.LoadFromFile("testdata/example.toml")
+	actual, err := experiment.LoadFromFile("testdata/load_test.toml")
+	if err != nil {
+		t.Fatal(err)
+	}
 	if actual.Duration != 123456 {
 		t.Fatal("Wrong duration")
 	}

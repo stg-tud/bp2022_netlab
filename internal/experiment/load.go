@@ -1,6 +1,7 @@
 package experiment
 
 import (
+	"errors"
 	"os"
 
 	logger "github.com/gookit/slog"
@@ -18,7 +19,7 @@ type expConf struct {
 	RandomSeed int64
 	Duration   uint
 	WorldSize  customtypes.Area
-	NodeGroups []node
+	NodeGroups []nodegroup
 	Targets    []Target
 }
 type network struct {
@@ -37,14 +38,14 @@ type network struct {
 	LossStartRange float32
 }
 
-type node struct {
+type nodegroup struct {
 	Prefix        string
 	NoNodes       uint
-	MovementModel Movement
+	MovementModel movement
 	NodesType     NodeType
 	Networks      []uint
 }
-type Movement struct {
+type movement struct {
 	Model    string
 	MinSpeed int
 	MaxSpeed int
@@ -52,21 +53,24 @@ type Movement struct {
 }
 
 // parse toml file into experiment struct
-func LoadFromFile(file string) Experiment {
+func LoadFromFile(file string) (exp Experiment, returnError error) {
 	logger.Info("Generate experiment")
 	var conf expConf
 
 	buf, e := os.ReadFile(file)
 	if e != nil {
 		logger.Error("could not find toml file")
+
+		return exp, e
 	}
 
 	err := toml.Unmarshal(buf, &conf)
 	if err != nil {
 		logger.Error("Error parsing toml into struct")
+		return exp, err
 	}
 	// actual experiment
-	exp := Experiment{}
+	exp = Experiment{}
 	exp.Targets = conf.Targets
 	exp.Duration = conf.Duration
 	exp.Name = conf.Name
@@ -75,9 +79,13 @@ func LoadFromFile(file string) Experiment {
 
 	// network slices
 	nets := conf.Networks
-	for i := 0; i < len(nets); i++ {
+	for i := range nets {
 
-		netType := setDefaultNet(nets[i].Type, nets[i])
+		netType, e := setDefaultNet(nets[i].Type, nets[i])
+		if e != nil {
+			logger.Error("While generating Experiments, could not find networktype")
+			return exp, e
+		}
 
 		net, err := NewNetwork(nets[i].Name, netType)
 		if err != nil {
@@ -88,7 +96,7 @@ func LoadFromFile(file string) Experiment {
 	}
 	// nodegroups slices
 	nodes := conf.NodeGroups
-	for i := 0; i < len(nodes); i++ {
+	for i := range nodes {
 		node, err := NewNodeGroup(nodes[i].Prefix, nodes[i].NoNodes)
 		if err != nil {
 			logger.Error("Error creating new Nodegroups")
@@ -98,7 +106,7 @@ func LoadFromFile(file string) Experiment {
 		nets := nodes[i].Networks
 
 		//networks of nodegroups
-		for k := 0; k < len(nets); k++ {
+		for k := range nets {
 			exp.NodeGroups[i].Networks = append(exp.NodeGroups[i].Networks, &exp.Networks[nets[k]])
 		}
 		//movementmodel of nodegroups
@@ -117,12 +125,11 @@ func LoadFromFile(file string) Experiment {
 
 	}
 	logger.Trace("Finished generation")
-	return exp
-
+	return exp, nil
 }
 
 // return a networktype with the given name and sets them to deafault/ custom
-func setDefaultNet(name string, net network) (networkType networktypes.NetworkType) {
+func setDefaultNet(name string, net network) (networkType networktypes.NetworkType, err error) {
 
 	switch name {
 	case "wireless_lan":
@@ -145,7 +152,7 @@ func setDefaultNet(name string, net network) (networkType networktypes.NetworkTy
 		if net.Promiscuous {
 			wirelesslan.Promiscuous = net.Promiscuous
 		}
-		return wirelesslan
+		return wirelesslan, nil
 	case "wireless":
 		wireless := networktypes.Wireless{}.Default()
 		if net.Bandwidth != 54000000 {
@@ -172,15 +179,15 @@ func setDefaultNet(name string, net network) (networkType networktypes.NetworkTy
 		if !net.Movement {
 			wireless.Movement = net.Promiscuous
 		}
-		return wireless
+		return wireless, nil
 	case "emane":
-		return networktypes.Emane{}.Default()
+		return networktypes.Emane{}.Default(), nil
 	case "hub":
-		return networktypes.Hub{}.Default()
+		return networktypes.Hub{}.Default(), nil
 	case "switch":
-		return networktypes.Switch{}.Default()
+		return networktypes.Switch{}.Default(), nil
 	default:
 		logger.Error("While generating Experiments, could not find networktype")
-		return
+		return networktypes.WirelessLAN{}.Default(), errors.New("while generating Experiments, could not find networktype")
 	}
 }

@@ -22,7 +22,6 @@ Promiscuous = false
 Name = 'switch'
 Type = 'switch'
 
-
 [[Networks]]
 Name = 'changed_wifi'
 Type = 'wireless_lan'
@@ -61,13 +60,11 @@ NoNodes = 1
 NodesType = 0
 Networks = [0]
 
-
 [[NodeGroups]]
 Prefix = 'b'
 NoNodes = 2
 NodesType = 0
 Networks=[0,1]
-
 
 [[NodeGroups]]
 Prefix = 'c'
@@ -84,8 +81,6 @@ NodesType = 0
 Networks=[2]
 [NodeGroups.MovementModel]
 Model='RandomWaypoint'
-
-
 
 [[NodeGroups]]
 Prefix = 'e'
@@ -107,10 +102,6 @@ MinSpeed = 1
 MaxSpeed = 2
 MaxPause = 17
 
-
-
-
-
 [[NodeGroups]]
 Prefix = 'g'
 NoNodes = 7
@@ -121,5 +112,3 @@ Model = 'RandomWaypoint'
 MinSpeed = 123
 MaxSpeed = 456
 MaxPause = 0
-
-
