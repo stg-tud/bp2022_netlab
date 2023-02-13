@@ -1,38 +1,37 @@
 package eventgenerators
 
-type MessageBurstEventGenerator struct {
-	// Movement enabled
+import "github.com/stg-tud/bp2022_netlab/internal/customtypes"
+
+type MessageBurstGenerator struct {
+	// Class of the first event generator
+	Class string
+	// Creation interval in seconds (one new message every X to Y seconds)
 	Interval uint
-	// Bandwidth (bps)
-	size uint
-	// Max range (pixels)
-	Range int
-	// Transmission jitter (usec)
-	Jitter int
-	// Transmission delay (usec)
-	Delay int
-	// Loss Initial
-	LossInitial float32
-	// Loss Factor
-	LossFactor float32
-	// Loss Start Range (pixels)
-	LossStartRange float32
+	// Size of the message
+	Size customtypes.Area
+	// range of message source/destination addresses
+	Hosts customtypes.Area
+	// Message ID prefix
+	Prefix string
 }
 
-func (MessageBurstEventGenerator) String() string {
-	return "MessageBurstEventGenerator"
+func (MessageBurstGenerator) String() string {
+	return "MessageBurstGenerator"
 }
 
 // Returns a new configuration of Wireless with default values applied.
-func (MessageBurstEventGenerator) Default() MessageBurstEventGenerator {
-	return MessageBurstEventGenerator{
-		Interval:       20,
-		size:           54000000,
-		Range:          400,
-		Jitter:         0,
-		Delay:          5000,
-		LossInitial:    0.0,
-		LossFactor:     1.0,
-		LossStartRange: 300.0,
+func (MessageBurstGenerator) Default() MessageBurstGenerator {
+	return MessageBurstGenerator{
+		Class:    "MessageBurstGenerator",
+		Interval: 20,
+		Size: customtypes.Area{
+			Height: 80,
+			Width:  120,
+		},
+		Hosts: customtypes.Area{
+			Height: 5,
+			Width:  15,
+		},
+		Prefix: "M",
 	}
 }
