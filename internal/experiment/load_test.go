@@ -26,7 +26,7 @@ func TestLoad(t *testing.T) {
 		t.Fatal("Wrong experiment name")
 	}
 	if actual.RandomSeed != 1673916419715 {
-		t.Fatal("Wrong duration")
+		t.Fatal("Wrong Randomseed")
 	}
 	if actual.NodeGroups[0].MovementModel.String() != "Random Waypoint" {
 		t.Fatal("Wrong movementModel")

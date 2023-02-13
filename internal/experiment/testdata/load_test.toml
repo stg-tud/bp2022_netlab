@@ -1,6 +1,6 @@
 Name = 'Testing Experiment'
 Runs = 5
-Targets = [0, 1]
+Targets = ["Core","The One"]
 RandomSeed = 1673916419715
 Duration = 123456
 
@@ -58,19 +58,19 @@ LossStartRange = 300.0
 Prefix = 'a'
 NoNodes = 1
 NodesType = 0
-Networks = [0]
+Networks = ['wireless_lan']
 
 [[NodeGroups]]
 Prefix = 'b'
 NoNodes = 2
 NodesType = 0
-Networks=[0,1]
+Networks=['wireless_lan','switch']
 
 [[NodeGroups]]
 Prefix = 'c'
 NoNodes = 3
 NodesType = 0
-Networks=[1]
+Networks=['switch']
 [NodeGroups.MovementModel]
 Model='Static'
 
@@ -78,7 +78,7 @@ Model='Static'
 Prefix = 'd'
 NoNodes = 4
 NodesType = 0
-Networks=[2]
+Networks=['changed_wifi']
 [NodeGroups.MovementModel]
 Model='RandomWaypoint'
 
@@ -86,7 +86,7 @@ Model='RandomWaypoint'
 Prefix = 'e'
 NoNodes = 5
 NodesType = 1
-Networks = [3]
+Networks = ['hub']
 [NodeGroups.MovementModel]
 Model='Static'
 
@@ -94,7 +94,7 @@ Model='Static'
 Prefix = 'f'
 NoNodes = 6
 NodesType = 0
-Networks = [4]
+Networks = ['emane']
 
 [NodeGroups.MovementModel]
 Model = 'custom'

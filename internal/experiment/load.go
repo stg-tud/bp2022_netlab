@@ -20,7 +20,7 @@ type expConf struct {
 	Duration   uint
 	WorldSize  customtypes.Area
 	NodeGroups []nodegroup
-	Targets    []Target
+	Targets    []string
 }
 type network struct {
 	Name        string
@@ -43,7 +43,7 @@ type nodegroup struct {
 	NoNodes       uint
 	MovementModel movement
 	NodesType     NodeType
-	Networks      []uint
+	Networks      []string
 }
 type movement struct {
 	Model    string
@@ -71,7 +71,17 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 	}
 	// actual experiment
 	exp = Experiment{}
-	exp.Targets = conf.Targets
+	var replaceTargets [2]Target
+	for i := range conf.Targets {
+		switch conf.Targets[i] {
+		case "Core":
+			replaceTargets[i] = 0
+		case "The One":
+			replaceTargets[i] = 1
+		default:
+			return exp, errors.New("wrong targets")
+		}
+	}
 	exp.Duration = conf.Duration
 	exp.Name = conf.Name
 	exp.RandomSeed = conf.RandomSeed
@@ -107,19 +117,34 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 
 		//networks of nodegroups
 		for k := range nets {
-			exp.NodeGroups[i].Networks = append(exp.NodeGroups[i].Networks, &exp.Networks[nets[k]])
+
+			indexOfNetwork, e := setNetworkInNodeGroup(conf, nets[k])
+			if e != nil {
+				logger.Error("Error setting up Networks for Nodegroup")
+			}
+			exp.NodeGroups[i].Networks = append(exp.NodeGroups[i].Networks, &exp.Networks[indexOfNetwork])
+
 		}
 		//movementmodel of nodegroups
 		model := nodes[i].MovementModel.Model
 
-		if model == "Static" {
+		switch model {
+
+		case "Static":
 			exp.NodeGroups[i].MovementModel = movementpatterns.Static{}
-		}
-		if model == "RandomWaypoint" {
+		case "":
+			exp.NodeGroups[i].MovementModel = movementpatterns.RandomWaypoint{}
+		case "RandomWaypoint":
 			exp.NodeGroups[i].MovementModel = movementpatterns.RandomWaypoint{
-				MinSpeed: nodes[i].MovementModel.MinSpeed,
-				MaxSpeed: nodes[i].MovementModel.MaxSpeed,
-				MaxPause: nodes[i].MovementModel.MaxPause,
+				MinSpeed: conf.NodeGroups[i].MovementModel.MinSpeed,
+				MaxSpeed: conf.NodeGroups[i].MovementModel.MaxSpeed,
+				MaxPause: conf.NodeGroups[i].MovementModel.MaxPause,
+			}
+		default:
+			exp.NodeGroups[i].MovementModel = movementpatterns.RandomWaypoint{
+				MinSpeed: conf.NodeGroups[i].MovementModel.MinSpeed,
+				MaxSpeed: conf.NodeGroups[i].MovementModel.MaxSpeed,
+				MaxPause: conf.NodeGroups[i].MovementModel.MaxPause,
 			}
 		}
 
@@ -190,4 +215,14 @@ func setDefaultNet(name string, net network) (networkType networktypes.NetworkTy
 		logger.Error("While generating Experiments, could not find networktype")
 		return networktypes.WirelessLAN{}.Default(), errors.New("while generating Experiments, could not find networktype")
 	}
+}
+
+func setNetworkInNodeGroup(conf expConf, nameOfNetwork string) (i int, err error) {
+
+	for i, network := range conf.Networks {
+		if nameOfNetwork == network.Name {
+			return i, nil
+		}
+	}
+	return i, errors.New("could not find the network for nodegroup")
 }
