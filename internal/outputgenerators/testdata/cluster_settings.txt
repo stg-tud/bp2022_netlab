@@ -49,60 +49,66 @@ Group.bufferSize = 5M
 Group.waitTime = 0, 120
 #All nodes have the firstinterface inteface
 Group.nrofInterfaces = 1
-Group.interface1 = firstinterface
+Group.interface1 = 
 # walking speeds
 Group.speed = 0.5, 1.5
 #Group.msgTtl = 60
 
 Group.nrofHosts = 40
 Group.nrofApplications = 0
-
-# group1 (pedestrians) specific settings
 Group0.groupID = a
 Group0.nrofHosts = 1
-Group0.nrofInterfaces = 1
-Group0.interface0= Wireless LAN
-Group0.movementModel = Random Waypoint
+Group0.nrofInterfaces = 0
+Group0.interface1= <nil>
+Group0.movementModel = RandomWaypoint
 
 
 
 Group1.groupID = b
 Group1.nrofHosts = 2
-Group1.nrofInterfaces = 1
-Group1.interface1= Switch
-Group1.movementModel = Random Waypoint
+Group1.nrofInterfaces = 0
+Group1.interface2= <nil>
+Group1.movementModel = RandomWaypoint
 
 
 
 Group2.groupID = c
 Group2.nrofHosts = 3
-Group2.nrofInterfaces = 1
-Group2.interface2= Wireless LAN
+Group2.nrofInterfaces = 0
+Group2.interface3= <nil>
 Group2.movementModel = Static
 
 
 
 Group3.groupID = d
 Group3.nrofHosts = 4
-Group3.nrofInterfaces = 2
-Group3.interface3= Hub
-Group3.movementModel = Random Waypoint
+Group3.nrofInterfaces = 0
+Group3.interface4= <nil>
+Group3.movementModel = RandomWaypoint
 
 
 
 Group4.groupID = e
 Group4.nrofHosts = 5
-Group4.nrofInterfaces = 2
-Group4.interface4= Emane
+Group4.nrofInterfaces = 0
+Group4.interface5= <nil>
 Group4.movementModel = Static
 
 
 
 Group5.groupID = f
 Group5.nrofHosts = 6
-Group5.nrofInterfaces = 3
-Group5.interface5= Wireless
-Group5.movementModel = Random Waypoint
+Group5.nrofInterfaces = 0
+Group5.interface6= <nil>
+Group5.movementModel = RandomWaypoint
+
+
+
+Group6.groupID = g
+Group6.nrofHosts = 7
+Group6.nrofInterfaces = 0
+Group6.interface7= <nil>
+Group6.movementModel = RandomWaypoint
 
 
 

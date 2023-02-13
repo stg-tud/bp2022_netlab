@@ -13,22 +13,22 @@ const TestDataFolder = "testdata"
 // GetTestingExperiment returns an Experiment loaded with values used for unit tests.
 func GetTestingExperiment() experiment.Experiment {
 	var networks []experiment.Network
-	net, _ := experiment.NewNetwork("wireless_lan", networktypes.WirelessLAN{}.Default(), 1)
+	net, _ := experiment.NewNetwork("wireless_lan", networktypes.WirelessLAN{}.Default())
 	networks = append(networks, net)
-	net, _ = experiment.NewNetwork("switch", networktypes.Switch{}.Default(), 1)
+	net, _ = experiment.NewNetwork("switch", networktypes.Switch{}.Default())
 	networks = append(networks, net)
 
 	changedWifi := networktypes.WirelessLAN{}.Default()
 	changedWifi.Bandwidth = 17
 	changedWifi.Promiscuous = true
-	net, _ = experiment.NewNetwork("changed_wifi", changedWifi, 1)
+	net, _ = experiment.NewNetwork("changed_wifi", changedWifi)
 	networks = append(networks, net)
 
-	net, _ = experiment.NewNetwork("hub", networktypes.Hub{}.Default(), 2)
+	net, _ = experiment.NewNetwork("hub", networktypes.Hub{}.Default())
 	networks = append(networks, net)
-	net, _ = experiment.NewNetwork("emane", networktypes.Emane{}.Default(), 2)
+	net, _ = experiment.NewNetwork("emane", networktypes.Emane{}.Default())
 	networks = append(networks, net)
-	net, _ = experiment.NewNetwork("wireless", networktypes.Wireless{}.Default(), 3)
+	net, _ = experiment.NewNetwork("wireless", networktypes.Wireless{}.Default())
 	networks = append(networks, net)
 
 	var nodegroups []experiment.NodeGroup

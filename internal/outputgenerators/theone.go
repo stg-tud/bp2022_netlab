@@ -18,8 +18,9 @@ type groups struct {
 	Id             string
 	NrofHosts      uint
 	NrofInterfaces uint
+	InterfaceID    uint
 	Interface      networktypes.NetworkType
-	MovementModel  movementpatterns.MovementPattern
+	MovementModel  string
 }
 
 type data struct {
@@ -43,6 +44,13 @@ type networkInterFace struct {
 	Range     int
 }
 
+var InterfaceIdCounter uint = 1
+
+func (t Theone) getInterfaceId() uint {
+	InterfaceIdCounter++
+	return InterfaceIdCounter - 1
+}
+
 // The name of the file that should be written to
 const TheoneOutput = "cluster_settings.txt"
 
@@ -53,18 +61,29 @@ var defaultValuesTheone = data{
 	ScenarioUpdateInterval:      0.1,
 }
 
-// generates the groups for theone.txt
+func (t Theone) movementpattern(movementpatterntype movementpatterns.MovementPattern) string {
+	switch movementpatterntype.(type) {
+	case movementpatterns.RandomWaypoint:
+		return "RandomWaypoint"
+	case movementpatterns.Static:
+		return "Static"
+	default:
+		return ""
+	}
+}
+
 func (t Theone) BuildGroups(exp experiment.Experiment) []groups {
 	logger.Trace("Building Groups")
 	groupInterface := []groups{}
-	for i := 0; i < len(exp.NodeGroups)-1; i++ {
-		expNetwork := &exp.Networks[i]
+	for i := 0; i < len(exp.NodeGroups); i++ {
+		expNodeGroups := &exp.NodeGroups[i]
 		group := groups{
-			Id:             exp.NodeGroups[i].Prefix,
-			NrofHosts:      exp.NodeGroups[i].NoNodes,
-			NrofInterfaces: expNetwork.NrofInterfaces,
-			Interface:      expNetwork.Type,
-			MovementModel:  exp.NodeGroups[i].MovementModel,
+			Id:        expNodeGroups.Prefix,
+			NrofHosts: expNodeGroups.NoNodes,
+			//NrofInterfaces: expNetwork.NrofInterfaces,
+			InterfaceID: t.getInterfaceId(),
+			//Interface:      expNetwork.Type,
+			MovementModel: t.movementpattern(expNodeGroups.MovementModel),
 		}
 		groupInterface = append(groupInterface, group)
 

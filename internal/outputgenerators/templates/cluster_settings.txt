@@ -26,7 +26,7 @@ Group.bufferSize = 5M
 Group.waitTime = 0, 120
 #All nodes have the firstinterface inteface
 Group.nrofInterfaces = 1
-Group.interface1 = firstinterface
+Group.interface1 = 
 # walking speeds
 Group.speed = 0.5, 1.5
 #Group.msgTtl = 60
@@ -34,13 +34,12 @@ Group.speed = 0.5, 1.5
 Group.nrofHosts = 40
 Group.nrofApplications = 0
 
-# group1 (pedestrians) specific settings
 
 {{- range $index, $group:= .Groups}}
 Group{{$index}}.groupID = {{$group.Id}}
 Group{{$index}}.nrofHosts = {{$group.NrofHosts}}
 Group{{$index}}.nrofInterfaces = {{$group.NrofInterfaces}}
-Group{{$index}}.interface{{$index}}= {{$group.Interface}}
+Group{{$index}}.interface{{ .InterfaceID}}= {{$group.Interface}}
 Group{{$index}}.movementModel = {{$group.MovementModel}}
 
 

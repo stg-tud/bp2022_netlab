@@ -9,11 +9,11 @@ import (
 // GetExampleExperiment returns a Experiment loaded with example values.
 func GetExampleExperiment() Experiment {
 	var networks []Network
-	net, _ := NewNetwork("switched", networktypes.Switch{}.Default(), 1)
+	net, _ := NewNetwork("switched", networktypes.Switch{}.Default())
 	networks = append(networks, net)
-	net, _ = NewNetwork("wifi", networktypes.WirelessLAN{}.Default(), 2)
+	net, _ = NewNetwork("wifi", networktypes.WirelessLAN{}.Default())
 	networks = append(networks, net)
-	net, _ = NewNetwork("bluetooth", networktypes.Wireless{}.Default(), 2)
+	net, _ = NewNetwork("bluetooth", networktypes.Wireless{}.Default())
 	networks = append(networks, net)
 
 	var nodegroups []NodeGroup

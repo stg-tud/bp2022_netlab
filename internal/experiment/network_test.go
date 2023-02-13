@@ -11,7 +11,7 @@ import (
 
 func TestNetworkWithoutName(t *testing.T) {
 	_, error1 := experiment.NewDefaultNetwork("")
-	_, error2 := experiment.NewNetwork("", networktypes.Emane{}, 1)
+	_, error2 := experiment.NewNetwork("", networktypes.Emane{})
 	if error1 == nil || error2 == nil {
 		t.Fatal("Networks without name should not be allowed!")
 	}
@@ -27,7 +27,7 @@ func TestNewNetwork(t *testing.T) {
 	}
 	for _, networkType := range networkTypes {
 		networkName := fmt.Sprintf("network_under_test_%s", strings.ToLower(networkType.String()))
-		network_under_test, err := experiment.NewNetwork(networkName, networkType, 1)
+		network_under_test, err := experiment.NewNetwork(networkName, networkType)
 		if err != nil {
 			t.Fatalf("Error creating new '%s' network: %s", networkType.String(), err)
 		}
