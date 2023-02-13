@@ -117,9 +117,21 @@ Group6.movementModel = RandomWaypoint
 
 ## Message creation parameters
 # How many event generators
-Events.nrof = 1
+Events.nrof = 2
 # Class of the first event generator
 Events1.class = MessageEventGenerator
+# (following settings are specific for the MessageEventGenerator class)
+# Creation interval in seconds (one new message every 25 to 35 seconds)
+Events1.interval = 25,35
+# Message sizes (50kB - 150kB)
+Events1.size = 50k,150k
+# range of message source/destination addresses
+Events1.hosts = 0,120
+# Message ID prefix
+Events1.prefix = M
+
+# Class of the first event generator
+Events1.class = changedBurst
 # (following settings are specific for the MessageEventGenerator class)
 # Creation interval in seconds (one new message every 25 to 35 seconds)
 Events1.interval = 25,35

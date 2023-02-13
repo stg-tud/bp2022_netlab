@@ -33,11 +33,11 @@ func GetTestingExperiment() experiment.Experiment {
 	networks = append(networks, net)
 
 	var eventgenerator []experiment.EventGenerator
-	evg, _ := experiment.NewEventGenerator("MessageEventGenerator", eventgenerators.MessageEventGenerator{}.Default())
+	evg, _ := experiment.NewEventGenerator("MessageEventGenerator", eventgenerators.MessageEventGenerator{}.Default(), 1)
 	eventgenerator = append(eventgenerator, evg)
 	changedBurst := eventgenerators.MessageBurstGenerator{}.Default()
 	changedBurst.Interval = 25
-	evg, _ = experiment.NewEventGenerator("changedBurst", changedBurst)
+	evg, _ = experiment.NewEventGenerator("changedBurst", changedBurst, 2)
 	eventgenerator = append(eventgenerator, evg)
 
 	var nodegroups []experiment.NodeGroup

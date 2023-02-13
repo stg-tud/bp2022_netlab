@@ -6,6 +6,9 @@ import (
 	"text/template"
 
 	logger "github.com/gookit/slog"
+	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
+
+	//"github.com/stg-tud/bp2022_netlab/internal/eventgenerators"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
@@ -33,11 +36,19 @@ type data struct {
 	NrofHostGroups              int
 	Groups                      []groups
 	Interfaces                  []networkInterFace
+	EventGenerator              []eventGeneraTor
 	RandomSeed                  int64
 	Warmup                      uint
 	Runtime                     uint
+	NoEventGenerator int
 }
-
+type eventGeneraTor struct {
+	Name             string
+	Interval         uint
+	Size             customtypes.Area
+	Hosts            customtypes.Area
+	Prefix           string
+}
 type networkInterFace struct {
 	Name      string
 	Bandwidth int
@@ -104,6 +115,16 @@ func (t Theone) BuildNetworks(exp experiment.Experiment) (networks []networkInte
 
 	return networks
 }
+func (t Theone) BuildEventGenerator(exp experiment.Experiment) (eventGenerator []eventGeneraTor) {
+	logger.Trace("Building Event Generators")
+	for i := 0; i < len(exp.EventGenerators); i++ {
+		evg := eventGeneraTor{
+			Name:             exp.EventGenerators[i].Name,
+		}
+		eventGenerator = append(eventGenerator, evg)
+	}
+	return eventGenerator
+}
 
 // generates a txt for Theone with a given experiment
 func (t Theone) Generate(exp experiment.Experiment) {
@@ -146,6 +167,8 @@ func (t Theone) Generate(exp experiment.Experiment) {
 	replace.Groups = t.BuildGroups(exp)
 
 	replace.Interfaces = t.BuildNetworks(exp)
+	replace.EventGenerator = t.BuildEventGenerator(exp)
+	replace.NoEventGenerator = len(exp.EventGenerators)
 
 	txtTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "cluster_settings.txt"))
 	if err != nil {

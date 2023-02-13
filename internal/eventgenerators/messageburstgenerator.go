@@ -19,7 +19,7 @@ func (MessageBurstGenerator) String() string {
 	return "MessageBurstGenerator"
 }
 
-// Returns a new configuration of Wireless with default values applied.
+// Returns a new configuration of MessageBurstGenerator with default values applied.
 func (MessageBurstGenerator) Default() MessageBurstGenerator {
 	return MessageBurstGenerator{
 		Class:    "MessageBurstGenerator",

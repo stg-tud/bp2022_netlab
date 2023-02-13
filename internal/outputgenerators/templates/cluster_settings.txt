@@ -49,9 +49,10 @@ Group{{$index}}.movementModel = {{$group.MovementModel}}
 
 ## Message creation parameters
 # How many event generators
-Events.nrof = 1
+Events.nrof = {{ .NoEventGenerator}}
+{{- range $index, $event:= .EventGenerator}}
 # Class of the first event generator
-Events1.class = MessageEventGenerator
+Events1.class = {{$event.Name}}
 # (following settings are specific for the MessageEventGenerator class)
 # Creation interval in seconds (one new message every 25 to 35 seconds)
 Events1.interval = 25,35
@@ -61,7 +62,7 @@ Events1.size = 50k,150k
 Events1.hosts = 0,120
 # Message ID prefix
 Events1.prefix = M
-
+{{end}}
 
 ## Movement model settings
 # seed for movement models' pseudo random number generator (default = 0)

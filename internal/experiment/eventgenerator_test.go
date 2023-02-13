@@ -11,7 +11,7 @@ import (
 
 func TestEventGeneratorWithoutName(t *testing.T) {
 	_, error1 := experiment.NewDefaultEventGenerator("")
-	_, error2 := experiment.NewEventGenerator("", eventgenerators.MessageEventGenerator{})
+	_, error2 := experiment.NewEventGenerator("", eventgenerators.MessageEventGenerator{}, 1)
 	if error1 == nil || error2 == nil {
 		t.Fatal("EventGenerators without name should not be allowed!")
 	}

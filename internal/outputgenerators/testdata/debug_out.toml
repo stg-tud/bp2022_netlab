@@ -191,6 +191,7 @@ LossStartRange = 300.0
 
 [[EventGenerators]]
 Name = 'MessageEventGenerator'
+NoEventGenerator = 1
 
 [EventGenerators.Type]
 Class = 'MessageEventGenerator'
@@ -207,6 +208,7 @@ Width = 15
 
 [[EventGenerators]]
 Name = 'changedBurst'
+NoEventGenerator = 2
 
 [EventGenerators.Type]
 Class = 'MessageBurstGenerator'
