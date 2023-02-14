@@ -21,6 +21,7 @@ type expConf struct {
 	WorldSize  customtypes.Area
 	NodeGroups []nodegroup
 	Targets    []string
+	Warmup     uint
 }
 type network struct {
 	Name        string
@@ -42,7 +43,7 @@ type nodegroup struct {
 	Prefix        string
 	NoNodes       uint
 	MovementModel movement
-	NodesType     NodeType
+	NodesType     string
 	Networks      []string
 }
 type movement struct {
@@ -86,7 +87,7 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 	exp.Name = conf.Name
 	exp.RandomSeed = conf.RandomSeed
 	exp.WorldSize = conf.WorldSize
-
+	exp.Warmup = conf.Warmup
 	// network slices
 	nets := conf.Networks
 	for i := range nets {
@@ -111,7 +112,20 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 		if err != nil {
 			logger.Error("Error creating new Nodegroups")
 		}
-		node.NodesType = nodes[i].NodesType
+
+		switch nodes[i].NodesType {
+
+		case "PC":
+			node.NodesType = NodeTypePC
+		case "Router":
+			node.NodesType = NodeTypeRouter
+		case "":
+			logger.Error("not found nodetype")
+			return exp, errors.New("wrong nodetype")
+		default:
+			node.NodesType = NodeTypePC
+		}
+
 		exp.NodeGroups = append(exp.NodeGroups, node)
 		nets := nodes[i].Networks
 

@@ -56,4 +56,7 @@ func TestLoad(t *testing.T) {
 	if actual.Networks[2] != net {
 		t.Fatal("Wrong network at [2]")
 	}
+	if actual.NodeGroups[6].NodesType.String() != "Router" {
+		t.Fatal("Wrong default network for Nodegroup")
+	}
 }

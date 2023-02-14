@@ -3,6 +3,7 @@ Runs = 5
 Targets = ["Core","The One"]
 RandomSeed = 1673916419715
 Duration = 123456
+Warmup = 5
 
 [WorldSize]
 Height = 170
@@ -57,19 +58,19 @@ LossStartRange = 300.0
 [[NodeGroups]]
 Prefix = 'a'
 NoNodes = 1
-NodesType = 0
+NodesType = 'Router'
 Networks = ['wireless_lan']
 
 [[NodeGroups]]
 Prefix = 'b'
 NoNodes = 2
-NodesType = 0
+NodesType = 'Router'
 Networks=['wireless_lan','switch']
 
 [[NodeGroups]]
 Prefix = 'c'
 NoNodes = 3
-NodesType = 0
+NodesType = 'Router'
 Networks=['switch']
 [NodeGroups.MovementModel]
 Model='Static'
@@ -77,7 +78,7 @@ Model='Static'
 [[NodeGroups]]
 Prefix = 'd'
 NoNodes = 4
-NodesType = 0
+NodesType = 'Router'
 Networks=['changed_wifi']
 [NodeGroups.MovementModel]
 Model='RandomWaypoint'
@@ -85,7 +86,7 @@ Model='RandomWaypoint'
 [[NodeGroups]]
 Prefix = 'e'
 NoNodes = 5
-NodesType = 1
+NodesType = 'PC'
 Networks = ['hub']
 [NodeGroups.MovementModel]
 Model='Static'
@@ -93,7 +94,7 @@ Model='Static'
 [[NodeGroups]]
 Prefix = 'f'
 NoNodes = 6
-NodesType = 0
+NodesType = 'Router'
 Networks = ['emane']
 
 [NodeGroups.MovementModel]
@@ -105,7 +106,7 @@ MaxPause = 17
 [[NodeGroups]]
 Prefix = 'g'
 NoNodes = 7
-NodesType = 0
+NodesType = 'Router'
 
 [NodeGroups.MovementModel]
 Model = 'RandomWaypoint'
