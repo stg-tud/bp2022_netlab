@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"reflect"
+	"strings"
 
 	logger "github.com/gookit/slog"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
@@ -97,7 +98,7 @@ func (b Bonnmotion) execute(command []string) error {
 			err = cerr
 		}
 	}()
-	_, err = stepFile.WriteString(fmt.Sprintln(command))
+	_, err = stepFile.WriteString(fmt.Sprintf("%s %s\n", BonnMotionExecutable, strings.Join(command, " ")))
 	if err != nil {
 		logger.Error("Error writing step file:", err)
 		return err

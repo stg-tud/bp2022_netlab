@@ -126,7 +126,11 @@ func generate(cmd *cobra.Command, args []string) {
 
 	folderstructure.OverwriteExisting = overwriteExisting
 
-	exp := experiment.GetExampleExperiment()
+	exp, err := experiment.LoadFromFile(args[0])
+	if err != nil {
+		logger.Error("Error loading file:", err)
+		return
+	}
 
 	logger.Info("Using random seed", exp.RandomSeed)
 
