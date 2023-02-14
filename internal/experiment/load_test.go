@@ -1,19 +1,14 @@
 package experiment_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
-	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
 func TestLoad(t *testing.T) {
-	t.Cleanup(func() {
-		os.RemoveAll(folderstructure.OutputFolderName)
-	})
 
 	actual, err := experiment.LoadFromFile("testdata/load_test.toml")
 	if err != nil {

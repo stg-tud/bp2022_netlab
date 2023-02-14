@@ -106,7 +106,7 @@ MaxPause = 17
 [[NodeGroups]]
 Prefix = 'g'
 NoNodes = 7
-NodesType = 'Router'
+
 
 [NodeGroups.MovementModel]
 Model = 'RandomWaypoint'
