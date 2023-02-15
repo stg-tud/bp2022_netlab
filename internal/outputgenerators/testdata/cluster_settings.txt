@@ -11,8 +11,8 @@ Scenario.updateInterval = 0.1
 Scenario.endTime = 43k
 wireless_lan.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
-wireless_lan.transmitSpeed = 250k
-wireless_lan.transmitRange = 10
+wireless_lan.transmitSpeed = 540k
+wireless_lan.transmitRange = 13
 
 switch.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
@@ -21,8 +21,8 @@ switch.transmitRange = 10
 
 changed_wifi.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
-changed_wifi.transmitSpeed = 250k
-changed_wifi.transmitRange = 10
+changed_wifi.transmitSpeed = 0k
+changed_wifi.transmitRange = 13
 
 hub.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
@@ -36,8 +36,8 @@ emane.transmitRange = 10
 
 wireless.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
-wireless.transmitSpeed = 250k
-wireless.transmitRange = 10
+wireless.transmitSpeed = 540k
+wireless.transmitRange = 20
 
 
 Scenario.nrofHostGroups = 7

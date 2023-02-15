@@ -13,8 +13,8 @@ Scenario.endTime = {{ .Runtime}}k
 {{- range $index, $interfaces:=.Interfaces}}
 {{$interfaces.Name}}.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
-{{$interfaces.Name}}.transmitSpeed = 250k
-{{$interfaces.Name}}.transmitRange = 10
+{{$interfaces.Name}}.transmitSpeed = {{$interfaces.Bandwidth}}k
+{{$interfaces.Name}}.transmitRange = {{$interfaces.Range}}
 {{end}}
 
 Scenario.nrofHostGroups = {{ .NrofHostGroups}}

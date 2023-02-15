@@ -1,9 +1,9 @@
 package outputgenerators
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"text/template"
 
 	logger "github.com/gookit/slog"
@@ -17,6 +17,10 @@ import (
 
 type Theone struct{}
 
+type replacenetwork struct {
+	Bandwidth int
+	Range     int
+}
 type groups struct {
 	Id             string
 	NrofHosts      uint
@@ -99,7 +103,7 @@ func (t Theone) BuildGroups(exp experiment.Experiment) []groups {
 			MovementModel: t.movementpattern(expNodeGroups.MovementModel),
 		}
 		groupInterface = append(groupInterface, group)
-		fmt.Println(i, ":", len(expNodeGroups.Networks))
+
 	}
 	return groupInterface
 }
@@ -109,14 +113,24 @@ func (t Theone) BuildNetworks(exp experiment.Experiment) (networks []networkInte
 
 	logger.Trace("Building Interfaces")
 	for i := 0; i < len(exp.Networks); i++ {
+		bandwidth := 250
+		rangeOfNetwork := 10
+		if reflect.TypeOf(exp.Networks[i].Type).String() == "networktypes.WirelessLAN" || reflect.TypeOf(exp.Networks[i].Type).String() == "networktypes.Wireless" {
+			bandwidth = int(reflect.ValueOf(exp.Networks[i].Type).FieldByName("Bandwidth").Int()) / 100000
+			rangeOfNetwork = int(reflect.ValueOf(exp.Networks[i].Type).FieldByName("Range").Int()) / 20
+		}
+
 		nt := networkInterFace{
-			Name: exp.Networks[i].Name,
+			Name:      exp.Networks[i].Name,
+			Bandwidth: bandwidth,
+			Range:     rangeOfNetwork,
 		}
 		networks = append(networks, nt)
 	}
 
 	return networks
 }
+
 func (t Theone) BuildEventGenerator(exp experiment.Experiment) (eventGenerator []eventGeneraTor) {
 	logger.Trace("Building Event Generators")
 	for i := 0; i < len(exp.EventGenerators); i++ {
@@ -166,6 +180,7 @@ func (t Theone) Generate(exp experiment.Experiment) {
 	replace.WorldSizeHeight = uint(exp.WorldSize.Height * 20)
 	replace.WorldSizeWidth = uint(exp.WorldSize.Width * 20)
 	replace.Interfaces = t.BuildNetworks(exp)
+
 	replace.Groups = t.BuildGroups(exp)
 
 	replace.EventGenerator = t.BuildEventGenerator(exp)
