@@ -7,20 +7,32 @@ import (
 	logger "github.com/gookit/slog"
 	"github.com/pelletier/go-toml/v2"
 	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
+	"github.com/stg-tud/bp2022_netlab/internal/eventgenerators"
+
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
 type expConf struct {
-	Name       string
-	Runs       uint
-	Networks   []network
-	RandomSeed int64
-	Duration   uint
-	WorldSize  customtypes.Area
-	NodeGroups []nodegroup
-	Targets    []string
-	Warmup     uint
+	Name            string
+	Runs            uint
+	Networks        []network
+	RandomSeed      int64
+	Duration        uint
+	WorldSize       customtypes.Area
+	NodeGroups      []nodegroup
+	Targets         []string
+	Warmup          uint
+	EventGenerators []eventgenerator
+}
+type eventgenerator struct {
+	Name             string
+	Class            string
+	NoEventGenerator int
+	Prefix           string
+	Intervall        customtypes.Position
+	Size             customtypes.Position
+	Hosts            customtypes.Position
 }
 type network struct {
 	Name        string
@@ -150,9 +162,81 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 		}
 
 	}
+
+	//eventgenerators
+	events := []EventGenerator{}
+	for _, eve := range conf.EventGenerators {
+		buffer, e := setDefaultEventGen(eve.Class, eve)
+		if e != nil {
+			logger.Error("Erorr setting up event generators")
+		}
+		newEvent, err := NewEventGenerator(eve.Name, buffer, uint(eve.NoEventGenerator))
+		if err != nil {
+			logger.Error("Error setting up new event generators")
+		}
+		events = append(events, newEvent)
+	}
+	exp.EventGenerators = events
 	//finished
 	logger.Trace("Finished generation")
 	return exp, nil
+}
+func setDefaultEventGen(className string, eve eventgenerator) (eventgenerators.EventGenerator, error) {
+	switch className {
+
+	case "MessageEventGenerator":
+		msg := eventgenerators.MessageEventGenerator{}.Default()
+		if eve.Intervall.X != 25 && eve.Intervall.X != 0 {
+			msg.Interval.X = eve.Intervall.X
+		}
+		if eve.Intervall.Y != 35 && eve.Intervall.Y != 0 {
+			msg.Interval.X = eve.Intervall.X
+		}
+		if eve.Size.X != 80 && eve.Size.X != 120 {
+			msg.Size.X = eve.Size.X
+		}
+		if eve.Size.Y != 80 && eve.Size.Y != 120 {
+			msg.Size.Y = eve.Size.Y
+		}
+		if eve.Hosts.X != 5 && eve.Hosts.X != 0 {
+			msg.Hosts.X = eve.Hosts.X
+		}
+		if eve.Hosts.Y != 15 && eve.Hosts.Y != 0 {
+			msg.Hosts.Y = eve.Hosts.Y
+		}
+		if eve.Prefix != "M" && eve.Prefix != "" {
+			msg.Prefix = eve.Prefix
+		}
+		return msg, nil
+
+	case "MessageBurstGenerator":
+		burst := eventgenerators.MessageBurstGenerator{}.Default()
+		if eve.Intervall.X != 25 && eve.Intervall.X != 0 {
+			burst.Interval.X = eve.Intervall.X
+		}
+		if eve.Intervall.Y != 35 && eve.Intervall.Y != 0 {
+			burst.Interval.X = eve.Intervall.X
+		}
+		if eve.Size.X != 80 && eve.Size.X != 120 {
+			burst.Size.X = eve.Size.X
+		}
+		if eve.Size.Y != 80 && eve.Size.Y != 120 {
+			burst.Size.Y = eve.Size.Y
+		}
+		if eve.Hosts.X != 5 && eve.Hosts.X != 0 {
+			burst.Hosts.X = eve.Hosts.X
+		}
+		if eve.Hosts.Y != 15 && eve.Hosts.Y != 0 {
+			burst.Hosts.Y = eve.Hosts.Y
+		}
+		if eve.Prefix != "M" && eve.Prefix != "" {
+			burst.Prefix = eve.Prefix
+		}
+		return burst, nil
+	default:
+		logger.Error("Error while generating eventgeneratos, class name not found")
+		return eventgenerators.MessageEventGenerator{}.Default(), errors.New("error while generating eventgeneratos, class name not found")
+	}
 }
 
 // return a networktype with the given type and sets them to deafault/ custom

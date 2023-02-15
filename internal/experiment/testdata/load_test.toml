@@ -113,3 +113,39 @@ Model = 'RandomWaypoint'
 MinSpeed = 123
 MaxSpeed = 456
 MaxPause = 0
+
+[[EventGenerators]]
+Name = 'MessageEventGenerator'
+Class = 'MessageEventGenerator'
+NoEventGenerator = 1
+Prefix = 'M'
+
+[EventGenerators.Interval]
+X = 25
+Y = 35
+
+[EventGenerators.Size]
+X = 80
+Y = 120
+
+[EventGenerators.Hosts]
+X = 5
+Y = 15
+
+[[EventGenerators]]
+Name = 'MessageBurstGenerator'
+Class = 'MessageBurstGenerator'
+NoEventGenerator = 2
+Prefix = 'M'
+
+[EventGenerators.Interval]
+X = 25
+Y = 35
+
+[EventGenerators.Size]
+X = 80
+Y = 120
+
+[EventGenerators.Hosts]
+X = 5
+Y = 15

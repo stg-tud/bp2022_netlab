@@ -14,8 +14,16 @@ func TestLoad(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	if actual.Duration != 123456 {
 		t.Fatal("Wrong duration")
+	}
+	expect, err := experiment.NewDefaultEventGenerator("MessageEventGenerator")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if actual.EventGenerators[0] != expect {
+		t.Fatal("Wrong eventgenerators[0]")
 	}
 	if actual.Name != "Testing Experiment" {
 		t.Fatal("Wrong experiment name")
@@ -54,4 +62,5 @@ func TestLoad(t *testing.T) {
 	if actual.NodeGroups[6].NodesType.String() != "Router" {
 		t.Fatal("Wrong default network for Nodegroup")
 	}
+
 }
