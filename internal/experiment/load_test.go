@@ -1,19 +1,14 @@
 package experiment_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
-	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
 func TestLoad(t *testing.T) {
-	t.Cleanup(func() {
-		os.RemoveAll(folderstructure.OutputFolderName)
-	})
 
 	actual, err := experiment.LoadFromFile("testdata/load_test.toml")
 	if err != nil {
@@ -55,5 +50,8 @@ func TestLoad(t *testing.T) {
 	net, _ = experiment.NewNetwork("changed_wifi", changedWifi)
 	if actual.Networks[2] != net {
 		t.Fatal("Wrong network at [2]")
+	}
+	if actual.NodeGroups[6].NodesType.String() != "Router" {
+		t.Fatal("Wrong default network for Nodegroup")
 	}
 }

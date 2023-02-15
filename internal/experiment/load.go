@@ -8,7 +8,6 @@ import (
 	"github.com/pelletier/go-toml/v2"
 	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
-
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
@@ -21,6 +20,7 @@ type expConf struct {
 	WorldSize  customtypes.Area
 	NodeGroups []nodegroup
 	Targets    []string
+	Warmup     uint
 }
 type network struct {
 	Name        string
@@ -42,7 +42,7 @@ type nodegroup struct {
 	Prefix        string
 	NoNodes       uint
 	MovementModel movement
-	NodesType     NodeType
+	NodesType     string
 	Networks      []string
 }
 type movement struct {
@@ -56,14 +56,13 @@ type movement struct {
 func LoadFromFile(file string) (exp Experiment, returnError error) {
 	logger.Info("Generate experiment")
 	var conf expConf
-
+	// read file
 	buf, e := os.ReadFile(file)
 	if e != nil {
 		logger.Error("could not find toml file")
 
 		return exp, e
 	}
-
 	err := toml.Unmarshal(buf, &conf)
 	if err != nil {
 		logger.Error("Error parsing toml into struct")
@@ -79,30 +78,28 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 		case "The One":
 			replaceTargets[i] = 1
 		default:
-			return exp, errors.New("wrong targets")
+			return exp, errors.New("eror getting targets, could not find target")
 		}
 	}
+	// experiment other field
 	exp.Duration = conf.Duration
 	exp.Name = conf.Name
 	exp.RandomSeed = conf.RandomSeed
 	exp.WorldSize = conf.WorldSize
-
+	exp.Warmup = conf.Warmup
 	// network slices
 	nets := conf.Networks
 	for i := range nets {
-
 		netType, e := setDefaultNet(nets[i].Type, nets[i])
 		if e != nil {
 			logger.Error("While generating Experiments, could not find networktype")
 			return exp, e
 		}
-
 		net, err := NewNetwork(nets[i].Name, netType)
 		if err != nil {
 			logger.Error("Error creating new Networks")
 		}
 		exp.Networks = append(exp.Networks, net)
-
 	}
 	// nodegroups slices
 	nodes := conf.NodeGroups
@@ -111,11 +108,15 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 		if err != nil {
 			logger.Error("Error creating new Nodegroups")
 		}
-		node.NodesType = nodes[i].NodesType
+		switch nodes[i].NodesType {
+		case "PC":
+			node.NodesType = NodeTypePC
+		case "Router":
+			node.NodesType = NodeTypeRouter
+		}
 		exp.NodeGroups = append(exp.NodeGroups, node)
-		nets := nodes[i].Networks
-
 		//networks of nodegroups
+		nets := nodes[i].Networks
 		for k := range nets {
 
 			indexOfNetwork, e := setNetworkInNodeGroup(conf, nets[k])
@@ -149,26 +150,27 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 		}
 
 	}
+	//finished
 	logger.Trace("Finished generation")
 	return exp, nil
 }
 
-// return a networktype with the given name and sets them to deafault/ custom
-func setDefaultNet(name string, net network) (networkType networktypes.NetworkType, err error) {
+// return a networktype with the given type and sets them to deafault/ custom
+func setDefaultNet(netType string, net network) (networkType networktypes.NetworkType, err error) {
 
-	switch name {
+	switch netType {
 	case "wireless_lan":
 		wirelesslan := networktypes.WirelessLAN{}.Default()
-		if net.Bandwidth != 54000000 {
+		if net.Bandwidth != 54000000 && net.Bandwidth != 0 {
 			wirelesslan.Bandwidth = net.Bandwidth
 		}
-		if net.Range != 275 {
+		if net.Range != 275 && net.Range != 0 {
 			wirelesslan.Range = net.Range
 		}
 		if net.Jitter != 0 {
 			wirelesslan.Jitter = net.Jitter
 		}
-		if net.Delay != 5000 {
+		if net.Delay != 5000 && net.Delay != 0 {
 			wirelesslan.Delay = net.Delay
 		}
 		if net.Loss != 0.0 {
@@ -180,22 +182,22 @@ func setDefaultNet(name string, net network) (networkType networktypes.NetworkTy
 		return wirelesslan, nil
 	case "wireless":
 		wireless := networktypes.Wireless{}.Default()
-		if net.Bandwidth != 54000000 {
+		if net.Bandwidth != 54000000 && net.Bandwidth != 0 {
 			wireless.Bandwidth = net.Bandwidth
 		}
-		if net.Range != 400 {
+		if net.Range != 400 && net.Range != 0 {
 			wireless.Range = net.Range
 		}
-		if net.Delay != 5000 {
+		if net.Delay != 5000 && net.Delay != 0 {
 			wireless.Bandwidth = net.Delay
 		}
 		if net.LossInitial != 0.0 {
 			wireless.LossInitial = net.Loss
 		}
-		if net.LossFactor != 1.0 {
+		if net.LossFactor != 1.0 && net.LossFactor != 0 {
 			wireless.LossFactor = net.Loss
 		}
-		if net.LossStartRange != 300.0 {
+		if net.LossStartRange != 300.0 && net.LossStartRange != 0 {
 			wireless.LossStartRange = net.Loss
 		}
 		if net.Jitter != 0 {
@@ -217,6 +219,7 @@ func setDefaultNet(name string, net network) (networkType networktypes.NetworkTy
 	}
 }
 
+// set nodegroups network with the corresponding name
 func setNetworkInNodeGroup(conf expConf, nameOfNetwork string) (i int, err error) {
 
 	for i, network := range conf.Networks {
