@@ -15,14 +15,15 @@ import (
 
 var overwriteExisting bool
 var targetsOverwrite []string
+var outputFolder string
 
 var generateCmd = &cobra.Command{
 	Use:     "generate [filename]",
 	Aliases: []string{"gen"},
 	Short:   "Loads the given TOML file and generates output files",
-	Long: `test will run some tests on the given TOML file. It will try to
-parse the file and echo syntactical errors as well as invalid values. No
-further steps are taken, e.g. no output files will be generated.`,
+	Long: `generate will load the given TOML file and generate outputs
+for all targets specified in it. If targets are specified. as flags,
+the targets from the file will be ignored.`,
 	Args: cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
 	Run:  generate,
 }
@@ -30,6 +31,7 @@ further steps are taken, e.g. no output files will be generated.`,
 func init() {
 	generateCmd.PersistentFlags().BoolVarP(&overwriteExisting, "overwrite", "o", false, "overwrite existing files for the same configuration")
 	generateCmd.PersistentFlags().StringArrayVarP(&targetsOverwrite, "targets", "t", []string{}, "generate configs for the following targets (no matter which targets are configured in the TOML file)")
+	generateCmd.PersistentFlags().StringVarP(&outputFolder, "folder", "f", "output", "name of the folder the output should be written to (default: output)")
 }
 
 func stringTargetMapping(input string) (experiment.Target, error) {
@@ -121,10 +123,11 @@ func buildOutputGenerators(exp experiment.Experiment) []outputgenerators.OutputG
 }
 
 func generate(cmd *cobra.Command, args []string) {
+	folderstructure.OutputFolderName = outputFolder
+	folderstructure.OverwriteExisting = overwriteExisting
+
 	logging.Init(debug)
 	logger.Info("Starting")
-
-	folderstructure.OverwriteExisting = overwriteExisting
 
 	exp, err := experiment.LoadFromFile(args[0])
 	if err != nil {

@@ -10,7 +10,7 @@ import (
 )
 
 // The name of the (top level) output folder
-const OutputFolderName = "output"
+var OutputFolderName = "output"
 
 // GetOutputFolder returns the relative path of the output folder
 func GetOutputFolder(exp experiment.Experiment, subfolders ...string) string {
