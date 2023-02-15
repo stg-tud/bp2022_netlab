@@ -8,9 +8,6 @@ import (
 	"text/template"
 
 	logger "github.com/gookit/slog"
-
-	//"github.com/stg-tud/bp2022_netlab/internal/eventgenerators"
-
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
@@ -19,7 +16,7 @@ import (
 type Theone struct{}
 
 type groups struct {
-	Index uint
+	Index          uint
 	Id             string
 	NrofHosts      uint
 	NrofInterfaces int
@@ -45,7 +42,7 @@ type data struct {
 	NoEventGenerator            int
 }
 type eventGeneraTor struct {
-	Index uint
+	Index     uint
 	Name      string
 	IntervalX int
 	IntervalY int
@@ -97,7 +94,7 @@ func (t Theone) BuildGroups(exp experiment.Experiment) []groups {
 
 		expNodeGroups := &exp.NodeGroups[i]
 		group := groups{
-			Index: uint(i+1),
+			Index:     uint(i + 1),
 			Id:        expNodeGroups.Prefix,
 			NrofHosts: expNodeGroups.NoNodes,
 
@@ -139,8 +136,8 @@ func (t Theone) BuildEventGenerator(exp experiment.Experiment) (eventGenerator [
 	for i := 0; i < len(exp.EventGenerators); i++ {
 		fmt.Println()
 		evg := eventGeneraTor{
-			Index: uint(i+1),
-			Name: exp.EventGenerators[i].Name,
+			Index: uint(i + 1),
+			Name:  exp.EventGenerators[i].Name,
 
 			Prefix: reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Prefix").String(),
 
