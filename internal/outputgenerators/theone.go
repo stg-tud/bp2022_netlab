@@ -21,8 +21,8 @@ type groups struct {
 	NrofHosts      uint
 	NrofInterfaces int
 
-	Interface      []*experiment.Network
-	MovementModel  string
+	Interface     []*experiment.Network
+	MovementModel string
 }
 
 type theonedata struct {
@@ -90,7 +90,7 @@ func (t Theone) BuildGroups(exp experiment.Experiment) []groups {
 	for i := 0; i < len(exp.NodeGroups); i++ {
 
 		expNodeGroups := &exp.NodeGroups[i]
-		
+
 		group := groups{
 			Index:         uint(i + 1),
 			Id:            expNodeGroups.Prefix,
