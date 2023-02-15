@@ -1,6 +1,7 @@
 package outputgenerators
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -12,7 +13,6 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
-	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
 type Theone struct{}
@@ -20,9 +20,9 @@ type Theone struct{}
 type groups struct {
 	Id             string
 	NrofHosts      uint
-	NrofInterfaces uint
+	NrofInterfaces int
 	InterfaceID    uint
-	Interface      networktypes.NetworkType
+	Interface      []*experiment.Network
 	MovementModel  string
 }
 
@@ -86,18 +86,20 @@ func (t Theone) movementpattern(movementpatterntype movementpatterns.MovementPat
 func (t Theone) BuildGroups(exp experiment.Experiment) []groups {
 	logger.Trace("Building Groups")
 	groupInterface := []groups{}
+
 	for i := 0; i < len(exp.NodeGroups); i++ {
+
 		expNodeGroups := &exp.NodeGroups[i]
 		group := groups{
 			Id:        expNodeGroups.Prefix,
 			NrofHosts: expNodeGroups.NoNodes,
-			//NrofInterfaces: expNetwork.NrofInterfaces,
-			InterfaceID: t.getInterfaceId(),
-			//Interface:      expNetwork.Type,
+
+			InterfaceID:   t.getInterfaceId(),
+			Interface:     expNodeGroups.Networks,
 			MovementModel: t.movementpattern(expNodeGroups.MovementModel),
 		}
 		groupInterface = append(groupInterface, group)
-
+		fmt.Println(i, ":", len(expNodeGroups.Networks))
 	}
 	return groupInterface
 }
@@ -160,14 +162,18 @@ func (t Theone) Generate(exp experiment.Experiment) {
 	replace.Warmup = exp.Warmup * 200
 	replace.Runtime = exp.Duration
 	replace.NrofHostGroups = len(exp.NodeGroups)
-
+	
 	replace.WorldSizeHeight = uint(exp.WorldSize.Height * 20)
 	replace.WorldSizeWidth = uint(exp.WorldSize.Width * 20)
-
+	replace.Interfaces = t.BuildNetworks(exp)
 	replace.Groups = t.BuildGroups(exp)
 
-	replace.Interfaces = t.BuildNetworks(exp)
+	
 	replace.EventGenerator = t.BuildEventGenerator(exp)
+	for i, node := range exp.NodeGroups {
+
+		replace.Groups[i].NrofInterfaces = len(node.Networks)
+	}
 	replace.NoEventGenerator = len(exp.EventGenerators)
 
 	txtTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "cluster_settings.txt"))

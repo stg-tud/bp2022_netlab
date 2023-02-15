@@ -91,7 +91,9 @@ Group3.movementModel = RandomWaypoint
 Group4.groupID = e
 Group4.nrofHosts = 5
 Group4.nrofInterfaces = 0
-Group4.interface5= <nil>
+Group4.interface5= <
+    
+>
 Group4.movementModel = Static
 
 
