@@ -40,7 +40,7 @@ Group{{$group.Index}}.groupID = {{$group.Id}}
 Group{{$group.Index}}.nrofHosts = {{$group.NrofHosts}}
 Group{{$group.Index}}.nrofInterfaces = {{$group.NrofInterfaces}}
 {{- range $index1, $interfaces:= .Interface }}
-Group{{$group.Index}}.interface{{ $index1}}= {{$interfaces.Name}}
+Group{{$group.Index}}.interface{{add $index1 1}}= {{$interfaces.Name}}
 {{- end}}
 Group{{$group.Index}}.movementModel = {{$group.MovementModel}}
 {{end}}

@@ -20,7 +20,7 @@ type groups struct {
 	Id             string
 	NrofHosts      uint
 	NrofInterfaces int
-	InterfaceID    uint
+
 	Interface      []*experiment.Network
 	MovementModel  string
 }
@@ -53,16 +53,10 @@ type eventGeneraTor struct {
 	Prefix    string
 }
 type networkInterFace struct {
+	ID        int
 	Name      string
 	Bandwidth int
 	Range     int
-}
-
-var InterfaceIdCounter uint = 1
-
-func (t Theone) getInterfaceId() uint {
-	InterfaceIdCounter++
-	return InterfaceIdCounter - 1
 }
 
 // The name of the file that should be written to
@@ -75,6 +69,9 @@ var defaultValuesTheone = theonedata{
 	ScenarioUpdateInterval:      0.1,
 }
 
+func add(x, y int) int {
+	return x + y
+}
 func (t Theone) movementpattern(movementpatterntype movementpatterns.MovementPattern) string {
 	switch movementpatterntype.(type) {
 	case movementpatterns.RandomWaypoint:
@@ -93,12 +90,11 @@ func (t Theone) BuildGroups(exp experiment.Experiment) []groups {
 	for i := 0; i < len(exp.NodeGroups); i++ {
 
 		expNodeGroups := &exp.NodeGroups[i]
+		
 		group := groups{
-			Index:     uint(i + 1),
-			Id:        expNodeGroups.Prefix,
-			NrofHosts: expNodeGroups.NoNodes,
-
-			InterfaceID:   t.getInterfaceId(),
+			Index:         uint(i + 1),
+			Id:            expNodeGroups.Prefix,
+			NrofHosts:     expNodeGroups.NoNodes,
 			Interface:     expNodeGroups.Networks,
 			MovementModel: t.movementpattern(expNodeGroups.MovementModel),
 		}
@@ -203,8 +199,8 @@ func (t Theone) Generate(exp experiment.Experiment) {
 		replace.Groups[i].NrofInterfaces = len(node.Networks)
 	}
 	replace.NoEventGenerator = len(exp.EventGenerators)
-
-	txtTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "cluster_settings.txt"))
+	funcs := template.FuncMap{"add": add}
+	txtTemplate := template.Must(template.New("cluster_settings.txt").Funcs(funcs).ParseFiles(filepath.Join(GetTemplatesFolder(), "cluster_settings.txt")))
 	if err != nil {
 		logger.Error("Error opening template file:", err)
 	}
