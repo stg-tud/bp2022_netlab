@@ -22,18 +22,18 @@ func (MessageBurstGenerator) String() string {
 // Returns a new configuration of MessageBurstGenerator with default values applied.
 func (MessageBurstGenerator) Default() MessageBurstGenerator {
 	return MessageBurstGenerator{
-		Class:    "MessageBurstGenerator",
+		Class: "MessageBurstGenerator",
 		Interval: customtypes.Position{
 			X: 25,
 			Y: 35,
 		},
 		Size: customtypes.Position{
 			X: 80,
-			Y:  120,
+			Y: 120,
 		},
 		Hosts: customtypes.Position{
 			X: 5,
-			Y:  15,
+			Y: 15,
 		},
 		Prefix: "M",
 	}
