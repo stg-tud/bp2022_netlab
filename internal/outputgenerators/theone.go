@@ -162,13 +162,12 @@ func (t Theone) Generate(exp experiment.Experiment) {
 	replace.Warmup = exp.Warmup * 200
 	replace.Runtime = exp.Duration
 	replace.NrofHostGroups = len(exp.NodeGroups)
-	
+
 	replace.WorldSizeHeight = uint(exp.WorldSize.Height * 20)
 	replace.WorldSizeWidth = uint(exp.WorldSize.Width * 20)
 	replace.Interfaces = t.BuildNetworks(exp)
 	replace.Groups = t.BuildGroups(exp)
 
-	
 	replace.EventGenerator = t.BuildEventGenerator(exp)
 	for i, node := range exp.NodeGroups {
 

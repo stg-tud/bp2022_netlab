@@ -10,9 +10,9 @@ import (
 )
 
 func TestTheone(t *testing.T) {
-	/*t.Cleanup(func() {
+	t.Cleanup(func() {
 		os.RemoveAll(folderstructure.OutputFolderName)
-	})*/
+	})
 
 	to := outputgenerators.Theone{}
 	testingExperiment := GetTestingExperiment()
