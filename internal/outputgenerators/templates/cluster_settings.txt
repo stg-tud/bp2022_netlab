@@ -55,13 +55,13 @@ Events.nrof = {{ .NoEventGenerator}}
 Events{{$index}}.class = {{$event.Name}}
 # (following settings are specific for the MessageEventGenerator class)
 # Creation interval in seconds (one new message every 25 to 35 seconds)
-Events{{$index}}.interval = 25,35
+Events{{$index}}.interval = {{$event.IntervalX}},{{$event.IntervalY}}
 # Message sizes (50kB - 150kB)
-Events{{$index}}.size = 50k,150k
+Events{{$index}}.size = {{$event.SizeX}}k,{{$event.SizeY}}k
 # range of message source/destination addresses
-Events{{$index}}.hosts = 0,120
+Events{{$index}}.hosts = {{$event.HostsX}},{{$event.HostsY}}
 # Message ID prefix
-Events{{$index}}.prefix = M
+Events{{$index}}.prefix = {{$event.Prefix}}
 {{end}}
 
 ## Movement model settings

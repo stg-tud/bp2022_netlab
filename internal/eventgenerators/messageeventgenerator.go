@@ -6,11 +6,11 @@ type MessageEventGenerator struct {
 	// Class of the first event generator
 	Class string
 	// Creation interval in seconds (one new message every X to Y seconds)
-	Interval uint
+	Interval customtypes.Position
 	// Size of the message
-	Size customtypes.Area
+	Size customtypes.Position
 	// range of message source/destination addresses
-	Hosts customtypes.Area
+	Hosts customtypes.Position
 	// Message ID prefix
 	Prefix string
 }
@@ -22,15 +22,18 @@ func (MessageEventGenerator) String() string {
 // Returns a new configuration of Messageeventgenerator with default values applied.
 func (MessageEventGenerator) Default() MessageEventGenerator {
 	return MessageEventGenerator{
-		Class:    "MessageEventGenerator",
-		Interval: 20,
-		Size: customtypes.Area{
-			Height: 80,
-			Width:  120,
+		Class: "MessageEventGenerator",
+		Interval: customtypes.Position{
+			X: 25,
+			Y: 35,
 		},
-		Hosts: customtypes.Area{
-			Height: 5,
-			Width:  15,
+		Size: customtypes.Position{
+			X: 80,
+			Y: 120,
+		},
+		Hosts: customtypes.Position{
+			X: 5,
+			Y: 15,
 		},
 		Prefix: "M",
 	}

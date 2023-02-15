@@ -119,9 +119,9 @@ Events0.class = MessageEventGenerator
 # Creation interval in seconds (one new message every 25 to 35 seconds)
 Events0.interval = 25,35
 # Message sizes (50kB - 150kB)
-Events0.size = 50k,150k
+Events0.size = 80k,120k
 # range of message source/destination addresses
-Events0.hosts = 0,120
+Events0.hosts = 5,15
 # Message ID prefix
 Events0.prefix = M
 
@@ -131,9 +131,9 @@ Events1.class = changedBurst
 # Creation interval in seconds (one new message every 25 to 35 seconds)
 Events1.interval = 25,35
 # Message sizes (50kB - 150kB)
-Events1.size = 50k,150k
+Events1.size = 80k,120k
 # range of message source/destination addresses
-Events1.hosts = 0,120
+Events1.hosts = 5,15
 # Message ID prefix
 Events1.prefix = M
 

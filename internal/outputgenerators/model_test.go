@@ -36,7 +36,7 @@ func GetTestingExperiment() experiment.Experiment {
 	evg, _ := experiment.NewEventGenerator("MessageEventGenerator", eventgenerators.MessageEventGenerator{}.Default(), 1)
 	eventgenerator = append(eventgenerator, evg)
 	changedBurst := eventgenerators.MessageBurstGenerator{}.Default()
-	changedBurst.Interval = 25
+	changedBurst.Interval = customtypes.Position{X: 25, Y: 35}
 	evg, _ = experiment.NewEventGenerator("changedBurst", changedBurst, 2)
 	eventgenerator = append(eventgenerator, evg)
 

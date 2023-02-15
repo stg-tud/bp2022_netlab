@@ -1,15 +1,16 @@
 package outputgenerators
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"reflect"
 	"text/template"
 
 	logger "github.com/gookit/slog"
-	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
 
 	//"github.com/stg-tud/bp2022_netlab/internal/eventgenerators"
+
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
@@ -17,10 +18,6 @@ import (
 
 type Theone struct{}
 
-type replacenetwork struct {
-	Bandwidth int
-	Range     int
-}
 type groups struct {
 	Id             string
 	NrofHosts      uint
@@ -47,11 +44,14 @@ type data struct {
 	NoEventGenerator            int
 }
 type eventGeneraTor struct {
-	Name     string
-	Interval uint
-	Size     customtypes.Area
-	Hosts    customtypes.Area
-	Prefix   string
+	Name      string
+	IntervalX int
+	IntervalY int
+	SizeX     int
+	SizeY     int
+	HostsX    int
+	HostsY    int
+	Prefix    string
 }
 type networkInterFace struct {
 	Name      string
@@ -134,9 +134,22 @@ func (t Theone) BuildNetworks(exp experiment.Experiment) (networks []networkInte
 func (t Theone) BuildEventGenerator(exp experiment.Experiment) (eventGenerator []eventGeneraTor) {
 	logger.Trace("Building Event Generators")
 	for i := 0; i < len(exp.EventGenerators); i++ {
+		fmt.Println()
 		evg := eventGeneraTor{
 			Name: exp.EventGenerators[i].Name,
+
+			Prefix: reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Prefix").String(),
+
+			SizeX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Size").FieldByName("X").Int()),
+			SizeY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Size").FieldByName("Y").Int()),
+
+			HostsX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Hosts").FieldByName("X").Int()),
+			HostsY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Hosts").FieldByName("Y").Int()),
+
+			IntervalX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Interval").FieldByName("X").Int()),
+			IntervalY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Interval").FieldByName("Y").Int()),
 		}
+
 		eventGenerator = append(eventGenerator, evg)
 	}
 	return eventGenerator
