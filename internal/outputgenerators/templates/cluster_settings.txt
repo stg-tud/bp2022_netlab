@@ -36,13 +36,13 @@ Group.nrofApplications = 0
 
 
 {{- range $index, $group:= .Groups}}
-Group{{$index}}.groupID = {{$group.Id}}
-Group{{$index}}.nrofHosts = {{$group.NrofHosts}}
-Group{{$index}}.nrofInterfaces = {{$group.NrofInterfaces}}
+Group{{$group.Index}}.groupID = {{$group.Id}}
+Group{{$group.Index}}.nrofHosts = {{$group.NrofHosts}}
+Group{{$group.Index}}.nrofInterfaces = {{$group.NrofInterfaces}}
 {{- range $index1, $interfaces:= .Interface }}
-Group{{$index}}.interface{{ $index1}}= {{$interfaces.Name}}
-{{end}}
-Group{{$index}}.movementModel = {{$group.MovementModel}}
+Group{{$group.Index}}.interface{{ $index1}}= {{$interfaces.Name}}
+{{- end}}
+Group{{$group.Index}}.movementModel = {{$group.MovementModel}}
 {{end}}
 
 
@@ -52,16 +52,16 @@ Group{{$index}}.movementModel = {{$group.MovementModel}}
 Events.nrof = {{ .NoEventGenerator}}
 {{- range $index, $event:= .EventGenerator}}
 # Class of the first event generator
-Events{{$index}}.class = {{$event.Name}}
+Events{{$event.Index}}.class = {{$event.Name}}
 # (following settings are specific for the MessageEventGenerator class)
 # Creation interval in seconds (one new message every 25 to 35 seconds)
-Events{{$index}}.interval = {{$event.IntervalX}},{{$event.IntervalY}}
+Events{{$event.Index}}.interval = {{$event.IntervalX}},{{$event.IntervalY}}
 # Message sizes (50kB - 150kB)
-Events{{$index}}.size = {{$event.SizeX}}k,{{$event.SizeY}}k
+Events{{$event.Index}}.size = {{$event.SizeX}}k,{{$event.SizeY}}k
 # range of message source/destination addresses
-Events{{$index}}.hosts = {{$event.HostsX}},{{$event.HostsY}}
+Events{{$event.Index}}.hosts = {{$event.HostsX}},{{$event.HostsY}}
 # Message ID prefix
-Events{{$index}}.prefix = {{$event.Prefix}}
+Events{{$event.Index}}.prefix = {{$event.Prefix}}
 {{end}}
 
 ## Movement model settings

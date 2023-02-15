@@ -210,7 +210,7 @@ X = 5
 Y = 15
 
 [[EventGenerators]]
-Name = 'changedBurst'
+Name = 'MessageBurstGenerator'
 NoEventGenerator = 2
 
 [EventGenerators.Type]
