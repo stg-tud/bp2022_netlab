@@ -59,44 +59,44 @@ Group.nrofApplications = 0
 Group1.groupID = a
 Group1.nrofHosts = 1
 Group1.nrofInterfaces = 1
-Group1.interface0= wireless_lan
+Group1.interface1= wireless_lan
 Group1.movementModel = RandomWaypoint
 
 Group2.groupID = b
 Group2.nrofHosts = 2
 Group2.nrofInterfaces = 2
-Group2.interface0= wireless_lan
-Group2.interface1= switch
+Group2.interface1= wireless_lan
+Group2.interface2= switch
 Group2.movementModel = RandomWaypoint
 
 Group3.groupID = c
 Group3.nrofHosts = 3
 Group3.nrofInterfaces = 1
-Group3.interface0= switch
+Group3.interface1= switch
 Group3.movementModel = Static
 
 Group4.groupID = d
 Group4.nrofHosts = 4
 Group4.nrofInterfaces = 1
-Group4.interface0= changed_wifi
+Group4.interface1= changed_wifi
 Group4.movementModel = RandomWaypoint
 
 Group5.groupID = e
 Group5.nrofHosts = 5
 Group5.nrofInterfaces = 1
-Group5.interface0= hub
+Group5.interface1= hub
 Group5.movementModel = Static
 
 Group6.groupID = f
 Group6.nrofHosts = 6
 Group6.nrofInterfaces = 1
-Group6.interface0= emane
+Group6.interface1= emane
 Group6.movementModel = RandomWaypoint
 
 Group7.groupID = g
 Group7.nrofHosts = 7
 Group7.nrofInterfaces = 1
-Group7.interface0= wireless
+Group7.interface1= wireless
 Group7.movementModel = RandomWaypoint
 
 
