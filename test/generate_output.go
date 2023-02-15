@@ -20,6 +20,7 @@ func main() {
 		outputgenerators.Bonnmotion{},
 		outputgenerators.Debug{},
 		outputgenerators.Theone{},
+		outputgenerators.CoreEmulab{},
 	}
 
 	for _, outputGenerator := range outputGenerators {

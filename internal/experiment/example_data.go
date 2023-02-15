@@ -38,8 +38,8 @@ func GetExampleExperiment() Experiment {
 		Targets: []Target{TargetTheOne, TargetCore},
 
 		RandomSeed: GenerateRandomSeed(),
-
-		Duration: 120,
+		Warmup:     5,
+		Duration:   120,
 		WorldSize: customtypes.Area{
 			Height: 800,
 			Width:  1000,

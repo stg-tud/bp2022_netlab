@@ -25,7 +25,7 @@ type groups struct {
 	MovementModel  string
 }
 
-type data struct {
+type theonedata struct {
 	ScenarioName                string
 	ScenarioSimulateConnections bool
 	ScenarioUpdateInterval      float64
@@ -69,7 +69,7 @@ func (t Theone) getInterfaceId() uint {
 const TheoneOutput = "cluster_settings.txt"
 
 // The default values for sluster_settings.txt
-var defaultValuesTheone = data{
+var defaultValuesTheone = theonedata{
 
 	ScenarioSimulateConnections: true,
 	ScenarioUpdateInterval:      0.1,
