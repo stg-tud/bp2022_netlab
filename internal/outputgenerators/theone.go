@@ -63,6 +63,9 @@ type networkInterfaceTheOne struct {
 // The name of the file that should be written to
 const TheOneOutput = "cluster_settings.txt"
 
+func (TheOne) String() string {
+	return "the-one"
+}
 // add function for template
 func add(x, y int) int {
 	return x + y
@@ -181,7 +184,7 @@ func (t TheOne) Generate(exp experiment.Experiment) {
 	}
 
 	funcs := template.FuncMap{"add": add}
-	txtTemplate := template.Must(template.New(TheOneOutput).Funcs(funcs).ParseFiles(filepath.Join(GetTemplatesFolder(), TheOneOutput)))
+	txtTemplate := template.Must(template.New(TheOneOutput).Funcs(funcs).ParseFiles(filepath.Join(TemplatesFolder, TheOneOutput)))
 	if err != nil {
 		logger.Error("Error opening template file:", err)
 		return
