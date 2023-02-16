@@ -275,7 +275,7 @@ func (c Core) Generate(exp experiment.Experiment) {
 		Devices:      devices,
 		WorldSize:    exp.WorldSize,
 	}
-	xmlTemplate, err := template.ParseFS(TemplatesFS, filepath.Join(TemplatesFolder, CoreOutputFile))
+	xmlTemplate, err := template.ParseFS(TemplatesFS, fmt.Sprintf("%s/%s", TemplatesFolder, CoreOutputFile))
 	if err != nil {
 		logger.Error("Error opening template file:", err)
 	}

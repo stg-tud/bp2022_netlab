@@ -1,6 +1,7 @@
 package outputgenerators
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -94,7 +95,7 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 	replace.Warmup = exp.Warmup
 	replace.Runtime = exp.Duration
 
-	confTemplate, err := template.ParseFS(TemplatesFS, filepath.Join(TemplatesFolder, "experiment.conf"))
+	confTemplate, err := template.ParseFS(TemplatesFS, fmt.Sprintf("%s/%s", TemplatesFolder, "experiment.conf"))
 	if err != nil {
 		logger.Error("Error opening template file:", err)
 	}
