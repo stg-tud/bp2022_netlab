@@ -13,7 +13,7 @@ func TestExistingPathsAllowance(t *testing.T) {
 		os.RemoveAll(folderstructure.OutputFolderName)
 	})
 
-	os.Setenv(folderstructure.SkipExistingEnv, "0")
+	folderstructure.OverwriteExisting = true
 
 	err := os.MkdirAll(folderstructure.OutputFolderName, 0755)
 	if err != nil {
@@ -45,7 +45,7 @@ func TestExistingPathsDenial(t *testing.T) {
 		}
 	}
 
-	os.Setenv(folderstructure.SkipExistingEnv, "1")
+	folderstructure.OverwriteExisting = false
 
 	err := os.MkdirAll(folderstructure.OutputFolderName, 0755)
 	if err != nil {

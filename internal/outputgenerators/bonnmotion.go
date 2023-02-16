@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"reflect"
+	"strings"
 
 	logger "github.com/gookit/slog"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
@@ -26,6 +27,10 @@ type Bonnmotion struct {
 	stepFilePath string
 }
 
+func (Bonnmotion) String() string {
+	return "BonnMotion"
+}
+
 // Returns the correct BonnMotion platform name for the given Target.
 func (Bonnmotion) platform(t experiment.Target) (bool, string) {
 	switch t {
@@ -41,9 +46,19 @@ func (Bonnmotion) platform(t experiment.Target) (bool, string) {
 }
 
 // Returns whether the given Target is (currently) supported by this output generator.
-func (b Bonnmotion) IsSupported(t experiment.Target) bool {
+func (b Bonnmotion) TargetIsSupported(t experiment.Target) bool {
 	supported, _ := b.platform(t)
 	return supported
+}
+
+func (b Bonnmotion) MovementPatternIsSupported(movementPattern movementpatterns.MovementPattern) bool {
+	switch movementPattern.(type) {
+	case movementpatterns.RandomWaypoint:
+		return true
+
+	default:
+		return false
+	}
 }
 
 // Returns the parameter set for Random Waypoint movement model for a given NodeGroup inside an Experiment.
@@ -83,7 +98,7 @@ func (b Bonnmotion) execute(command []string) error {
 			err = cerr
 		}
 	}()
-	_, err = stepFile.WriteString(fmt.Sprintln(command))
+	_, err = stepFile.WriteString(fmt.Sprintf("%s %s\n", BonnMotionExecutable, strings.Join(command, " ")))
 	if err != nil {
 		logger.Error("Error writing step file:", err)
 		return err

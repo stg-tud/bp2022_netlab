@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	logging.Init()
+	logging.Init(true)
 	logger.Info("Starting")
 
 	exampleExperiment, _ := experiment.LoadFromFile("internal/experiment/testdata/load_test.toml")
