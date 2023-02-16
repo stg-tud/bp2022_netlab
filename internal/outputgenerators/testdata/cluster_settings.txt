@@ -11,33 +11,33 @@ Scenario.updateInterval = 0.1
 Scenario.endTime = 43
 wireless_lan.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
-wireless_lan.transmitSpeed = 540k
-wireless_lan.transmitRange = 13
+wireless_lan.transmitSpeed = 54000000
+wireless_lan.transmitRange = 275
 
 switch.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
-switch.transmitSpeed = 6570k
+switch.transmitSpeed = 6570
 switch.transmitRange = 100
 
 changed_wifi.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
-changed_wifi.transmitSpeed = 0k
-changed_wifi.transmitRange = 13
+changed_wifi.transmitSpeed = 17
+changed_wifi.transmitRange = 275
 
 hub.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
-hub.transmitSpeed = 6570k
+hub.transmitSpeed = 6570
 hub.transmitRange = 100
 
 emane.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
-emane.transmitSpeed = 6570k
+emane.transmitSpeed = 6570
 emane.transmitRange = 100
 
 wireless.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
-wireless.transmitSpeed = 540k
-wireless.transmitRange = 20
+wireless.transmitSpeed = 54000000
+wireless.transmitRange = 400
 
 
 Scenario.nrofHostGroups = 7
@@ -111,7 +111,7 @@ Events1.class = MessageEventGenerator
 # Creation interval in seconds (one new message every 25 to 35 seconds)
 Events1.interval = 25,35
 # Message sizes (50kB - 150kB)
-Events1.size = 80k,120k
+Events1.size = 80,120
 # range of message source/destination addresses
 Events1.hosts = 5,15
 # distance to hosts
@@ -125,7 +125,7 @@ Events2.class = MessageBurstGenerator
 # Creation interval in seconds (one new message every 25 to 35 seconds)
 Events2.interval = 25,35
 # Message sizes (50kB - 150kB)
-Events2.size = 80k,120k
+Events2.size = 80,120
 # range of message source/destination addresses
 Events2.hosts = 5,15
 # distance to hosts

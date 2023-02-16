@@ -121,20 +121,20 @@ NoEventGenerator = 1
 Prefix = 'M'
 
 [EventGenerators.Interval]
-XSeconds = 25
-YSeconds = 35
+From = 25
+To = 35
 
 [EventGenerators.Size]
-XSeconds = 80
-YSeconds = 120
+From = 80
+To = 120
 
 [EventGenerators.Hosts]
-XSeconds = 5
-YSeconds = 15
+From = 5
+To = 15
 
 [EventGenerators.ToHosts]
-XSeconds = 16
-YSeconds = 17
+From = 16
+To = 17
 
 [[EventGenerators]]
 Name = 'MessageBurstGenerator'
@@ -143,17 +143,17 @@ NoEventGenerator = 2
 Prefix = 'M'
 
 [EventGenerators.Interval]
-XSeconds = 25
-YSeconds = 35
+From = 25
+To = 35
 
 [EventGenerators.Size]
-XSeconds = 80
-YSeconds = 120
+From = 80
+To = 120
 
 [EventGenerators.Hosts]
-XSeconds = 5
-YSeconds = 15
+From = 5
+To = 15
 
 [EventGenerators.ToHosts]
-XSeconds = 16
-YSeconds = 17
+From = 16
+To = 17

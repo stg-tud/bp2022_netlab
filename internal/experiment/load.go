@@ -30,10 +30,10 @@ type eventgenerator struct {
 	Class            string
 	NoEventGenerator int
 	Prefix           string
-	Intervall        customtypes.XToYSeconds
-	Size             customtypes.XToYSeconds
-	Hosts            customtypes.XToYSeconds
-	ToHosts          customtypes.XToYSeconds
+	Intervall        customtypes.Interval
+	Size             customtypes.Interval
+	Hosts            customtypes.Interval
+	ToHosts          customtypes.Interval
 }
 type network struct {
 	Name        string
@@ -187,29 +187,29 @@ func setDefaultEventGenerator(className string, eve eventgenerator) (eventgenera
 
 	case "MessageEventGenerator":
 		msg := eventgenerators.MessageEventGenerator{}.Default()
-		if eve.Intervall.XSeconds != 25 && eve.Intervall.XSeconds != 0 {
-			msg.Interval.XSeconds = eve.Intervall.XSeconds
+		if eve.Intervall.From != 25 && eve.Intervall.From != 0 {
+			msg.Interval.From = eve.Intervall.From
 		}
-		if eve.Intervall.YSeconds != 35 && eve.Intervall.YSeconds != 0 {
-			msg.Interval.XSeconds = eve.Intervall.XSeconds
+		if eve.Intervall.To != 35 && eve.Intervall.To != 0 {
+			msg.Interval.From = eve.Intervall.From
 		}
-		if eve.Size.XSeconds != 80 && eve.Size.XSeconds != 120 {
-			msg.Size.XSeconds = eve.Size.XSeconds
+		if eve.Size.From != 80 && eve.Size.From != 120 {
+			msg.Size.From = eve.Size.From
 		}
-		if eve.Size.YSeconds != 80 && eve.Size.YSeconds != 120 {
-			msg.Size.YSeconds = eve.Size.YSeconds
+		if eve.Size.To != 80 && eve.Size.To != 120 {
+			msg.Size.To = eve.Size.To
 		}
-		if eve.Hosts.XSeconds != 5 && eve.Hosts.XSeconds != 0 {
-			msg.Hosts.XSeconds = eve.Hosts.XSeconds
+		if eve.Hosts.From != 5 && eve.Hosts.From != 0 {
+			msg.Hosts.From = eve.Hosts.From
 		}
-		if eve.Hosts.YSeconds != 15 && eve.Hosts.YSeconds != 0 {
-			msg.Hosts.YSeconds = eve.Hosts.YSeconds
+		if eve.Hosts.To != 15 && eve.Hosts.To != 0 {
+			msg.Hosts.To = eve.Hosts.To
 		}
-		if eve.ToHosts.XSeconds != 16 && eve.ToHosts.XSeconds != 0 {
-			msg.ToHosts.XSeconds = eve.ToHosts.XSeconds
+		if eve.ToHosts.From != 16 && eve.ToHosts.From != 0 {
+			msg.ToHosts.From = eve.ToHosts.From
 		}
-		if eve.ToHosts.YSeconds != 17 && eve.ToHosts.YSeconds != 0 {
-			msg.ToHosts.YSeconds = eve.ToHosts.YSeconds
+		if eve.ToHosts.To != 17 && eve.ToHosts.To != 0 {
+			msg.ToHosts.To = eve.ToHosts.To
 		}
 		if eve.Prefix != "M" && eve.Prefix != "" {
 			msg.Prefix = eve.Prefix
@@ -218,29 +218,29 @@ func setDefaultEventGenerator(className string, eve eventgenerator) (eventgenera
 
 	case "MessageBurstGenerator":
 		burst := eventgenerators.MessageBurstGenerator{}.Default()
-		if eve.Intervall.XSeconds != 25 && eve.Intervall.XSeconds != 0 {
-			burst.Interval.XSeconds = eve.Intervall.XSeconds
+		if eve.Intervall.From != 25 && eve.Intervall.From != 0 {
+			burst.Interval.From = eve.Intervall.From
 		}
-		if eve.Intervall.YSeconds != 35 && eve.Intervall.YSeconds != 0 {
-			burst.Interval.XSeconds = eve.Intervall.XSeconds
+		if eve.Intervall.To != 35 && eve.Intervall.To != 0 {
+			burst.Interval.From = eve.Intervall.From
 		}
-		if eve.Size.XSeconds != 80 && eve.Size.XSeconds != 120 {
-			burst.Size.XSeconds = eve.Size.XSeconds
+		if eve.Size.From != 80 && eve.Size.From != 120 {
+			burst.Size.From = eve.Size.From
 		}
-		if eve.Size.YSeconds != 80 && eve.Size.YSeconds != 120 {
-			burst.Size.YSeconds = eve.Size.YSeconds
+		if eve.Size.To != 80 && eve.Size.To != 120 {
+			burst.Size.To = eve.Size.To
 		}
-		if eve.Hosts.XSeconds != 5 && eve.Hosts.XSeconds != 0 {
-			burst.Hosts.XSeconds = eve.Hosts.XSeconds
+		if eve.Hosts.From != 5 && eve.Hosts.From != 0 {
+			burst.Hosts.From = eve.Hosts.From
 		}
-		if eve.Hosts.YSeconds != 15 && eve.Hosts.YSeconds != 0 {
-			burst.Hosts.YSeconds = eve.Hosts.YSeconds
+		if eve.Hosts.To != 15 && eve.Hosts.To != 0 {
+			burst.Hosts.To = eve.Hosts.To
 		}
-		if eve.ToHosts.XSeconds != 16 && eve.ToHosts.XSeconds != 0 {
-			burst.ToHosts.XSeconds = eve.ToHosts.XSeconds
+		if eve.ToHosts.From != 16 && eve.ToHosts.From != 0 {
+			burst.ToHosts.From = eve.ToHosts.From
 		}
-		if eve.ToHosts.YSeconds != 17 && eve.ToHosts.YSeconds != 0 {
-			burst.ToHosts.YSeconds = eve.ToHosts.YSeconds
+		if eve.ToHosts.To != 17 && eve.ToHosts.To != 0 {
+			burst.ToHosts.To = eve.ToHosts.To
 		}
 		if eve.Prefix != "M" && eve.Prefix != "" {
 			burst.Prefix = eve.Prefix

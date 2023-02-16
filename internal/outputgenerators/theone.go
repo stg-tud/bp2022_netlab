@@ -3,13 +3,14 @@ package outputgenerators
 import (
 	"os"
 	"path/filepath"
-	"reflect"
 	"text/template"
 
 	logger "github.com/gookit/slog"
+	"github.com/stg-tud/bp2022_netlab/internal/eventgenerators"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
+	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
 type TheOne struct{}
@@ -42,6 +43,7 @@ type theOneData struct {
 type eventGenerator struct {
 	Index     uint
 	Name      string
+	Type      eventgenerators.EventGeneratorType
 	IntervalX int
 	IntervalY int
 	SizeX     int
@@ -83,10 +85,7 @@ func (t TheOne) buildGroups(exp experiment.Experiment) []group {
 	logger.Trace("Building Groups")
 	groupInterface := []group{}
 
-	for i := range exp.NodeGroups {
-
-		expNodeGroups := exp.NodeGroups[i]
-
+	for i, expNodeGroups := range exp.NodeGroups {
 		group := group{
 			Index:          uint(i + 1),
 			Id:             expNodeGroups.Prefix,
@@ -109,9 +108,14 @@ func (t TheOne) buildInterfaces(exp experiment.Experiment) (networks []networkIn
 	for i := range exp.Networks {
 		bandwidth := 6570
 		rangeOfNetwork := 100
-		if reflect.TypeOf(exp.Networks[i].Type).String() == "networktypes.WirelessLAN" || reflect.TypeOf(exp.Networks[i].Type).String() == "networktypes.Wireless" {
-			bandwidth = int(reflect.ValueOf(exp.Networks[i].Type).FieldByName("Bandwidth").Int()) / 100000
-			rangeOfNetwork = int(reflect.ValueOf(exp.Networks[i].Type).FieldByName("Range").Int()) / 20
+		switch networkType := exp.Networks[i].Type.(type) {
+		case networktypes.WirelessLAN:
+			bandwidth = networkType.Bandwidth
+			rangeOfNetwork = networkType.Range
+
+		case networktypes.Wireless:
+			bandwidth = networkType.Bandwidth
+			rangeOfNetwork = networkType.Range
 		}
 
 		nt := networkInterfaceTheOne{
@@ -128,24 +132,11 @@ func (t TheOne) buildInterfaces(exp experiment.Experiment) (networks []networkIn
 // generates the eventgenerators for cluster_settings.txt
 func (t TheOne) buildEventGenerator(exp experiment.Experiment) (eventGenerators []eventGenerator) {
 	logger.Trace("Building Event Generators")
-	for i := range exp.EventGenerators {
+	for i, expEventGenerator := range exp.EventGenerators {
 		evg := eventGenerator{
 			Index: uint(i + 1),
-			Name:  exp.EventGenerators[i].Name,
-
-			Prefix: reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Prefix").String(),
-
-			SizeX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Size").FieldByName("XSeconds").Int()),
-			SizeY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Size").FieldByName("YSeconds").Int()),
-
-			HostsX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Hosts").FieldByName("XSeconds").Int()),
-			HostsY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Hosts").FieldByName("YSeconds").Int()),
-
-			ToHostsX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("ToHosts").FieldByName("XSeconds").Int()),
-			ToHostsY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("ToHosts").FieldByName("YSeconds").Int()),
-
-			IntervalX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Interval").FieldByName("XSeconds").Int()),
-			IntervalY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Interval").FieldByName("YSeconds").Int()),
+			Name:  expEventGenerator.Name,
+			Type:  expEventGenerator.Type,
 		}
 
 		eventGenerators = append(eventGenerators, evg)
