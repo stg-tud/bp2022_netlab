@@ -30,9 +30,10 @@ type eventgenerator struct {
 	Class            string
 	NoEventGenerator int
 	Prefix           string
-	Intervall        customtypes.Position
-	Size             customtypes.Position
-	Hosts            customtypes.Position
+	Intervall        customtypes.XToYSeconds
+	Size             customtypes.XToYSeconds
+	Hosts            customtypes.XToYSeconds
+	ToHosts          customtypes.XToYSeconds
 }
 type network struct {
 	Name        string
@@ -186,23 +187,29 @@ func setDefaultEventGenerator(className string, eve eventgenerator) (eventgenera
 
 	case "MessageEventGenerator":
 		msg := eventgenerators.MessageEventGenerator{}.Default()
-		if eve.Intervall.X != 25 && eve.Intervall.X != 0 {
-			msg.Interval.XSeconds = eve.Intervall.X
+		if eve.Intervall.XSeconds != 25 && eve.Intervall.XSeconds != 0 {
+			msg.Interval.XSeconds = eve.Intervall.XSeconds
 		}
-		if eve.Intervall.Y != 35 && eve.Intervall.Y != 0 {
-			msg.Interval.XSeconds = eve.Intervall.X
+		if eve.Intervall.YSeconds != 35 && eve.Intervall.YSeconds != 0 {
+			msg.Interval.XSeconds = eve.Intervall.XSeconds
 		}
-		if eve.Size.X != 80 && eve.Size.X != 120 {
-			msg.Size.XSeconds = eve.Size.X
+		if eve.Size.XSeconds != 80 && eve.Size.XSeconds != 120 {
+			msg.Size.XSeconds = eve.Size.XSeconds
 		}
-		if eve.Size.Y != 80 && eve.Size.Y != 120 {
-			msg.Size.YSeconds = eve.Size.Y
+		if eve.Size.YSeconds != 80 && eve.Size.YSeconds != 120 {
+			msg.Size.YSeconds = eve.Size.YSeconds
 		}
-		if eve.Hosts.X != 5 && eve.Hosts.X != 0 {
-			msg.Hosts.XSeconds = eve.Hosts.X
+		if eve.Hosts.XSeconds != 5 && eve.Hosts.XSeconds != 0 {
+			msg.Hosts.XSeconds = eve.Hosts.XSeconds
 		}
-		if eve.Hosts.Y != 15 && eve.Hosts.Y != 0 {
-			msg.Hosts.YSeconds = eve.Hosts.Y
+		if eve.Hosts.YSeconds != 15 && eve.Hosts.YSeconds != 0 {
+			msg.Hosts.YSeconds = eve.Hosts.YSeconds
+		}
+		if eve.ToHosts.XSeconds != 5 && eve.ToHosts.XSeconds != 0 {
+			msg.ToHosts.XSeconds = eve.ToHosts.XSeconds
+		}
+		if eve.ToHosts.YSeconds != 15 && eve.ToHosts.YSeconds != 0 {
+			msg.ToHosts.YSeconds = eve.ToHosts.YSeconds
 		}
 		if eve.Prefix != "M" && eve.Prefix != "" {
 			msg.Prefix = eve.Prefix
@@ -211,23 +218,29 @@ func setDefaultEventGenerator(className string, eve eventgenerator) (eventgenera
 
 	case "MessageBurstGenerator":
 		burst := eventgenerators.MessageBurstGenerator{}.Default()
-		if eve.Intervall.X != 25 && eve.Intervall.X != 0 {
-			burst.Interval.XSeconds = eve.Intervall.X
+		if eve.Intervall.XSeconds != 25 && eve.Intervall.XSeconds != 0 {
+			burst.Interval.XSeconds = eve.Intervall.XSeconds
 		}
-		if eve.Intervall.Y != 35 && eve.Intervall.Y != 0 {
-			burst.Interval.XSeconds = eve.Intervall.X
+		if eve.Intervall.YSeconds != 35 && eve.Intervall.YSeconds != 0 {
+			burst.Interval.XSeconds = eve.Intervall.XSeconds
 		}
-		if eve.Size.X != 80 && eve.Size.X != 120 {
-			burst.Size.XSeconds = eve.Size.X
+		if eve.Size.XSeconds != 80 && eve.Size.XSeconds != 120 {
+			burst.Size.XSeconds = eve.Size.XSeconds
 		}
-		if eve.Size.Y != 80 && eve.Size.Y != 120 {
-			burst.Size.YSeconds = eve.Size.Y
+		if eve.Size.YSeconds != 80 && eve.Size.YSeconds != 120 {
+			burst.Size.YSeconds = eve.Size.YSeconds
 		}
-		if eve.Hosts.X != 5 && eve.Hosts.X != 0 {
-			burst.Hosts.XSeconds = eve.Hosts.X
+		if eve.Hosts.XSeconds != 5 && eve.Hosts.XSeconds != 0 {
+			burst.Hosts.XSeconds = eve.Hosts.XSeconds
 		}
-		if eve.Hosts.Y != 15 && eve.Hosts.Y != 0 {
-			burst.Hosts.YSeconds = eve.Hosts.Y
+		if eve.Hosts.YSeconds != 15 && eve.Hosts.YSeconds != 0 {
+			burst.Hosts.YSeconds = eve.Hosts.YSeconds
+		}
+		if eve.ToHosts.XSeconds != 5 && eve.ToHosts.XSeconds != 0 {
+			burst.ToHosts.XSeconds = eve.ToHosts.XSeconds
+		}
+		if eve.ToHosts.YSeconds != 15 && eve.ToHosts.YSeconds != 0 {
+			burst.ToHosts.YSeconds = eve.ToHosts.YSeconds
 		}
 		if eve.Prefix != "M" && eve.Prefix != "" {
 			burst.Prefix = eve.Prefix

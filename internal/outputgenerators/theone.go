@@ -48,6 +48,8 @@ type eventGenerator struct {
 	SizeY     int
 	HostsX    int
 	HostsY    int
+	ToHostsX  int
+	ToHostsY  int
 	Prefix    string
 }
 type networkInterfaceTheOne struct {
@@ -138,6 +140,9 @@ func (t TheOne) buildEventGenerator(exp experiment.Experiment) (eventGenerators 
 
 			HostsX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Hosts").FieldByName("XSeconds").Int()),
 			HostsY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Hosts").FieldByName("YSeconds").Int()),
+
+			ToHostsX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("ToHosts").FieldByName("XSeconds").Int()),
+			ToHostsY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("ToHosts").FieldByName("YSeconds").Int()),
 
 			IntervalX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Interval").FieldByName("XSeconds").Int()),
 			IntervalY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Interval").FieldByName("YSeconds").Int()),

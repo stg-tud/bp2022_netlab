@@ -11,7 +11,7 @@ func main() {
 	logging.Init()
 	logger.Info("Starting")
 
-	exampleExperiment := experiment.GetExampleExperiment()
+	exampleExperiment, _ := experiment.LoadFromFile("internal/experiment/testdata/load_test.toml")
 
 	logger.Info("Using random seed", exampleExperiment.RandomSeed)
 

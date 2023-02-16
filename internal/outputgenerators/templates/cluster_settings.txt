@@ -60,6 +60,8 @@ Events{{add $index 1}}.interval = {{$event.IntervalX}},{{$event.IntervalY}}
 Events{{add $index 1}}.size = {{$event.SizeX}}k,{{$event.SizeY}}k
 # range of message source/destination addresses
 Events{{add $index 1}}.hosts = {{$event.HostsX}},{{$event.HostsY}}
+# distance to hosts
+Events{{add $index 1}}.tohosts = {{$event.ToHostsX}},{{$event.ToHostsY}}
 # Message ID prefix
 Events{{add $index 1}}.prefix = {{$event.Prefix}}
 {{end}}
