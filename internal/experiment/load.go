@@ -205,10 +205,10 @@ func setDefaultEventGenerator(className string, eve eventgenerator) (eventgenera
 		if eve.Hosts.YSeconds != 15 && eve.Hosts.YSeconds != 0 {
 			msg.Hosts.YSeconds = eve.Hosts.YSeconds
 		}
-		if eve.ToHosts.XSeconds != 5 && eve.ToHosts.XSeconds != 0 {
+		if eve.ToHosts.XSeconds != 16 && eve.ToHosts.XSeconds != 0 {
 			msg.ToHosts.XSeconds = eve.ToHosts.XSeconds
 		}
-		if eve.ToHosts.YSeconds != 15 && eve.ToHosts.YSeconds != 0 {
+		if eve.ToHosts.YSeconds != 17 && eve.ToHosts.YSeconds != 0 {
 			msg.ToHosts.YSeconds = eve.ToHosts.YSeconds
 		}
 		if eve.Prefix != "M" && eve.Prefix != "" {
@@ -236,10 +236,10 @@ func setDefaultEventGenerator(className string, eve eventgenerator) (eventgenera
 		if eve.Hosts.YSeconds != 15 && eve.Hosts.YSeconds != 0 {
 			burst.Hosts.YSeconds = eve.Hosts.YSeconds
 		}
-		if eve.ToHosts.XSeconds != 5 && eve.ToHosts.XSeconds != 0 {
+		if eve.ToHosts.XSeconds != 16 && eve.ToHosts.XSeconds != 0 {
 			burst.ToHosts.XSeconds = eve.ToHosts.XSeconds
 		}
-		if eve.ToHosts.YSeconds != 15 && eve.ToHosts.YSeconds != 0 {
+		if eve.ToHosts.YSeconds != 17 && eve.ToHosts.YSeconds != 0 {
 			burst.ToHosts.YSeconds = eve.ToHosts.YSeconds
 		}
 		if eve.Prefix != "M" && eve.Prefix != "" {
