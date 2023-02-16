@@ -8,7 +8,7 @@ RandomSeed = 1673916419715
 Scenario.simulateConnections = true
 Scenario.updateInterval = 0.1
 # 43k ~= 12h
-Scenario.endTime = 43k
+Scenario.endTime = 43
 wireless_lan.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
 wireless_lan.transmitSpeed = 540k
@@ -16,8 +16,8 @@ wireless_lan.transmitRange = 13
 
 switch.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
-switch.transmitSpeed = 250k
-switch.transmitRange = 10
+switch.transmitSpeed = 6570k
+switch.transmitRange = 100
 
 changed_wifi.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
@@ -26,13 +26,13 @@ changed_wifi.transmitRange = 13
 
 hub.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
-hub.transmitSpeed = 250k
-hub.transmitRange = 10
+hub.transmitSpeed = 6570k
+hub.transmitRange = 100
 
 emane.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
-emane.transmitSpeed = 250k
-emane.transmitRange = 10
+emane.transmitSpeed = 6570k
+emane.transmitRange = 100
 
 wireless.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps

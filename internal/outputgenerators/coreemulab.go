@@ -12,7 +12,7 @@ import (
 
 type CoreEmulab struct{}
 
-type coreemudata struct {
+type coreEmuData struct {
 	Name      string
 	Scenario  string
 	Automator string
@@ -39,7 +39,7 @@ const CoreEmulabTemplate = "experiment.conf"
 const CoreEmulabOutput = "experiment.conf"
 
 // The default values for experiment.conf
-var defaultValuesCoreEmulab = coreemudata{
+var defaultValuesCoreEmulab = coreEmuData{
 
 	Scenario:  "core.xml",
 	Automator: "",

@@ -19,7 +19,7 @@ func main() {
 		outputgenerators.Core{},
 		outputgenerators.Bonnmotion{},
 		outputgenerators.Debug{},
-		outputgenerators.Theone{},
+		outputgenerators.TheOne{},
 		outputgenerators.CoreEmulab{},
 	}
 

@@ -9,21 +9,21 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/outputgenerators"
 )
 
-func TestTheone(t *testing.T) {
+func TestTheOne(t *testing.T) {
 	t.Cleanup(func() {
 		os.RemoveAll(folderstructure.OutputFolderName)
 	})
-	to := outputgenerators.Theone{}
+	to := outputgenerators.TheOne{}
 	testingExperiment := GetTestingExperiment()
 	outputFolder := folderstructure.GetOutputFolder(testingExperiment)
 	to.Generate(testingExperiment)
 
-	expected, err := os.ReadFile(filepath.Join(TestDataFolder, outputgenerators.TheoneOutput))
+	expected, err := os.ReadFile(filepath.Join(TestDataFolder, outputgenerators.TheOneOutput))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}
 
-	actual, err := os.ReadFile(filepath.Join(outputFolder, outputgenerators.TheoneOutput))
+	actual, err := os.ReadFile(filepath.Join(outputFolder, outputgenerators.TheOneOutput))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}

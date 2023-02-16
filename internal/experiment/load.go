@@ -166,7 +166,7 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 	//eventgenerators
 	events := []EventGenerator{}
 	for _, eve := range conf.EventGenerators {
-		buffer, e := setDefaultEventGen(eve.Class, eve)
+		buffer, e := setDefaultEventGenerator(eve.Class, eve)
 		if e != nil {
 			logger.Error("Erorr setting up event generators")
 		}
@@ -181,28 +181,28 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 	logger.Trace("Finished generation")
 	return exp, nil
 }
-func setDefaultEventGen(className string, eve eventgenerator) (eventgenerators.EventGenerator, error) {
+func setDefaultEventGenerator(className string, eve eventgenerator) (eventgenerators.EventGeneratorType, error) {
 	switch className {
 
 	case "MessageEventGenerator":
 		msg := eventgenerators.MessageEventGenerator{}.Default()
 		if eve.Intervall.X != 25 && eve.Intervall.X != 0 {
-			msg.Interval.X = eve.Intervall.X
+			msg.Interval.XSeconds = eve.Intervall.X
 		}
 		if eve.Intervall.Y != 35 && eve.Intervall.Y != 0 {
-			msg.Interval.X = eve.Intervall.X
+			msg.Interval.XSeconds = eve.Intervall.X
 		}
 		if eve.Size.X != 80 && eve.Size.X != 120 {
-			msg.Size.X = eve.Size.X
+			msg.Size.XSeconds = eve.Size.X
 		}
 		if eve.Size.Y != 80 && eve.Size.Y != 120 {
-			msg.Size.Y = eve.Size.Y
+			msg.Size.YSeconds = eve.Size.Y
 		}
 		if eve.Hosts.X != 5 && eve.Hosts.X != 0 {
-			msg.Hosts.X = eve.Hosts.X
+			msg.Hosts.XSeconds = eve.Hosts.X
 		}
 		if eve.Hosts.Y != 15 && eve.Hosts.Y != 0 {
-			msg.Hosts.Y = eve.Hosts.Y
+			msg.Hosts.YSeconds = eve.Hosts.Y
 		}
 		if eve.Prefix != "M" && eve.Prefix != "" {
 			msg.Prefix = eve.Prefix
@@ -212,30 +212,30 @@ func setDefaultEventGen(className string, eve eventgenerator) (eventgenerators.E
 	case "MessageBurstGenerator":
 		burst := eventgenerators.MessageBurstGenerator{}.Default()
 		if eve.Intervall.X != 25 && eve.Intervall.X != 0 {
-			burst.Interval.X = eve.Intervall.X
+			burst.Interval.XSeconds = eve.Intervall.X
 		}
 		if eve.Intervall.Y != 35 && eve.Intervall.Y != 0 {
-			burst.Interval.X = eve.Intervall.X
+			burst.Interval.XSeconds = eve.Intervall.X
 		}
 		if eve.Size.X != 80 && eve.Size.X != 120 {
-			burst.Size.X = eve.Size.X
+			burst.Size.XSeconds = eve.Size.X
 		}
 		if eve.Size.Y != 80 && eve.Size.Y != 120 {
-			burst.Size.Y = eve.Size.Y
+			burst.Size.YSeconds = eve.Size.Y
 		}
 		if eve.Hosts.X != 5 && eve.Hosts.X != 0 {
-			burst.Hosts.X = eve.Hosts.X
+			burst.Hosts.XSeconds = eve.Hosts.X
 		}
 		if eve.Hosts.Y != 15 && eve.Hosts.Y != 0 {
-			burst.Hosts.Y = eve.Hosts.Y
+			burst.Hosts.YSeconds = eve.Hosts.Y
 		}
 		if eve.Prefix != "M" && eve.Prefix != "" {
 			burst.Prefix = eve.Prefix
 		}
 		return burst, nil
 	default:
-		logger.Error("Error while generating eventgeneratos, class name not found")
-		return eventgenerators.MessageEventGenerator{}.Default(), errors.New("error while generating eventgeneratos, class name not found")
+		logger.Error("Error while generating eventgenerator, class name not found")
+		return eventgenerators.MessageEventGenerator{}.Default(), errors.New("error while generating eventgenerator, class name not found")
 	}
 }
 

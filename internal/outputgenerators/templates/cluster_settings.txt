@@ -5,10 +5,10 @@
 ## Scenario settings
 Scenario.name = "{{ .ScenarioName}}"
 RandomSeed = {{ .RandomSeed}}
-Scenario.simulateConnections = {{ .ScenarioSimulateConnections}}
-Scenario.updateInterval = {{ .ScenarioUpdateInterval}}
+Scenario.simulateConnections = true
+Scenario.updateInterval = 0.1
 # 43k ~= 12h
-Scenario.endTime = {{ .Runtime}}k
+Scenario.endTime = {{ .Runtime}}
 
 {{- range $index, $interfaces:=.Interfaces}}
 {{$interfaces.Name}}.type = SimpleBroadcastInterface
@@ -36,13 +36,13 @@ Group.nrofApplications = 0
 
 
 {{- range $index, $group:= .Groups}}
-Group{{$group.Index}}.groupID = {{$group.Id}}
-Group{{$group.Index}}.nrofHosts = {{$group.NrofHosts}}
-Group{{$group.Index}}.nrofInterfaces = {{$group.NrofInterfaces}}
-{{- range $index1, $interfaces:= .Interface }}
-Group{{$group.Index}}.interface{{add $index1 1}}= {{$interfaces.Name}}
+Group{{add $index 1}}.groupID = {{$group.Id}}
+Group{{add $index 1}}.nrofHosts = {{$group.NrofHosts}}
+Group{{add $index 1}}.nrofInterfaces = {{$group.NrofInterfaces}}
+{{- range $index1, $interfaces:= .Interfaces }}
+Group{{add $index 1}}.interface{{add $index1 1}}= {{$interfaces.Name}}
 {{- end}}
-Group{{$group.Index}}.movementModel = {{$group.MovementModel}}
+Group{{add $index 1}}.movementModel = {{$group.MovementModel}}
 {{end}}
 
 
@@ -50,18 +50,18 @@ Group{{$group.Index}}.movementModel = {{$group.MovementModel}}
 ## Message creation parameters
 # How many event generators
 Events.nrof = {{ .NoEventGenerator}}
-{{- range $index, $event:= .EventGenerator}}
+{{- range $index, $event:= .EventGenerators}}
 # Class of the first event generator
-Events{{$event.Index}}.class = {{$event.Name}}
+Events{{add $index 1}}.class = {{$event.Name}}
 # (following settings are specific for the MessageEventGenerator class)
 # Creation interval in seconds (one new message every 25 to 35 seconds)
-Events{{$event.Index}}.interval = {{$event.IntervalX}},{{$event.IntervalY}}
+Events{{add $index 1}}.interval = {{$event.IntervalX}},{{$event.IntervalY}}
 # Message sizes (50kB - 150kB)
-Events{{$event.Index}}.size = {{$event.SizeX}}k,{{$event.SizeY}}k
+Events{{add $index 1}}.size = {{$event.SizeX}}k,{{$event.SizeY}}k
 # range of message source/destination addresses
-Events{{$event.Index}}.hosts = {{$event.HostsX}},{{$event.HostsY}}
+Events{{add $index 1}}.hosts = {{$event.HostsX}},{{$event.HostsY}}
 # Message ID prefix
-Events{{$event.Index}}.prefix = {{$event.Prefix}}
+Events{{add $index 1}}.prefix = {{$event.Prefix}}
 {{end}}
 
 ## Movement model settings

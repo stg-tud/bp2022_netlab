@@ -1,7 +1,6 @@
 package outputgenerators
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -13,19 +12,18 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 )
 
-type Theone struct{}
+type TheOne struct{}
 
-type groups struct {
+type group struct {
 	Index          uint
 	Id             string
 	NrofHosts      uint
 	NrofInterfaces int
-
-	Interface     []*experiment.Network
-	MovementModel string
+	Interfaces     []*experiment.Network
+	MovementModel  string
 }
 
-type theonedata struct {
+type theOneData struct {
 	ScenarioName                string
 	ScenarioSimulateConnections bool
 	ScenarioUpdateInterval      float64
@@ -33,15 +31,15 @@ type theonedata struct {
 	WorldSizeHeight             uint
 	WorldSizeWidth              uint
 	NrofHostGroups              int
-	Groups                      []groups
-	Interfaces                  []networkInterFace
-	EventGenerator              []eventGeneraTor
+	Groups                      []group
+	Interfaces                  []networkInterfaceTheOne
+	EventGenerators             []eventGenerator
 	RandomSeed                  int64
 	Warmup                      uint
 	Runtime                     uint
 	NoEventGenerator            int
 }
-type eventGeneraTor struct {
+type eventGenerator struct {
 	Index     uint
 	Name      string
 	IntervalX int
@@ -52,28 +50,23 @@ type eventGeneraTor struct {
 	HostsY    int
 	Prefix    string
 }
-type networkInterFace struct {
-	ID        int
+type networkInterfaceTheOne struct {
 	Name      string
 	Bandwidth int
 	Range     int
 }
 
 // The name of the file that should be written to
-const TheoneOutput = "cluster_settings.txt"
+const TheOneOutput = "cluster_settings.txt"
 
-// The default values for sluster_settings.txt
-var defaultValuesTheone = theonedata{
-
-	ScenarioSimulateConnections: true,
-	ScenarioUpdateInterval:      0.1,
-}
-
+// add function for template
 func add(x, y int) int {
 	return x + y
 }
-func (t Theone) movementpattern(movementpatterntype movementpatterns.MovementPattern) string {
-	switch movementpatterntype.(type) {
+
+// returns the names of the movement pattern types in the way needed
+func (t TheOne) movementPattern(movementPatternType movementpatterns.MovementPattern) string {
+	switch movementPatternType.(type) {
 	case movementpatterns.RandomWaypoint:
 		return "RandomWaypoint"
 	case movementpatterns.Static:
@@ -83,20 +76,22 @@ func (t Theone) movementpattern(movementpatterntype movementpatterns.MovementPat
 	}
 }
 
-func (t Theone) BuildGroups(exp experiment.Experiment) []groups {
+// generates the group for cluster_settings.txt
+func (t TheOne) buildGroups(exp experiment.Experiment) []group {
 	logger.Trace("Building Groups")
-	groupInterface := []groups{}
+	groupInterface := []group{}
 
-	for i := 0; i < len(exp.NodeGroups); i++ {
+	for i := range exp.NodeGroups {
 
-		expNodeGroups := &exp.NodeGroups[i]
+		expNodeGroups := exp.NodeGroups[i]
 
-		group := groups{
-			Index:         uint(i + 1),
-			Id:            expNodeGroups.Prefix,
-			NrofHosts:     expNodeGroups.NoNodes,
-			Interface:     expNodeGroups.Networks,
-			MovementModel: t.movementpattern(expNodeGroups.MovementModel),
+		group := group{
+			Index:          uint(i + 1),
+			Id:             expNodeGroups.Prefix,
+			NrofHosts:      expNodeGroups.NoNodes,
+			Interfaces:     expNodeGroups.Networks,
+			MovementModel:  t.movementPattern(expNodeGroups.MovementModel),
+			NrofInterfaces: len(expNodeGroups.Networks),
 		}
 		groupInterface = append(groupInterface, group)
 
@@ -104,19 +99,20 @@ func (t Theone) BuildGroups(exp experiment.Experiment) []groups {
 	return groupInterface
 }
 
-// generates the networks for theone.txt
-func (t Theone) BuildNetworks(exp experiment.Experiment) (networks []networkInterFace) {
+// generates the interfaces for cluster_settings.txt
+// bandwidth and range are both divided by a certain factor, because the ratio of the one is different
+func (t TheOne) buildInterfaces(exp experiment.Experiment) (networks []networkInterfaceTheOne) {
 
 	logger.Trace("Building Interfaces")
-	for i := 0; i < len(exp.Networks); i++ {
-		bandwidth := 250
-		rangeOfNetwork := 10
+	for i := range exp.Networks {
+		bandwidth := 6570
+		rangeOfNetwork := 100
 		if reflect.TypeOf(exp.Networks[i].Type).String() == "networktypes.WirelessLAN" || reflect.TypeOf(exp.Networks[i].Type).String() == "networktypes.Wireless" {
 			bandwidth = int(reflect.ValueOf(exp.Networks[i].Type).FieldByName("Bandwidth").Int()) / 100000
 			rangeOfNetwork = int(reflect.ValueOf(exp.Networks[i].Type).FieldByName("Range").Int()) / 20
 		}
 
-		nt := networkInterFace{
+		nt := networkInterfaceTheOne{
 			Name:      exp.Networks[i].Name,
 			Bandwidth: bandwidth,
 			Range:     rangeOfNetwork,
@@ -127,40 +123,40 @@ func (t Theone) BuildNetworks(exp experiment.Experiment) (networks []networkInte
 	return networks
 }
 
-func (t Theone) BuildEventGenerator(exp experiment.Experiment) (eventGenerator []eventGeneraTor) {
+// generates the eventgenerators for cluster_settings.txt
+func (t TheOne) buildEventGenerator(exp experiment.Experiment) (eventGenerators []eventGenerator) {
 	logger.Trace("Building Event Generators")
-	for i := 0; i < len(exp.EventGenerators); i++ {
-		fmt.Println()
-		evg := eventGeneraTor{
+	for i := range exp.EventGenerators {
+		evg := eventGenerator{
 			Index: uint(i + 1),
 			Name:  exp.EventGenerators[i].Name,
 
 			Prefix: reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Prefix").String(),
 
-			SizeX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Size").FieldByName("X").Int()),
-			SizeY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Size").FieldByName("Y").Int()),
+			SizeX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Size").FieldByName("XSeconds").Int()),
+			SizeY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Size").FieldByName("YSeconds").Int()),
 
-			HostsX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Hosts").FieldByName("X").Int()),
-			HostsY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Hosts").FieldByName("Y").Int()),
+			HostsX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Hosts").FieldByName("XSeconds").Int()),
+			HostsY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Hosts").FieldByName("YSeconds").Int()),
 
-			IntervalX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Interval").FieldByName("X").Int()),
-			IntervalY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Interval").FieldByName("Y").Int()),
+			IntervalX: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Interval").FieldByName("XSeconds").Int()),
+			IntervalY: int(reflect.ValueOf(exp.EventGenerators[i].Type).FieldByName("Interval").FieldByName("YSeconds").Int()),
 		}
 
-		eventGenerator = append(eventGenerator, evg)
+		eventGenerators = append(eventGenerators, evg)
 	}
-	return eventGenerator
+	return eventGenerators
 }
 
 // generates a txt for Theone with a given experiment
-func (t Theone) Generate(exp experiment.Experiment) {
-	logger.Info("Generating Theone output")
+func (t TheOne) Generate(exp experiment.Experiment) {
+	logger.Info("Generating TheOne output")
 	outputFolder, err := folderstructure.GetAndCreateOutputFolder(exp)
 	if err != nil {
 		logger.Error("Could not create output folder!", err)
 		return
 	}
-	outputFilePath := filepath.Join(outputFolder, TheoneOutput)
+	outputFilePath := filepath.Join(outputFolder, TheOneOutput)
 	if !folderstructure.MayCreatePath(outputFilePath) {
 		logger.Error("Not allowed to write output file!")
 		return
@@ -169,40 +165,30 @@ func (t Theone) Generate(exp experiment.Experiment) {
 	fbuffer, err := os.Create(outputFilePath)
 	if err != nil {
 		logger.Error("Error creating output file:", err)
+		return
 	}
-	defer func() {
-		if cerr := fbuffer.Close(); cerr != nil {
-			logger.Error("Error closing output file:", cerr)
-			err = cerr
-		}
-	}()
 
-	if err != nil {
-		panic(err)
+	// WorldSizes are multiplied by twenty because the Size of The One is about 20 times bigger
+	//WarmUp is multiplied by 200, because the warm up period for the one is about 200 times longer
+	replace := theOneData{
+		ScenarioName:     folderstructure.FileSystemEscape(exp.Name),
+		RandomSeed:       exp.RandomSeed,
+		Warmup:           exp.Warmup * 200,
+		Runtime:          exp.Duration,
+		NrofHostGroups:   len(exp.NodeGroups),
+		WorldSizeHeight:  exp.WorldSize.Height * 20,
+		WorldSizeWidth:   exp.WorldSize.Width * 20,
+		Interfaces:       t.buildInterfaces(exp),
+		Groups:           t.buildGroups(exp),
+		NoEventGenerator: len(exp.EventGenerators),
+		EventGenerators:  t.buildEventGenerator(exp),
 	}
-	replace := defaultValuesTheone
-	replace.ScenarioName = folderstructure.FileSystemEscape(exp.Name)
-	replace.RandomSeed = exp.RandomSeed
-	replace.Warmup = exp.Warmup * 200
-	replace.Runtime = exp.Duration
-	replace.NrofHostGroups = len(exp.NodeGroups)
 
-	replace.WorldSizeHeight = uint(exp.WorldSize.Height * 20)
-	replace.WorldSizeWidth = uint(exp.WorldSize.Width * 20)
-	replace.Interfaces = t.BuildNetworks(exp)
-
-	replace.Groups = t.BuildGroups(exp)
-
-	replace.EventGenerator = t.BuildEventGenerator(exp)
-	for i, node := range exp.NodeGroups {
-
-		replace.Groups[i].NrofInterfaces = len(node.Networks)
-	}
-	replace.NoEventGenerator = len(exp.EventGenerators)
 	funcs := template.FuncMap{"add": add}
-	txtTemplate := template.Must(template.New("cluster_settings.txt").Funcs(funcs).ParseFiles(filepath.Join(GetTemplatesFolder(), "cluster_settings.txt")))
+	txtTemplate := template.Must(template.New(TheOneOutput).Funcs(funcs).ParseFiles(filepath.Join(GetTemplatesFolder(), TheOneOutput)))
 	if err != nil {
 		logger.Error("Error opening template file:", err)
+		return
 	}
 	err = txtTemplate.Execute(fbuffer, replace)
 	if err != nil {

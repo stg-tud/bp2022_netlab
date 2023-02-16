@@ -3,14 +3,14 @@ package eventgenerators
 import "github.com/stg-tud/bp2022_netlab/internal/customtypes"
 
 type MessageBurstGenerator struct {
-	// Class of the first event generator
-	Class string
 	// Creation interval in seconds (one new message every X to Y seconds)
-	Interval customtypes.Position
+	Interval customtypes.XToYSeconds
 	// Size of the message
-	Size customtypes.Position
+	Size customtypes.XToYSeconds
 	// range of message source/destination addresses
-	Hosts customtypes.Position
+	Hosts customtypes.XToYSeconds
+	// distance to the host
+	ToHosts customtypes.XToYSeconds
 	// Message ID prefix
 	Prefix string
 }
@@ -22,18 +22,21 @@ func (MessageBurstGenerator) String() string {
 // Returns a new configuration of MessageBurstGenerator with default values applied.
 func (MessageBurstGenerator) Default() MessageBurstGenerator {
 	return MessageBurstGenerator{
-		Class: "MessageBurstGenerator",
-		Interval: customtypes.Position{
-			X: 25,
-			Y: 35,
+		Interval: customtypes.XToYSeconds{
+			XSeconds: 25,
+			YSeconds: 35,
 		},
-		Size: customtypes.Position{
-			X: 80,
-			Y: 120,
+		Size: customtypes.XToYSeconds{
+			XSeconds: 80,
+			YSeconds: 120,
 		},
-		Hosts: customtypes.Position{
-			X: 5,
-			Y: 15,
+		Hosts: customtypes.XToYSeconds{
+			XSeconds: 5,
+			YSeconds: 15,
+		},
+		ToHosts: customtypes.XToYSeconds{
+			XSeconds: 16,
+			YSeconds: 17,
 		},
 		Prefix: "M",
 	}

@@ -18,21 +18,21 @@ func TestEventGeneratorWithoutName(t *testing.T) {
 }
 
 func TestNewEventGenerator(t *testing.T) {
-	eventGenerator := []eventgenerators.EventGenerator{
+	eventGenerator := []eventgenerators.EventGeneratorType{
 		eventgenerators.MessageBurstGenerator{}.Default(),
 		eventgenerators.MessageEventGenerator{}.Default(),
 	}
 	for _, eventGenerator := range eventGenerator {
 		eventGeneratorName := fmt.Sprintf("eventGenerator_under_test_%s", strings.ToLower(eventGenerator.String()))
-		eventGenerator_under_test, err := experiment.NewNetwork(eventGeneratorName, eventGenerator)
+		eventGeneratorUnderTest, err := experiment.NewEventGenerator(eventGeneratorName, eventGenerator, 1)
 		if err != nil {
 			t.Fatalf("Error creating new '%s' EventGenerator: %s", eventGenerator.String(), err)
 		}
-		if eventGenerator_under_test.Name != eventGeneratorName {
-			t.Fatalf("EventGenerator has wrong name '%s', expected '%s'!", eventGenerator_under_test.Name, eventGeneratorName)
+		if eventGeneratorUnderTest.Name != eventGeneratorName {
+			t.Fatalf("EventGenerator has wrong name '%s', expected '%s'!", eventGeneratorUnderTest.Name, eventGeneratorName)
 		}
-		if eventGenerator_under_test.Type != eventGenerator {
-			t.Fatalf("EventGenerator has wrong type '%s', expected '%s'!", eventGenerator_under_test.Type, eventGenerator)
+		if eventGeneratorUnderTest.Type != eventGenerator {
+			t.Fatalf("EventGenerator has wrong type '%s', expected '%s'!", eventGeneratorUnderTest.Type, eventGenerator)
 		}
 	}
 }
