@@ -20,6 +20,7 @@ further steps are taken, e.g. no output files will be generated.`,
 	Run:          test,
 }
 
+// test user's input file for errors
 func test(cmd *cobra.Command, args []string) {
 	logging.Init(debug)
 	_, err := experiment.LoadFromFile(args[0])

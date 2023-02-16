@@ -34,6 +34,7 @@ func init() {
 	generateCmd.PersistentFlags().StringVarP(&outputFolder, "folder", "f", "output", "name of the folder the output should be written to (default: output)")
 }
 
+// returns an experiment.Target for a clear text user input string
 func stringTargetMapping(input string) (experiment.Target, error) {
 	cleanedInput := strings.ToLower(input)
 	cleanedInput = strings.TrimSpace(cleanedInput)
@@ -52,6 +53,7 @@ func stringTargetMapping(input string) (experiment.Target, error) {
 	}
 }
 
+// builds a list of all experiments.Targets relevant for output generation
 func buildTargets(exp experiment.Experiment) []experiment.Target {
 	targets := exp.Targets
 	if len(targetsOverwrite) > 0 {
@@ -69,6 +71,7 @@ func buildTargets(exp experiment.Experiment) []experiment.Target {
 	return targets
 }
 
+// returns an outputgenerators.OutputGenerator for a clear text user input string
 func targetOutputGeneratorMapping(input experiment.Target) (outputgenerators.OutputGenerator, error) {
 	switch input {
 	case experiment.TargetCore:
@@ -82,6 +85,7 @@ func targetOutputGeneratorMapping(input experiment.Target) (outputgenerators.Out
 	}
 }
 
+// builds a distinct list of all outputgenerators.OutputGenerators relevant for output generation
 func buildOutputGenerators(exp experiment.Experiment) []outputgenerators.OutputGenerator {
 	outputGenerators := []outputgenerators.OutputGenerator{}
 	for _, target := range exp.Targets {
@@ -122,6 +126,7 @@ func buildOutputGenerators(exp experiment.Experiment) []outputgenerators.OutputG
 	return cleanedOutputGenerators
 }
 
+// Manage generation of outputs with user's inputs
 func generate(cmd *cobra.Command, args []string) {
 	folderstructure.OutputFolderName = outputFolder
 	folderstructure.OverwriteExisting = overwriteExisting
