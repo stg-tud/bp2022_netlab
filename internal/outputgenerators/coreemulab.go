@@ -94,7 +94,7 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 	replace.Warmup = exp.Warmup
 	replace.Runtime = exp.Duration
 
-	confTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "experiment.conf"))
+	confTemplate, err := template.ParseFS(TemplatesFS, filepath.Join(TemplatesFolder, "experiment.conf"))
 	if err != nil {
 		logger.Error("Error opening template file:", err)
 	}

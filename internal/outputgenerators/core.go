@@ -21,6 +21,9 @@ func (Core) String() string {
 	return "CORE"
 }
 
+// The name of the file where the XML config should be written to
+const CoreOutputFile string = "core.xml"
+
 type coreData struct {
 	ScenarioName string
 	Devices      []device
@@ -272,7 +275,7 @@ func (c Core) Generate(exp experiment.Experiment) {
 		Devices:      devices,
 		WorldSize:    exp.WorldSize,
 	}
-	xmlTemplate, err := template.ParseFiles(filepath.Join(GetTemplatesFolder(), "core.xml"))
+	xmlTemplate, err := template.ParseFS(TemplatesFS, filepath.Join(TemplatesFolder, CoreOutputFile))
 	if err != nil {
 		logger.Error("Error opening template file:", err)
 	}
