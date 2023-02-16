@@ -1,6 +1,6 @@
 package customtypes
 
-// X to Y seconds specifies that every x to y seconds something should happen
+// Interval specifies an interval from some value to some value
 type Interval struct {
 	From int
 	To   int
