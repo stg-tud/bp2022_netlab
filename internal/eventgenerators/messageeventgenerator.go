@@ -24,19 +24,19 @@ func (MessageEventGenerator) Default() MessageEventGenerator {
 	return MessageEventGenerator{
 		Interval: customtypes.Interval{
 			From: 25,
-			To: 35,
+			To:   35,
 		},
 		Size: customtypes.Interval{
 			From: 80,
-			To: 120,
+			To:   120,
 		},
 		Hosts: customtypes.Interval{
 			From: 5,
-			To: 15,
+			To:   15,
 		},
 		ToHosts: customtypes.Interval{
 			From: 16,
-			To: 17,
+			To:   17,
 		},
 		Prefix: "M",
 	}
