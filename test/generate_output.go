@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	logging.Init()
+	logging.Init(true)
 	logger.Info("Starting")
 
 	exampleExperiment := experiment.GetExampleExperiment()
