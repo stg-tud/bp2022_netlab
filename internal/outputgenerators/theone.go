@@ -66,6 +66,7 @@ const TheOneOutput = "cluster_settings.txt"
 func (TheOne) String() string {
 	return "the-one"
 }
+
 // add function for template
 func add(x, y int) int {
 	return x + y
