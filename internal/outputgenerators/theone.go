@@ -1,12 +1,13 @@
 package outputgenerators
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"text/template"
 
 	logger "github.com/gookit/slog"
-	"github.com/stg-tud/bp2022_netlab/internal/eventgenerators"
+	"github.com/stg-tud/bp2022_netlab/internal/eventgeneratortypes"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
@@ -16,7 +17,6 @@ import (
 type TheOne struct{}
 
 type group struct {
-	Index          uint
 	Id             string
 	NrofHosts      uint
 	NrofInterfaces int
@@ -41,18 +41,8 @@ type theOneData struct {
 	NoEventGenerator            int
 }
 type eventGenerator struct {
-	Index     uint
-	Name      string
-	Type      eventgenerators.EventGeneratorType
-	IntervalX int
-	IntervalY int
-	SizeX     int
-	SizeY     int
-	HostsX    int
-	HostsY    int
-	ToHostsX  int
-	ToHostsY  int
-	Prefix    string
+	Name string
+	Type eventgeneratortypes.EventGeneratorType
 }
 type networkInterfaceTheOne struct {
 	Name      string
@@ -64,7 +54,7 @@ type networkInterfaceTheOne struct {
 const TheOneOutput = "cluster_settings.txt"
 
 func (TheOne) String() string {
-	return "the-one"
+	return "The ONE"
 }
 
 // add function for template
@@ -87,29 +77,27 @@ func (t TheOne) movementPattern(movementPatternType movementpatterns.MovementPat
 // generates the group for cluster_settings.txt
 func (t TheOne) buildGroups(exp experiment.Experiment) []group {
 	logger.Trace("Building Groups")
-	groupInterface := []group{}
+	groups := []group{}
 
-	for i, expNodeGroups := range exp.NodeGroups {
+	for _, expNodeGroups := range exp.NodeGroups {
 		group := group{
-			Index:          uint(i + 1),
 			Id:             expNodeGroups.Prefix,
 			NrofHosts:      expNodeGroups.NoNodes,
 			Interfaces:     expNodeGroups.Networks,
 			MovementModel:  t.movementPattern(expNodeGroups.MovementModel),
 			NrofInterfaces: len(expNodeGroups.Networks),
 		}
-		groupInterface = append(groupInterface, group)
+		groups = append(groups, group)
 
 	}
-	return groupInterface
+	return groups
 }
 
 // generates the interfaces for cluster_settings.txt
-// bandwidth and range are both divided by a certain factor, because the ratio of the one is different
+// 6750 bandwidth and 100 range are default values for wireless_lan, the prefered type if nothing else is set
 func (t TheOne) buildInterfaces(exp experiment.Experiment) (networks []networkInterfaceTheOne) {
-
 	logger.Trace("Building Interfaces")
-	for i := range exp.Networks {
+	for i, expNetworks := range exp.Networks {
 		bandwidth := 6570
 		rangeOfNetwork := 100
 		switch networkType := exp.Networks[i].Type.(type) {
@@ -123,7 +111,7 @@ func (t TheOne) buildInterfaces(exp experiment.Experiment) (networks []networkIn
 		}
 
 		nt := networkInterfaceTheOne{
-			Name:      exp.Networks[i].Name,
+			Name:      expNetworks.Name,
 			Bandwidth: bandwidth,
 			Range:     rangeOfNetwork,
 		}
@@ -133,14 +121,13 @@ func (t TheOne) buildInterfaces(exp experiment.Experiment) (networks []networkIn
 	return networks
 }
 
-// generates the eventgenerators for cluster_settings.txt
-func (t TheOne) buildEventGenerator(exp experiment.Experiment) (eventGenerators []eventGenerator) {
+// generates the eventgeneratortypes for cluster_settings.txt
+func (t TheOne) buildEventGenerators(exp experiment.Experiment) (eventGenerators []eventGenerator) {
 	logger.Trace("Building Event Generators")
-	for i, expEventGenerator := range exp.EventGenerators {
+	for _, expEventGenerator := range exp.EventGenerators {
 		evg := eventGenerator{
-			Index: uint(i + 1),
-			Name:  expEventGenerator.Name,
-			Type:  expEventGenerator.Type,
+			Name: expEventGenerator.Name,
+			Type: expEventGenerator.Type,
 		}
 
 		eventGenerators = append(eventGenerators, evg)
@@ -167,9 +154,14 @@ func (t TheOne) Generate(exp experiment.Experiment) {
 		logger.Error("Error creating output file:", err)
 		return
 	}
+	defer func() {
+		if cerr := fbuffer.Close(); cerr != nil {
+			logger.Error("Error closing output file:", cerr)
+		}
+	}()
 
-	// WorldSizes are multiplied by twenty because the Size of The One is about 20 times bigger
-	//WarmUp is multiplied by 200, because the warm up period for the one is about 200 times longer
+	// WorldSizes are multiplied by 20, because the Size of The ONE is about 20 times bigger compared to the values of clab, Core, etc.
+	// WarmUp is multiplied by 200, because the warm up period for THE ONE is about 200 times longer compared to the values of clab, Core, etc.
 	replace := theOneData{
 		ScenarioName:     folderstructure.FileSystemEscape(exp.Name),
 		RandomSeed:       exp.RandomSeed,
@@ -181,11 +173,11 @@ func (t TheOne) Generate(exp experiment.Experiment) {
 		Interfaces:       t.buildInterfaces(exp),
 		Groups:           t.buildGroups(exp),
 		NoEventGenerator: len(exp.EventGenerators),
-		EventGenerators:  t.buildEventGenerator(exp),
+		EventGenerators:  t.buildEventGenerators(exp),
 	}
 
 	funcs := template.FuncMap{"add": add}
-	txtTemplate := template.Must(template.New(TheOneOutput).Funcs(funcs).ParseFiles(filepath.Join(TemplatesFolder, TheOneOutput)))
+	txtTemplate := template.Must(template.New(TheOneOutput).Funcs(funcs).ParseFS(TemplatesFS, fmt.Sprintf("%s/%s", TemplatesFolder, TheOneOutput)))
 	if err != nil {
 		logger.Error("Error opening template file:", err)
 		return

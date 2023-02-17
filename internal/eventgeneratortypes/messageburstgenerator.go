@@ -1,8 +1,8 @@
-package eventgenerators
+package eventgeneratortypes
 
 import "github.com/stg-tud/bp2022_netlab/internal/customtypes"
 
-type MessageEventGenerator struct {
+type MessageBurstGenerator struct {
 	// Creation interval in seconds (one new message every X to Y seconds)
 	Interval customtypes.Interval
 	// Size of the message
@@ -15,13 +15,13 @@ type MessageEventGenerator struct {
 	Prefix string
 }
 
-func (MessageEventGenerator) String() string {
-	return "MessageEventGenerator"
+func (MessageBurstGenerator) String() string {
+	return "MessageBurstGenerator"
 }
 
-// Returns a new configuration of Messageeventgenerator with default values applied.
-func (MessageEventGenerator) Default() MessageEventGenerator {
-	return MessageEventGenerator{
+// Returns a new configuration of MessageBurstGenerator with default values applied.
+func (MessageBurstGenerator) Default() MessageBurstGenerator {
+	return MessageBurstGenerator{
 		Interval: customtypes.Interval{
 			From: 25,
 			To:   35,

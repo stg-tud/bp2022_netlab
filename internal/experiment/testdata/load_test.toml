@@ -116,8 +116,6 @@ MaxPause = 0
 
 [[EventGenerators]]
 Name = 'MessageEventGenerator'
-Class = 'MessageEventGenerator'
-NoEventGenerator = 1
 Prefix = 'M'
 
 [EventGenerators.Interval]
@@ -138,8 +136,6 @@ To = 17
 
 [[EventGenerators]]
 Name = 'MessageBurstGenerator'
-Class = 'MessageBurstGenerator'
-NoEventGenerator = 2
 Prefix = 'M'
 
 [EventGenerators.Interval]

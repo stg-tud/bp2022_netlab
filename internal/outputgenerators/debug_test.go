@@ -11,9 +11,9 @@ import (
 )
 
 func TestDebugGeneration(t *testing.T) {
-	t.Cleanup(func() {
+	/*t.Cleanup(func() {
 		os.RemoveAll(folderstructure.OutputFolderName)
-	})
+	})*/
 
 	og := outputgenerators.Debug{}
 	testingExperiment := GetTestingExperiment()

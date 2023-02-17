@@ -2,7 +2,7 @@ package outputgenerators_test
 
 import (
 	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
-	"github.com/stg-tud/bp2022_netlab/internal/eventgenerators"
+	"github.com/stg-tud/bp2022_netlab/internal/eventgeneratortypes"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
@@ -32,13 +32,13 @@ func GetTestingExperiment() experiment.Experiment {
 	net, _ = experiment.NewNetwork("wireless", networktypes.Wireless{}.Default())
 	networks = append(networks, net)
 
-	var eventgenerator []experiment.EventGenerator
-	evg, _ := experiment.NewEventGenerator("MessageEventGenerator", eventgenerators.MessageEventGenerator{}.Default(), 1)
-	eventgenerator = append(eventgenerator, evg)
-	changedBurst := eventgenerators.MessageBurstGenerator{}.Default()
+	var eventgenerators []experiment.EventGenerator
+	evg, _ := experiment.NewEventGenerator("MessageEventGenerator", eventgeneratortypes.MessageEventGenerator{}.Default())
+	eventgenerators = append(eventgenerators, evg)
+	changedBurst := eventgeneratortypes.MessageBurstGenerator{}.Default()
 	changedBurst.Interval = customtypes.Interval{From: 25, To: 35}
-	evg, _ = experiment.NewEventGenerator("MessageBurstGenerator", changedBurst, 2)
-	eventgenerator = append(eventgenerator, evg)
+	evg, _ = experiment.NewEventGenerator("MessageBurstGenerator", changedBurst)
+	eventgenerators = append(eventgenerators, evg)
 
 	var nodegroups []experiment.NodeGroup
 	ng, _ := experiment.NewNodeGroup("a", 1)
@@ -92,7 +92,7 @@ func GetTestingExperiment() experiment.Experiment {
 
 		Networks:        networks,
 		NodeGroups:      nodegroups,
-		EventGenerators: eventgenerator,
+		EventGenerators: eventgenerators,
 	}
 
 	return exp

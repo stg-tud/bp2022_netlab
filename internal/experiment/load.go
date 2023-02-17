@@ -7,7 +7,7 @@ import (
 	logger "github.com/gookit/slog"
 	"github.com/pelletier/go-toml/v2"
 	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
-	"github.com/stg-tud/bp2022_netlab/internal/eventgenerators"
+	"github.com/stg-tud/bp2022_netlab/internal/eventgeneratortypes"
 
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
@@ -26,14 +26,12 @@ type expConf struct {
 	EventGenerators []eventgenerator
 }
 type eventgenerator struct {
-	Name             string
-	Class            string
-	NoEventGenerator int
-	Prefix           string
-	Intervall        customtypes.Interval
-	Size             customtypes.Interval
-	Hosts            customtypes.Interval
-	ToHosts          customtypes.Interval
+	Name      string
+	Prefix    string
+	Intervall customtypes.Interval
+	Size      customtypes.Interval
+	Hosts     customtypes.Interval
+	ToHosts   customtypes.Interval
 }
 type network struct {
 	Name        string
@@ -164,14 +162,14 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 
 	}
 
-	//eventgenerators
+	//eventgeneratortypes
 	events := []EventGenerator{}
 	for _, eve := range conf.EventGenerators {
-		buffer, e := setDefaultEventGenerator(eve.Class, eve)
+		buffer, e := setDefaultEventGenerator(eve.Name, eve)
 		if e != nil {
-			logger.Error("Erorr setting up event generators")
+			logger.Error("Error setting up event generators")
 		}
-		newEvent, err := NewEventGenerator(eve.Name, buffer, uint(eve.NoEventGenerator))
+		newEvent, err := NewEventGenerator(eve.Name, buffer)
 		if err != nil {
 			logger.Error("Error setting up new event generators")
 		}
@@ -182,11 +180,11 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 	logger.Trace("Finished generation")
 	return exp, nil
 }
-func setDefaultEventGenerator(className string, eve eventgenerator) (eventgenerators.EventGeneratorType, error) {
-	switch className {
+func setDefaultEventGenerator(Name string, eve eventgenerator) (eventgeneratortypes.EventGeneratorType, error) {
+	switch Name {
 
 	case "MessageEventGenerator":
-		msg := eventgenerators.MessageEventGenerator{}.Default()
+		msg := eventgeneratortypes.MessageEventGenerator{}.Default()
 		if eve.Intervall.From != 25 && eve.Intervall.From != 0 {
 			msg.Interval.From = eve.Intervall.From
 		}
@@ -217,7 +215,7 @@ func setDefaultEventGenerator(className string, eve eventgenerator) (eventgenera
 		return msg, nil
 
 	case "MessageBurstGenerator":
-		burst := eventgenerators.MessageBurstGenerator{}.Default()
+		burst := eventgeneratortypes.MessageBurstGenerator{}.Default()
 		if eve.Intervall.From != 25 && eve.Intervall.From != 0 {
 			burst.Interval.From = eve.Intervall.From
 		}
@@ -247,8 +245,8 @@ func setDefaultEventGenerator(className string, eve eventgenerator) (eventgenera
 		}
 		return burst, nil
 	default:
-		logger.Error("Error while generating eventgenerator, class name not found")
-		return eventgenerators.MessageEventGenerator{}.Default(), errors.New("error while generating eventgenerator, class name not found")
+		logger.Error("Error while generating eventgenerator, name not found")
+		return eventgeneratortypes.MessageEventGenerator{}.Default(), errors.New("error while generating eventgenerator, name not found")
 	}
 }
 
