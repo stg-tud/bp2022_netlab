@@ -51,22 +51,24 @@ func GetTestingExperiment() experiment.Experiment {
 	nodegroups[1].Networks = []*experiment.Network{&networks[0], &networks[1]}
 
 	nodegroups[2].Networks = []*experiment.Network{&networks[1]}
-	nodegroups[2].MovementModel = movementpatterns.Static{}
+	nodegroups[2].MovementModel = movementpatterns.RandomWaypoint{}.Default()
 
 	nodegroups[3].Networks = []*experiment.Network{&networks[2]}
+	nodegroups[3].MovementModel = movementpatterns.Swim{}.Default()
 
 	nodegroups[4].NodesType = experiment.NodeTypePC
-	nodegroups[4].MovementModel = movementpatterns.Static{}
+	nodegroups[4].MovementModel = movementpatterns.Smooth{}.Default()
 	nodegroups[4].Networks = []*experiment.Network{&networks[3]}
 
 	nodegroups[5].Networks = []*experiment.Network{&networks[4]}
 	nodegroups[5].MovementModel = movementpatterns.RandomWaypoint{
-		MinSpeed: 1,
-		MaxSpeed: 2,
-		MaxPause: 17,
+		MinSpeed: 123,
+		MaxSpeed: 456,
+		MaxPause: 789,
 	}
 
 	nodegroups[6].Networks = []*experiment.Network{&networks[5]}
+	nodegroups[6].MovementModel = movementpatterns.Slaw{}.Default()
 
 	exp := experiment.Experiment{
 		Name:    "Testing Experiment",

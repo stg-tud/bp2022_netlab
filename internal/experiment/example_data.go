@@ -24,12 +24,14 @@ func GetExampleExperiment() Experiment {
 	ng, _ = NewNodeGroup("p", 29)
 	ng.Networks = append(ng.Networks, &networks[1])
 	ng.Networks = append(ng.Networks, &networks[2])
+	ng.MovementModel = movementpatterns.RandomWaypoint{}.Default()
 	nodegroups = append(nodegroups, ng)
 
 	ng, _ = NewNodeGroup("x", 17)
 	ng.MovementModel = movementpatterns.Static{}
 	ng.Networks = append(ng.Networks, &networks[2])
 	ng.NodesType = NodeTypePC
+	ng.MovementModel = movementpatterns.Smooth{}.Default()
 	nodegroups = append(nodegroups, ng)
 
 	var ExampleExperiment = Experiment{

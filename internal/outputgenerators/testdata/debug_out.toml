@@ -65,9 +65,6 @@ NoNodes = 1
 NodesType = 0
 
 [NodeGroups.MovementModel]
-MinSpeed = 123
-MaxSpeed = 456
-MaxPause = 0
 
 [[NodeGroups.Networks]]
 Name = 'wireless_lan'
@@ -86,9 +83,6 @@ NoNodes = 2
 NodesType = 0
 
 [NodeGroups.MovementModel]
-MinSpeed = 123
-MaxSpeed = 456
-MaxPause = 0
 
 [[NodeGroups.Networks]]
 Name = 'wireless_lan'
@@ -112,6 +106,9 @@ NoNodes = 3
 NodesType = 0
 
 [NodeGroups.MovementModel]
+MinSpeed = 1
+MaxSpeed = 5
+MaxPause = 3600
 
 [[NodeGroups.Networks]]
 Name = 'switch'
@@ -124,9 +121,11 @@ NoNodes = 4
 NodesType = 0
 
 [NodeGroups.MovementModel]
-MinSpeed = 123
-MaxSpeed = 456
-MaxPause = 0
+Radius = 0.2
+CellDistanceWeight = 0.5
+NodeSpeedMultiplier = 1.5
+WaitingTimeExponent = 1.55
+WaitingTimeUpperBound = 100.0
 
 [[NodeGroups.Networks]]
 Name = 'changed_wifi'
@@ -145,6 +144,14 @@ NoNodes = 5
 NodesType = 1
 
 [NodeGroups.MovementModel]
+Range = 100
+Clusters = 40
+Alpha = 1.45
+MinFlight = 1
+MaxFlight = 14000
+Beta = 1.5
+MinPause = 10
+MaxPause = 3600
 
 [[NodeGroups.Networks]]
 Name = 'hub'
@@ -157,9 +164,9 @@ NoNodes = 6
 NodesType = 0
 
 [NodeGroups.MovementModel]
-MinSpeed = 1
-MaxSpeed = 2
-MaxPause = 17
+MinSpeed = 123
+MaxSpeed = 456
+MaxPause = 789
 
 [[NodeGroups.Networks]]
 Name = 'emane'
@@ -172,9 +179,15 @@ NoNodes = 7
 NodesType = 0
 
 [NodeGroups.MovementModel]
-MinSpeed = 123
-MaxSpeed = 456
-MaxPause = 0
+NumberOfWaypoints = 500
+MinPause = 10
+MaxPause = 50
+LevyExponentPause = 1.0
+HurstParameter = 0.75
+DistanceWeight = 3.0
+ClusteringRange = 50
+ClusterRatio = 3.0
+WaypointRatio = 5.0
 
 [[NodeGroups.Networks]]
 Name = 'wireless'
