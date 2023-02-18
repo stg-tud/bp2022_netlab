@@ -80,6 +80,9 @@ func targetOutputGeneratorMapping(input experiment.Target) (outputgenerators.Out
 	case experiment.TargetCoreEmulab:
 		return outputgenerators.CoreEmulab{}, nil
 
+	case experiment.TargetTheOne:
+		return outputgenerators.TheOne{}, nil
+
 	default:
 		return outputgenerators.Debug{}, errors.New("no matching output generator found")
 	}

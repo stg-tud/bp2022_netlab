@@ -1,0 +1,149 @@
+#
+# Default settings for the simulation
+#
+
+## Scenario settings
+Scenario.name = "Testing_Experiment"
+RandomSeed = 1673916419715
+Scenario.simulateConnections = true
+Scenario.updateInterval = 0.1
+# 43k ~= 12h
+Scenario.endTime = 43
+wireless_lan.type = SimpleBroadcastInterface
+# transmit speed of 2 Mbps = 250kBps
+wireless_lan.transmitSpeed = 54000000
+wireless_lan.transmitRange = 275
+
+switch.type = SimpleBroadcastInterface
+# transmit speed of 2 Mbps = 250kBps
+switch.transmitSpeed = 6570
+switch.transmitRange = 100
+
+changed_wifi.type = SimpleBroadcastInterface
+# transmit speed of 2 Mbps = 250kBps
+changed_wifi.transmitSpeed = 17
+changed_wifi.transmitRange = 275
+
+hub.type = SimpleBroadcastInterface
+# transmit speed of 2 Mbps = 250kBps
+hub.transmitSpeed = 6570
+hub.transmitRange = 100
+
+emane.type = SimpleBroadcastInterface
+# transmit speed of 2 Mbps = 250kBps
+emane.transmitSpeed = 6570
+emane.transmitRange = 100
+
+wireless.type = SimpleBroadcastInterface
+# transmit speed of 2 Mbps = 250kBps
+wireless.transmitSpeed = 54000000
+wireless.transmitRange = 400
+
+
+Scenario.nrofHostGroups = 7
+
+# common settings for all groups
+Group.movementModel = ClusterMovement
+Group.router = EpidemicRouter
+Group.bufferSize = 5M
+Group.waitTime = 0, 120
+#All nodes have the firstinterface inteface
+Group.nrofInterfaces = 1
+Group.interface1 = 
+# walking speeds
+Group.speed = 0.5, 1.5
+#Group.msgTtl = 60
+
+Group.nrofHosts = 40
+Group.nrofApplications = 0
+Group1.groupID = a
+Group1.nrofHosts = 1
+Group1.nrofInterfaces = 1
+Group1.interface1= wireless_lan
+Group1.movementModel = RandomWaypoint
+
+Group2.groupID = b
+Group2.nrofHosts = 2
+Group2.nrofInterfaces = 2
+Group2.interface1= wireless_lan
+Group2.interface2= switch
+Group2.movementModel = RandomWaypoint
+
+Group3.groupID = c
+Group3.nrofHosts = 3
+Group3.nrofInterfaces = 1
+Group3.interface1= switch
+Group3.movementModel = Static
+
+Group4.groupID = d
+Group4.nrofHosts = 4
+Group4.nrofInterfaces = 1
+Group4.interface1= changed_wifi
+Group4.movementModel = RandomWaypoint
+
+Group5.groupID = e
+Group5.nrofHosts = 5
+Group5.nrofInterfaces = 1
+Group5.interface1= hub
+Group5.movementModel = Static
+
+Group6.groupID = f
+Group6.nrofHosts = 6
+Group6.nrofInterfaces = 1
+Group6.interface1= emane
+Group6.movementModel = RandomWaypoint
+
+Group7.groupID = g
+Group7.nrofHosts = 7
+Group7.nrofInterfaces = 1
+Group7.interface1= wireless
+Group7.movementModel = RandomWaypoint
+
+
+
+
+## Message creation parameters
+# How many event generators
+Events.nrof = 2
+# Class of the first event generator
+Events1.class = MessageEventGenerator
+# (following settings are specific for the MessageEventGenerator class)
+# Creation interval in seconds (one new message every 25 to 35 seconds)
+Events1.interval = 25,35
+# Message sizes (50kB - 150kB)
+Events1.size = 80,120
+# range of message source/destination addresses
+Events1.hosts = 5,15
+# distance to hosts
+Events1.tohosts = 16,17
+# Message ID prefix
+Events1.prefix = M
+
+# Class of the first event generator
+Events2.class = MessageBurstGenerator
+# (following settings are specific for the MessageEventGenerator class)
+# Creation interval in seconds (one new message every 25 to 35 seconds)
+Events2.interval = 25,35
+# Message sizes (50kB - 150kB)
+Events2.size = 80,120
+# range of message source/destination addresses
+Events2.hosts = 5,15
+# distance to hosts
+Events2.tohosts = 16,17
+# Message ID prefix
+Events2.prefix = M
+
+
+## Movement model settings
+# seed for movement models' pseudo random number generator (default = 0)
+MovementModel.rngSeed = 1673916419715
+# World's size for Movement Models without implicit size (width, height; meters)
+MovementModel.worldSize = 4800, 3400
+# How long time to move hosts in the world before real simulation
+MovementModel.warmup = 1000
+
+
+# how many events to show in the log panel (default = 30)
+GUI.EventLogPanel.nrofEvents = 30
+# Regular Expression log filter (see Pattern-class from the Java API for RE-matching details)
+#GUI.EventLogPanel.REfilter = .*p[1-9]<->p[1-9]$

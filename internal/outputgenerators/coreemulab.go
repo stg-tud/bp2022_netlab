@@ -17,7 +17,7 @@ func (CoreEmulab) String() string {
 	return "coreemu-lab"
 }
 
-type data struct {
+type coreEmuData struct {
 	Name      string
 	Scenario  string
 	Automator string
@@ -44,7 +44,7 @@ const CoreEmulabTemplate = "experiment.conf"
 const CoreEmulabOutput = "experiment.conf"
 
 // The default values for experiment.conf
-var defaultValuesCoreEmulab = data{
+var defaultValuesCoreEmulab = coreEmuData{
 
 	Scenario:  "core.xml",
 	Automator: "",
