@@ -80,6 +80,9 @@ func targetOutputGeneratorMapping(input experiment.Target) (outputgenerators.Out
 	case experiment.TargetCoreEmulab:
 		return outputgenerators.CoreEmulab{}, nil
 
+	case experiment.TargetTheOne:
+		return outputgenerators.TheOne{}, nil
+
 	default:
 		return outputgenerators.Debug{}, errors.New("no matching output generator found")
 	}
@@ -97,6 +100,10 @@ func buildOutputGenerators(exp experiment.Experiment) []outputgenerators.OutputG
 		if target == experiment.TargetCoreEmulab {
 			logger.Debug("Output generator \"coreemu-lab\" implies \"CORE\", therefore adding it")
 			outputGenerators = append(outputGenerators, outputgenerators.Core{})
+		}
+		if target == experiment.TargetTheOne {
+			logger.Debug("Output generator \"The ONE\"")
+			outputGenerators = append(outputGenerators, outputgenerators.TheOne{})
 		}
 	}
 	for _, nodeGroup := range exp.NodeGroups {
