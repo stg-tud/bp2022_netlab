@@ -97,10 +97,10 @@ func (t TheOne) buildGroups(exp experiment.Experiment) []group {
 // 6750 bandwidth and 100 range are default values for wireless_lan, the prefered type if nothing else is set
 func (t TheOne) buildInterfaces(exp experiment.Experiment) (networks []networkInterfaceTheOne) {
 	logger.Trace("Building Interfaces")
-	for i, expNetworks := range exp.Networks {
+	for _, expNetwork := range exp.Networks {
 		bandwidth := 6570
 		rangeOfNetwork := 100
-		switch networkType := exp.Networks[i].Type.(type) {
+		switch networkType := expNetwork.Type.(type) {
 		case networktypes.WirelessLAN:
 			bandwidth = networkType.Bandwidth
 			rangeOfNetwork = networkType.Range
@@ -111,7 +111,7 @@ func (t TheOne) buildInterfaces(exp experiment.Experiment) (networks []networkIn
 		}
 
 		nt := networkInterfaceTheOne{
-			Name:      expNetworks.Name,
+			Name:      expNetwork.Name,
 			Bandwidth: bandwidth,
 			Range:     rangeOfNetwork,
 		}
@@ -177,7 +177,13 @@ func (t TheOne) Generate(exp experiment.Experiment) {
 	}
 
 	funcs := template.FuncMap{"add": add}
-	txtTemplate := template.Must(template.New(TheOneOutput).Funcs(funcs).ParseFS(TemplatesFS, fmt.Sprintf("%s/%s", TemplatesFolder, TheOneOutput)))
+	txtTemplate := template.New(TheOneOutput).Funcs(funcs)
+	txtTemplate, err = txtTemplate.ParseFS(TemplatesFS, fmt.Sprintf("%s/%s", TemplatesFolder, TheOneOutput))
+	if err != nil {
+		logger.Error("Error opening template file:", err)
+		return
+	}
+	err = txtTemplate.Execute(fbuffer, replace)
 	if err != nil {
 		logger.Error("Error opening template file:", err)
 		return

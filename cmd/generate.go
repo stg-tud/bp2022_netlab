@@ -101,10 +101,6 @@ func buildOutputGenerators(exp experiment.Experiment) []outputgenerators.OutputG
 			logger.Debug("Output generator \"coreemu-lab\" implies \"CORE\", therefore adding it")
 			outputGenerators = append(outputGenerators, outputgenerators.Core{})
 		}
-		if target == experiment.TargetTheOne {
-			logger.Debug("Output generator \"The ONE\"")
-			outputGenerators = append(outputGenerators, outputgenerators.TheOne{})
-		}
 	}
 	for _, nodeGroup := range exp.NodeGroups {
 		supported := outputgenerators.Bonnmotion{}.MovementPatternIsSupported(nodeGroup.MovementModel)
