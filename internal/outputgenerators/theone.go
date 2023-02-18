@@ -185,11 +185,6 @@ func (t TheOne) Generate(exp experiment.Experiment) {
 	}
 	err = txtTemplate.Execute(fbuffer, replace)
 	if err != nil {
-		logger.Error("Error opening template file:", err)
-		return
-	}
-	err = txtTemplate.Execute(fbuffer, replace)
-	if err != nil {
 		logger.Error("Could not execute txt template:", err)
 		return
 	}
