@@ -87,7 +87,7 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 		switch strings.ToLower(targetString) {
 		case "core", "coreemu", "core-emu":
 			replaceTargets = append(replaceTargets, TargetCore)
-		case "coreemu-lab", "core-emulab", "core-emu-lab", "clab":
+		case "coreemulab", "coreemu-lab", "core-emulab", "core-emu-lab", "clab":
 			replaceTargets = append(replaceTargets, TargetCore)
 		case "the one", "theone", "one":
 			replaceTargets = append(replaceTargets, TargetTheOne)
