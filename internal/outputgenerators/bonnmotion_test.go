@@ -19,7 +19,7 @@ func TestBonnmotionGeneration(t *testing.T) {
 	outputFolder := folderstructure.GetOutputFolder(testingExperiment, "movements")
 	og.Generate(testingExperiment)
 
-	expected, err := os.ReadFile(filepath.Join(outputFolder, outputgenerators.BonnMotionStepFile))
+	expected, err := os.ReadFile(filepath.Join(TestDataFolder, outputgenerators.BonnMotionStepFile))
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}

@@ -1,6 +1,6 @@
 package movementpatterns
 
-type Smooth struct {
+type SMOOTH struct {
 	// Transmission range of mobile nodes
 	Range int
 	// Total number of clusters in the network
@@ -19,12 +19,12 @@ type Smooth struct {
 	MaxPause int
 }
 
-func (Smooth) String() string {
+func (SMOOTH) String() string {
 	return "SMOOTH"
 }
 
-func (Smooth) Default() MovementPattern {
-	return Smooth{
+func (SMOOTH) Default() MovementPattern {
+	return SMOOTH{
 		Range:     100,
 		Clusters:  40,
 		Alpha:     1.450,

@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"reflect"
 	"strings"
 
 	logger "github.com/gookit/slog"
@@ -24,7 +23,7 @@ const BonnMotionStepFile = "bonnmotion.steps"
 // The Bonnmotion output generator calles BonnMotion with the correct parameters.
 type Bonnmotion struct {
 	outputFolder string
-	stepFilePath string
+	stepFile     *os.File
 }
 
 func (Bonnmotion) String() string {
@@ -51,9 +50,10 @@ func (b Bonnmotion) TargetIsSupported(t experiment.Target) bool {
 	return supported
 }
 
+// Returns whether the given MovementPattern is (currently) supported by this output generator.
 func (b Bonnmotion) MovementPatternIsSupported(movementPattern movementpatterns.MovementPattern) bool {
 	switch movementPattern.(type) {
-	case movementpatterns.RandomWaypoint:
+	case movementpatterns.RandomWaypoint, movementpatterns.SMOOTH, movementpatterns.SLAW, movementpatterns.SWIM:
 		return true
 
 	default:
@@ -61,44 +61,75 @@ func (b Bonnmotion) MovementPatternIsSupported(movementPattern movementpatterns.
 	}
 }
 
+// Returns the parameter set for SMOOTH movement model for a given NodeGroup inside an Experiment.
+func (Bonnmotion) smoothParameters(movementModel movementpatterns.SMOOTH) []string {
+	return []string{
+		"SMOOTH",
+		fmt.Sprintf("-g %d", movementModel.Range),
+		fmt.Sprintf("-h %d", movementModel.Clusters),
+		fmt.Sprintf("-k %v", movementModel.Alpha),
+		fmt.Sprintf("-l %d", movementModel.MinFlight),
+		fmt.Sprintf("-m %d", movementModel.MaxFlight),
+		fmt.Sprintf("-o %v", movementModel.Beta),
+		fmt.Sprintf("-p %d", movementModel.MinPause),
+		fmt.Sprintf("-q %d", movementModel.MaxPause),
+	}
+}
+
+// Returns the parameter set for SLAW movement model for a given NodeGroup inside an Experiment.
+func (Bonnmotion) slawParameters(movementModel movementpatterns.SLAW) []string {
+	return []string{
+		"SLAW",
+		fmt.Sprintf("-w %d", movementModel.NumberOfWaypoints),
+		fmt.Sprintf("-p %d", movementModel.MinPause),
+		fmt.Sprintf("-P %d", movementModel.MaxPause),
+		fmt.Sprintf("-b %v", movementModel.LevyExponent),
+		fmt.Sprintf("-h %v", movementModel.HurstParameter),
+		fmt.Sprintf("-l %v", movementModel.DistanceWeight),
+		fmt.Sprintf("-r %v", movementModel.ClusteringRange),
+		fmt.Sprintf("-Q %v", movementModel.ClusterRatio),
+		fmt.Sprintf("-W %v", movementModel.WaypointRatio),
+	}
+}
+
+// Returns the parameter set for SWIM movement model for a given NodeGroup inside an Experiment.
+func (Bonnmotion) swimParameters(movementModel movementpatterns.SWIM) []string {
+	return []string{
+		"SWIM",
+		fmt.Sprintf("-r %v", movementModel.Radius),
+		fmt.Sprintf("-c %v", movementModel.CellDistanceWeight),
+		fmt.Sprintf("-m %v", movementModel.NodeSpeedMultiplier),
+		fmt.Sprintf("-e %v", movementModel.WaitingTimeExponent),
+		fmt.Sprintf("-u %v", movementModel.WaitingTimeUpperBound),
+	}
+}
+
 // Returns the parameter set for Random Waypoint movement model for a given NodeGroup inside an Experiment.
-func (Bonnmotion) randomWaypointParameters(exp experiment.Experiment, nodeGroup experiment.NodeGroup) []string {
-	movementmodel := nodeGroup.MovementModel.(movementpatterns.RandomWaypoint)
+func (Bonnmotion) randomWaypointParameters(movementModel movementpatterns.RandomWaypoint) []string {
 	return []string{
 		"RandomWaypoint",
-		fmt.Sprintf("-h%d", movementmodel.MaxSpeed),
-		fmt.Sprintf("-l%d", movementmodel.MinSpeed),
-		fmt.Sprintf("-p%d", movementmodel.MaxPause),
+		fmt.Sprintf("-h %d", movementModel.MaxSpeed),
+		fmt.Sprintf("-l %d", movementModel.MinSpeed),
+		fmt.Sprintf("-p %d", movementModel.MaxPause),
 	}
 }
 
 // Returns the general parameters for a given NodeGroup inside an Experiment.
 func (Bonnmotion) generalParameters(exp experiment.Experiment, nodeGroup experiment.NodeGroup) []string {
 	return []string{
-		fmt.Sprintf("-d%d", exp.Duration),
-		fmt.Sprintf("-n%d", nodeGroup.NoNodes),
-		fmt.Sprintf("-x%d", exp.WorldSize.Width),
-		fmt.Sprintf("-y%d", exp.WorldSize.Height),
-		fmt.Sprintf("-R%d", exp.RandomSeed),
+		fmt.Sprintf("-d %d", exp.Duration),
+		fmt.Sprintf("-n %d", nodeGroup.NoNodes),
+		fmt.Sprintf("-x %d", exp.WorldSize.Width),
+		fmt.Sprintf("-y %d", exp.WorldSize.Height),
+		fmt.Sprintf("-R %d", exp.RandomSeed),
 	}
 }
 
 // Writes the command to the step file and executes it
 func (b Bonnmotion) execute(command []string) error {
-	logger.Trace("Running command:", command)
-	logger.Tracef("Writing file \"%s\"", b.stepFilePath)
-	stepFile, err := os.OpenFile(b.stepFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		logger.Error("Error opening step file:", err)
-		return err
-	}
-	defer func() {
-		if cerr := stepFile.Close(); cerr != nil {
-			logger.Error("Error closing step file:", cerr)
-			err = cerr
-		}
-	}()
-	_, err = stepFile.WriteString(fmt.Sprintf("%s %s\n", BonnMotionExecutable, strings.Join(command, " ")))
+	commandString := fmt.Sprintf("%s %s", BonnMotionExecutable, strings.Join(command, " "))
+	logger.Trace("Running command:", commandString)
+	_, err := b.stepFile.WriteString(fmt.Sprintln(commandString))
 	if err != nil {
 		logger.Error("Error writing step file:", err)
 		return err
@@ -114,36 +145,49 @@ func (b Bonnmotion) execute(command []string) error {
 	return err
 }
 
-// Calls BonnMotion to generate the Random Waypoint data for a given NodeGroup inside an Experiment.
-func (b Bonnmotion) generateRandomWaypointNodeGroup(exp experiment.Experiment, nodeGroup experiment.NodeGroup) {
-	logger.Trace("Generating Random Waypoint movements")
+// Calls BonnMotion to generate the for a given NodeGroup inside an Experiment.
+func (b Bonnmotion) generateNodeGroup(exp experiment.Experiment, nodeGroup experiment.NodeGroup) error {
+	logger.Tracef("Generating \"%s\" movements", nodeGroup.MovementModel.String())
+	var movementModelParameters []string
+	switch movementModel := nodeGroup.MovementModel.(type) {
+	case movementpatterns.RandomWaypoint:
+		movementModelParameters = b.randomWaypointParameters(movementModel)
+	case movementpatterns.SMOOTH:
+		movementModelParameters = b.smoothParameters(movementModel)
+	case movementpatterns.SLAW:
+		movementModelParameters = b.slawParameters(movementModel)
+	case movementpatterns.SWIM:
+		movementModelParameters = b.swimParameters(movementModel)
+	default:
+		return fmt.Errorf("movement model \"%s\" is not supported", nodeGroup.MovementModel.String())
+	}
 	command := []string{
 		fmt.Sprintf("-f%s", nodeGroup.Prefix),
 	}
-	command = append(command, b.randomWaypointParameters(exp, nodeGroup)...)
+	command = append(command, movementModelParameters...)
 	command = append(command, b.generalParameters(exp, nodeGroup)...)
 	err := b.execute(command)
-	if err != nil {
-		logger.Error("Error running command:", err)
-	}
+	return err
 }
 
 // Calls BonnMotion to convert the BonnMotion output to the given Target's format for a given NodeGroup.
-func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup experiment.NodeGroup) {
+func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup experiment.NodeGroup) error {
 	logger.Tracef("Converting to target format \"%s\"", target.String())
 	supported, model := b.platform(target)
 	if !supported {
 		logger.Debug("Target platform is currently not supported. Skipping\n")
-		return
+		return nil
+	}
+	_, err := os.Stat(filepath.Join(b.outputFolder, fmt.Sprintf("%s.movements.gz", nodeGroup.Prefix)))
+	if os.IsNotExist(err) {
+		return err
 	}
 	command := []string{
 		model,
 		fmt.Sprintf("-f%s", nodeGroup.Prefix),
 	}
-	err := b.execute(command)
-	if err != nil {
-		logger.Error("Error running command:", err)
-	}
+	err = b.execute(command)
+	return err
 }
 
 // Generate generates output for the given Experiment with BonnMotion.
@@ -156,27 +200,43 @@ func (b Bonnmotion) Generate(exp experiment.Experiment) {
 	}
 	b.outputFolder = outputFolder
 
-	b.stepFilePath = filepath.Join(b.outputFolder, BonnMotionStepFile)
-	allowedToWriteStepFile := folderstructure.MayCreatePath(b.stepFilePath)
+	stepFilePath := filepath.Join(b.outputFolder, BonnMotionStepFile)
+	allowedToWriteStepFile := folderstructure.MayCreatePath(stepFilePath)
 	if !allowedToWriteStepFile {
 		logger.Error("Not allowed to write step file!")
 		return
 	}
+	b.stepFile, err = os.OpenFile(stepFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		logger.Error("Error opening step file:", err)
+		return
+	}
+	defer func() {
+		if cerr := b.stepFile.Close(); cerr != nil {
+			logger.Error("Error closing step file:", cerr)
+		}
+	}()
+
 	for _, nodeGroup := range exp.NodeGroups {
 		logger.Tracef("Processing NodeGroup \"%s\"", nodeGroup.Prefix)
+		if !b.MovementPatternIsSupported(nodeGroup.MovementModel) {
+			logger.Debugf("Movement model \"%s\" is currently not supported. Skipping", nodeGroup.MovementModel.String())
+			continue
+		}
 		if !folderstructure.MayCreatePath(filepath.Join(b.outputFolder, fmt.Sprintf("%s.movements.gz", nodeGroup.Prefix))) {
 			logger.Error("Not allowed to write output file!")
 			return
 		}
-		switch nodeGroup.MovementModel.(type) {
-		case movementpatterns.RandomWaypoint:
-			b.generateRandomWaypointNodeGroup(exp, nodeGroup)
-		default:
-			logger.Debugf("Movement model \"%s\" is currently not supported. Skipping", reflect.TypeOf(nodeGroup.MovementModel))
+		err = b.generateNodeGroup(exp, nodeGroup)
+		if err != nil {
+			logger.Error("Could not generate NodeGroup movement:", err)
 			continue
 		}
 		for _, target := range exp.Targets {
-			b.convertToTargetFormat(target, nodeGroup)
+			err = b.convertToTargetFormat(target, nodeGroup)
+			if err != nil {
+				logger.Error("Error converting to target format:", err)
+			}
 		}
 	}
 	logger.Trace("Finished generation")

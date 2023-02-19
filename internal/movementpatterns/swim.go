@@ -1,6 +1,6 @@
 package movementpatterns
 
-type Swim struct {
+type SWIM struct {
 	Radius                float32
 	CellDistanceWeight    float32
 	NodeSpeedMultiplier   float32
@@ -8,12 +8,12 @@ type Swim struct {
 	WaitingTimeUpperBound float32
 }
 
-func (Swim) String() string {
+func (SWIM) String() string {
 	return "SWIM: Small World In Motion"
 }
 
-func (Swim) Default() MovementPattern {
-	return Swim{
+func (SWIM) Default() MovementPattern {
+	return SWIM{
 		Radius:                0.200,
 		CellDistanceWeight:    0.500,
 		NodeSpeedMultiplier:   1.500,

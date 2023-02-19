@@ -46,10 +46,29 @@ type nodegroup struct {
 	Networks      []string
 }
 type movement struct {
-	Model    string
-	MinSpeed int
-	MaxSpeed int
-	MaxPause int
+	Model                 string
+	MinSpeed              int
+	MaxSpeed              int
+	MinPause              int
+	MaxPause              int
+	Range                 int
+	Clusters              int
+	Alpha                 float32
+	MinFlight             int
+	MaxFlight             int
+	Beta                  float32
+	NumberOfWaypoints     int
+	LevyExponent          float32
+	HurstParameter        float32
+	DistanceWeight        float32
+	ClusteringRange       float32
+	ClusterRatio          int
+	WaypointRatio         int
+	Radius                float32
+	CellDistanceWeight    float32
+	NodeSpeedMultiplier   float32
+	WaitingTimeExponent   float32
+	WaitingTimeUpperBound float32
 }
 
 // parse toml file into experiment struct
@@ -130,23 +149,27 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 		model := nodes[i].MovementModel.Model
 
 		switch model {
-
 		case "Static":
-			exp.NodeGroups[i].MovementModel = movementpatterns.Static{}
-		case "":
-			exp.NodeGroups[i].MovementModel = movementpatterns.RandomWaypoint{}
+			exp.NodeGroups[i].MovementModel = movementpatterns.Static{}.Default()
 		case "RandomWaypoint":
-			exp.NodeGroups[i].MovementModel = movementpatterns.RandomWaypoint{
-				MinSpeed: conf.NodeGroups[i].MovementModel.MinSpeed,
-				MaxSpeed: conf.NodeGroups[i].MovementModel.MaxSpeed,
-				MaxPause: conf.NodeGroups[i].MovementModel.MaxPause,
-			}
+			movementModel := movementpatterns.RandomWaypoint{}.Default().(movementpatterns.RandomWaypoint)
+			movementModel.MinSpeed = conf.NodeGroups[i].MovementModel.MinSpeed
+			movementModel.MaxSpeed = conf.NodeGroups[i].MovementModel.MaxSpeed
+			movementModel.MaxPause = conf.NodeGroups[i].MovementModel.MaxPause
+			exp.NodeGroups[i].MovementModel = movementModel
+		case "SMOOTH":
+			movementModel := movementpatterns.SMOOTH{}.Default().(movementpatterns.SMOOTH)
+			movementModel.Range = conf.NodeGroups[i].MovementModel.Range
+			movementModel.Clusters = conf.NodeGroups[i].MovementModel.Clusters
+			movementModel.Alpha = conf.NodeGroups[i].MovementModel.Alpha
+			movementModel.MinFlight = conf.NodeGroups[i].MovementModel.MinFlight
+			movementModel.MaxFlight = conf.NodeGroups[i].MovementModel.MaxFlight
+			movementModel.Beta = conf.NodeGroups[i].MovementModel.Beta
+			movementModel.MinPause = conf.NodeGroups[i].MovementModel.MinPause
+			movementModel.MaxPause = conf.NodeGroups[i].MovementModel.MaxPause
+			exp.NodeGroups[i].MovementModel = movementModel
 		default:
-			exp.NodeGroups[i].MovementModel = movementpatterns.RandomWaypoint{
-				MinSpeed: conf.NodeGroups[i].MovementModel.MinSpeed,
-				MaxSpeed: conf.NodeGroups[i].MovementModel.MaxSpeed,
-				MaxPause: conf.NodeGroups[i].MovementModel.MaxPause,
-			}
+			exp.NodeGroups[i].MovementModel = movementpatterns.Static{}.Default()
 		}
 
 	}

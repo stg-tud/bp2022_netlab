@@ -31,7 +31,7 @@ func GetExampleExperiment() Experiment {
 	ng.MovementModel = movementpatterns.Static{}
 	ng.Networks = append(ng.Networks, &networks[2])
 	ng.NodesType = NodeTypePC
-	ng.MovementModel = movementpatterns.Smooth{}.Default()
+	ng.MovementModel = movementpatterns.SMOOTH{}.Default()
 	nodegroups = append(nodegroups, ng)
 
 	var ExampleExperiment = Experiment{
