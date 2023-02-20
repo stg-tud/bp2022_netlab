@@ -3,6 +3,7 @@ package experiment
 import (
 	"errors"
 	"os"
+	"strings"
 
 	logger "github.com/gookit/slog"
 	"github.com/pelletier/go-toml/v2"
@@ -81,20 +82,25 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 	}
 	// actual experiment
 	exp = Experiment{}
-	var replaceTargets [2]Target
-	for i := range conf.Targets {
-		switch conf.Targets[i] {
-		case "Core":
-			replaceTargets[i] = 0
-		case "The One":
-			replaceTargets[i] = 1
+	var replaceTargets []Target
+	for _, targetString := range conf.Targets {
+		switch strings.ToLower(targetString) {
+		case "core", "coreemu", "core-emu":
+			replaceTargets = append(replaceTargets, TargetCore)
+		case "coreemulab", "coreemu-lab", "core-emulab", "core-emu-lab", "clab":
+			replaceTargets = append(replaceTargets, TargetCore)
+		case "the one", "theone", "one":
+			replaceTargets = append(replaceTargets, TargetTheOne)
 		default:
-			return exp, errors.New("eror getting targets, could not find target")
+			return exp, errors.New("error getting targets, could not find target")
 		}
 	}
+	exp.Targets = replaceTargets
+
 	// experiment other field
 	exp.Duration = conf.Duration
 	exp.Name = conf.Name
+	exp.Runs = conf.Runs
 	exp.RandomSeed = conf.RandomSeed
 	exp.WorldSize = conf.WorldSize
 	exp.Warmup = conf.Warmup

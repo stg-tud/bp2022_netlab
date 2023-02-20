@@ -42,10 +42,10 @@ func stringTargetMapping(input string) (experiment.Target, error) {
 	case "the-one", "theone", "one":
 		return experiment.TargetTheOne, nil
 
-	case "core", "coreemu":
+	case "core", "coreemu", "core-emu":
 		return experiment.TargetCore, nil
 
-	case "coreemulab", "core-emulab", "coreemu-lab", "clab":
+	case "coreemulab", "core-emulab", "coreemu-lab", "core-emu-lab", "clab":
 		return experiment.TargetCoreEmulab, nil
 
 	default:
