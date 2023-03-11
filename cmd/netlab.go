@@ -9,7 +9,7 @@ var debug bool
 var rootCmd = &cobra.Command{
 	Use:     "netlab",
 	Short:   "netlab is a tool to generate network experiment configuration files",
-	Version: "17",
+	Version: "0.0.1",
 	Long: `            _   _       _     
  _ __   ___| |_| | __ _| |__  
 | '_ \ / _ \ __| |/ _' | '_ \ 

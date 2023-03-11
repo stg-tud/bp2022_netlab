@@ -3,7 +3,7 @@ Runs = 5
 Targets = [0, 1]
 RandomSeed = 1673916419715
 Warmup = 5
-Duration = 123456
+Duration = 43
 
 [WorldSize]
 Height = 170
@@ -201,3 +201,47 @@ Delay = 5000
 LossInitial = 0.0
 LossFactor = 1.0
 LossStartRange = 300.0
+
+[[EventGenerators]]
+Name = 'MessageEventGenerator'
+
+[EventGenerators.Type]
+Prefix = 'M'
+
+[EventGenerators.Type.Interval]
+From = 25
+To = 35
+
+[EventGenerators.Type.Size]
+From = 80
+To = 120
+
+[EventGenerators.Type.Hosts]
+From = 5
+To = 15
+
+[EventGenerators.Type.ToHosts]
+From = 16
+To = 17
+
+[[EventGenerators]]
+Name = 'MessageBurstGenerator'
+
+[EventGenerators.Type]
+Prefix = 'M'
+
+[EventGenerators.Type.Interval]
+From = 25
+To = 35
+
+[EventGenerators.Type.Size]
+From = 80
+To = 120
+
+[EventGenerators.Type.Hosts]
+From = 5
+To = 15
+
+[EventGenerators.Type.ToHosts]
+From = 16
+To = 17

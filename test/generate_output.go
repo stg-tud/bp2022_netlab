@@ -11,7 +11,7 @@ func main() {
 	logging.Init(true)
 	logger.Info("Starting")
 
-	exampleExperiment := experiment.GetExampleExperiment()
+	exampleExperiment, _ := experiment.LoadFromFile("internal/experiment/testdata/load_test.toml")
 
 	logger.Info("Using random seed", exampleExperiment.RandomSeed)
 
@@ -19,6 +19,7 @@ func main() {
 		outputgenerators.Core{},
 		outputgenerators.Bonnmotion{},
 		outputgenerators.Debug{},
+		outputgenerators.TheOne{},
 		outputgenerators.CoreEmulab{},
 	}
 

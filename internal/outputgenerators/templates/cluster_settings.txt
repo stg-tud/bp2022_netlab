@@ -1,0 +1,81 @@
+#
+# Default settings for the simulation
+#
+
+## Scenario settings
+Scenario.name = "{{ .ScenarioName}}"
+RandomSeed = {{ .RandomSeed}}
+Scenario.simulateConnections = true
+Scenario.updateInterval = 0.1
+# 43k ~= 12h
+Scenario.endTime = {{ .Runtime}}
+
+{{- range $index, $interfaces:=.Interfaces}}
+{{$interfaces.Name}}.type = SimpleBroadcastInterface
+# transmit speed of 2 Mbps = 250kBps
+{{$interfaces.Name}}.transmitSpeed = {{$interfaces.Bandwidth}}
+{{$interfaces.Name}}.transmitRange = {{$interfaces.Range}}
+{{end}}
+
+Scenario.nrofHostGroups = {{ .NrofHostGroups}}
+
+# common settings for all groups
+Group.movementModel = ClusterMovement
+Group.router = EpidemicRouter
+Group.bufferSize = 5M
+Group.waitTime = 0, 120
+#All nodes have the firstinterface inteface
+Group.nrofInterfaces = 1
+Group.interface1 = 
+# walking speeds
+Group.speed = 0.5, 1.5
+#Group.msgTtl = 60
+
+Group.nrofHosts = 40
+Group.nrofApplications = 0
+
+
+{{- range $index, $group:= .Groups}}
+Group{{add $index 1}}.groupID = {{$group.Id}}
+Group{{add $index 1}}.nrofHosts = {{$group.NrofHosts}}
+Group{{add $index 1}}.nrofInterfaces = {{$group.NrofInterfaces}}
+{{- range $index1, $interfaces:= .Interfaces }}
+Group{{add $index 1}}.interface{{add $index1 1}}= {{$interfaces.Name}}
+{{- end}}
+Group{{add $index 1}}.movementModel = {{$group.MovementModel}}
+{{end}}
+
+
+
+## Message creation parameters
+# How many event generators
+Events.nrof = {{ .NoEventGenerator}}
+{{- range $index, $event:= .EventGenerators}}
+# Class of the first event generator
+Events{{add $index 1}}.class = {{$event.Name}}
+# (following settings are specific for the MessageEventGenerator class)
+# Creation interval in seconds (one new message every 25 to 35 seconds)
+Events{{add $index 1}}.interval = {{.Type.Interval.From}},{{.Type.Interval.To}}
+# Message sizes (50kB - 150kB)
+Events{{add $index 1}}.size = {{.Type.Size.From}},{{.Type.Size.To}}
+# range of message source/destination addresses
+Events{{add $index 1}}.hosts = {{.Type.Hosts.From}},{{.Type.Hosts.To}}
+# distance to hosts
+Events{{add $index 1}}.tohosts = {{.Type.ToHosts.From}},{{.Type.ToHosts.To}}
+# Message ID prefix
+Events{{add $index 1}}.prefix = {{.Type.Prefix}}
+{{end}}
+
+## Movement model settings
+# seed for movement models' pseudo random number generator (default = 0)
+MovementModel.rngSeed = {{ .RandomSeed}}
+# World's size for Movement Models without implicit size (width, height; meters)
+MovementModel.worldSize = {{ .WorldSizeWidth}}, {{ .WorldSizeHeight}}
+# How long time to move hosts in the world before real simulation
+MovementModel.warmup = {{ .Warmup}}
+
+
+# how many events to show in the log panel (default = 30)
+GUI.EventLogPanel.nrofEvents = 30
+# Regular Expression log filter (see Pattern-class from the Java API for RE-matching details)
+#GUI.EventLogPanel.REfilter = .*p[1-9]<->p[1-9]$
