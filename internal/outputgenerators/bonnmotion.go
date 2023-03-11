@@ -65,14 +65,22 @@ func (b Bonnmotion) MovementPatternIsSupported(movementPattern movementpatterns.
 func (Bonnmotion) smoothParameters(movementModel movementpatterns.SMOOTH) []string {
 	return []string{
 		"SMOOTH",
-		fmt.Sprintf("-g %d", movementModel.Range),
-		fmt.Sprintf("-h %d", movementModel.Clusters),
-		fmt.Sprintf("-k %v", movementModel.Alpha),
-		fmt.Sprintf("-l %d", movementModel.MinFlight),
-		fmt.Sprintf("-m %d", movementModel.MaxFlight),
-		fmt.Sprintf("-o %v", movementModel.Beta),
-		fmt.Sprintf("-p %d", movementModel.MinPause),
-		fmt.Sprintf("-q %d", movementModel.MaxPause),
+		"-g",
+		fmt.Sprintf("%d", movementModel.Range),
+		"-h",
+		fmt.Sprintf("%d", movementModel.Clusters),
+		"-k",
+		fmt.Sprintf("%v", movementModel.Alpha),
+		"-l",
+		fmt.Sprintf("%d", movementModel.MinFlight),
+		"-m",
+		fmt.Sprintf("%d", movementModel.MaxFlight),
+		"-o",
+		fmt.Sprintf("%v", movementModel.Beta),
+		"-p",
+		fmt.Sprintf("%d", movementModel.MinPause),
+		"-q",
+		fmt.Sprintf("%d", movementModel.MaxPause),
 	}
 }
 
@@ -80,15 +88,24 @@ func (Bonnmotion) smoothParameters(movementModel movementpatterns.SMOOTH) []stri
 func (Bonnmotion) slawParameters(movementModel movementpatterns.SLAW) []string {
 	return []string{
 		"SLAW",
-		fmt.Sprintf("-w %d", movementModel.NumberOfWaypoints),
-		fmt.Sprintf("-p %d", movementModel.MinPause),
-		fmt.Sprintf("-P %d", movementModel.MaxPause),
-		fmt.Sprintf("-b %v", movementModel.LevyExponent),
-		fmt.Sprintf("-h %v", movementModel.HurstParameter),
-		fmt.Sprintf("-l %v", movementModel.DistanceWeight),
-		fmt.Sprintf("-r %v", movementModel.ClusteringRange),
-		fmt.Sprintf("-Q %v", movementModel.ClusterRatio),
-		fmt.Sprintf("-W %v", movementModel.WaypointRatio),
+		"-w",
+		fmt.Sprintf("%d", movementModel.NumberOfWaypoints),
+		"-p",
+		fmt.Sprintf("%d", movementModel.MinPause),
+		"-P",
+		fmt.Sprintf("%d", movementModel.MaxPause),
+		"-b",
+		fmt.Sprintf("%v", movementModel.LevyExponent),
+		"-h",
+		fmt.Sprintf("%v", movementModel.HurstParameter),
+		"-l",
+		fmt.Sprintf("%v", movementModel.DistanceWeight),
+		"-r",
+		fmt.Sprintf("%v", movementModel.ClusteringRange),
+		"-Q",
+		fmt.Sprintf("%v", movementModel.ClusterRatio),
+		"-W",
+		fmt.Sprintf("%v", movementModel.WaypointRatio),
 	}
 }
 
@@ -96,11 +113,16 @@ func (Bonnmotion) slawParameters(movementModel movementpatterns.SLAW) []string {
 func (Bonnmotion) swimParameters(movementModel movementpatterns.SWIM) []string {
 	return []string{
 		"SWIM",
-		fmt.Sprintf("-r %v", movementModel.Radius),
-		fmt.Sprintf("-c %v", movementModel.CellDistanceWeight),
-		fmt.Sprintf("-m %v", movementModel.NodeSpeedMultiplier),
-		fmt.Sprintf("-e %v", movementModel.WaitingTimeExponent),
-		fmt.Sprintf("-u %v", movementModel.WaitingTimeUpperBound),
+		"-r",
+		fmt.Sprintf("%v", movementModel.Radius),
+		"-c",
+		fmt.Sprintf("%v", movementModel.CellDistanceWeight),
+		"-m",
+		fmt.Sprintf("%v", movementModel.NodeSpeedMultiplier),
+		"-e",
+		fmt.Sprintf("%v", movementModel.WaitingTimeExponent),
+		"-u",
+		fmt.Sprintf("%v", movementModel.WaitingTimeUpperBound),
 	}
 }
 
@@ -108,20 +130,28 @@ func (Bonnmotion) swimParameters(movementModel movementpatterns.SWIM) []string {
 func (Bonnmotion) randomWaypointParameters(movementModel movementpatterns.RandomWaypoint) []string {
 	return []string{
 		"RandomWaypoint",
-		fmt.Sprintf("-h %d", movementModel.MaxSpeed),
-		fmt.Sprintf("-l %d", movementModel.MinSpeed),
-		fmt.Sprintf("-p %d", movementModel.MaxPause),
+		"-h",
+		fmt.Sprintf("%d", movementModel.MaxSpeed),
+		"-l",
+		fmt.Sprintf("%d", movementModel.MinSpeed),
+		"-p",
+		fmt.Sprintf("%d", movementModel.MaxPause),
 	}
 }
 
 // Returns the general parameters for a given NodeGroup inside an Experiment.
 func (Bonnmotion) generalParameters(exp experiment.Experiment, nodeGroup experiment.NodeGroup) []string {
 	return []string{
-		fmt.Sprintf("-d %d", exp.Duration),
-		fmt.Sprintf("-n %d", nodeGroup.NoNodes),
-		fmt.Sprintf("-x %d", exp.WorldSize.Width),
-		fmt.Sprintf("-y %d", exp.WorldSize.Height),
-		fmt.Sprintf("-R %d", exp.RandomSeed),
+		"-d",
+		fmt.Sprintf("%d", exp.Duration),
+		"-n",
+		fmt.Sprintf("%d", nodeGroup.NoNodes),
+		"-x",
+		fmt.Sprintf("%d", exp.WorldSize.Width),
+		"-y",
+		fmt.Sprintf("%d", exp.WorldSize.Height),
+		"-R",
+		fmt.Sprintf("%d", exp.RandomSeed),
 	}
 }
 
@@ -184,7 +214,8 @@ func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup ex
 	}
 	command := []string{
 		model,
-		fmt.Sprintf("-f%s", nodeGroup.Prefix),
+		"-f",
+		nodeGroup.Prefix,
 	}
 	err = b.execute(command)
 	return err
