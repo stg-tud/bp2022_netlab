@@ -25,6 +25,7 @@ type expConf struct {
 	Targets         []string
 	Warmup          uint
 	EventGenerators []eventgenerator
+	ExternalMovement externalmovement
 }
 type eventgenerator struct {
 	Name      string
@@ -63,6 +64,7 @@ type movement struct {
 	MaxSpeed int
 	MaxPause int
 }
+
 
 // parse toml file into experiment struct
 func LoadFromFile(file string) (exp Experiment, returnError error) {
@@ -104,6 +106,8 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 	exp.RandomSeed = conf.RandomSeed
 	exp.WorldSize = conf.WorldSize
 	exp.Warmup = conf.Warmup
+	exp.ExternalMovement = conf.ExternalMovement
+	
 	// network slices
 	nets := conf.Networks
 	for i := range nets {

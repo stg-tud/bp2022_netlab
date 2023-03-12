@@ -62,5 +62,7 @@ func TestLoad(t *testing.T) {
 	if actual.NodeGroups[6].NodesType.String() != "Router" {
 		t.Fatal("Wrong default network for Nodegroup")
 	}
-
+	if actual.ExternalMovement.Active != true {
+		t.Fatal("Wrong external movement")
+	}
 }

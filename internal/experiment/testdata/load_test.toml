@@ -153,3 +153,7 @@ To = 15
 [EventGenerators.ToHosts]
 From = 16
 To = 17
+
+[ExternalMovement]
+Active = true
+fielName = "three_nodes.pos"

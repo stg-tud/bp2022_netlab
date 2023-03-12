@@ -94,7 +94,9 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 	replace.RandomSeed = exp.RandomSeed
 	replace.Warmup = exp.Warmup
 	replace.Runtime = exp.Duration
-
+	if exp.ExternalMovement.Active {
+		replace.Automator = exp.ExternalMovement.FileName
+	}
 	confTemplate, err := template.ParseFS(TemplatesFS, fmt.Sprintf("%s/%s", TemplatesFolder, "experiment.conf"))
 	if err != nil {
 		logger.Error("Error opening template file:", err)
