@@ -9,6 +9,10 @@ Duration = 43
 Height = 170
 Width = 240
 
+[ExternalMovement]
+Active = false
+FileName = ''
+
 [[Networks]]
 Name = 'wireless_lan'
 
