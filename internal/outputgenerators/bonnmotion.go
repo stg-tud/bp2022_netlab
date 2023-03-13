@@ -15,7 +15,7 @@ import (
 )
 
 // The name of the executable to run BonnMotion.
-const BonnMotionExecutable = "bonnmotion"
+var BonnMotionExecutable = "bm"
 
 // The name of the file that the taken steps should be written into.
 const BonnMotionStepFile = "bonnmotion.steps"

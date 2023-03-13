@@ -16,6 +16,7 @@ import (
 var overwriteExisting bool
 var targetsOverwrite []string
 var outputFolder string
+var bonnMotionExecutable string
 
 var generateCmd = &cobra.Command{
 	Use:     "generate [filename]",
@@ -31,7 +32,8 @@ the targets from the file will be ignored.`,
 func init() {
 	generateCmd.PersistentFlags().BoolVarP(&overwriteExisting, "overwrite", "o", false, "overwrite existing files for the same configuration")
 	generateCmd.PersistentFlags().StringArrayVarP(&targetsOverwrite, "targets", "t", []string{}, "generate configs for the following targets (no matter which targets are configured in the TOML file)")
-	generateCmd.PersistentFlags().StringVarP(&outputFolder, "folder", "f", "output", "name of the folder the output should be written to (default: output)")
+	generateCmd.PersistentFlags().StringVarP(&outputFolder, "folder", "f", "output", "name of the folder the output should be written to")
+	generateCmd.PersistentFlags().StringVarP(&bonnMotionExecutable, "bonnmotion", "b", "bm", "Path of the BonnMotion executable to run")
 }
 
 // returns an experiment.Target for a clear text user input string
@@ -133,6 +135,8 @@ func buildOutputGenerators(exp experiment.Experiment) []outputgenerators.OutputG
 func generate(cmd *cobra.Command, args []string) {
 	folderstructure.OutputFolderName = outputFolder
 	folderstructure.OverwriteExisting = overwriteExisting
+
+	outputgenerators.BonnMotionExecutable = bonnMotionExecutable
 
 	logging.Init(debug)
 	logger.Info("Starting")

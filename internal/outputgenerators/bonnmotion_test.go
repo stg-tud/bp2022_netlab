@@ -14,6 +14,8 @@ func TestBonnmotionGeneration(t *testing.T) {
 		os.RemoveAll(folderstructure.OutputFolderName)
 	})
 
+	outputgenerators.BonnMotionExecutable = "bonnmotion"
+
 	og := outputgenerators.Bonnmotion{}
 	testingExperiment := GetTestingExperiment()
 	outputFolder := folderstructure.GetOutputFolder(testingExperiment, "movements")
