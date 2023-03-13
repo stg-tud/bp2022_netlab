@@ -73,7 +73,7 @@ NoNodes = 3
 NodesType = 'Router'
 Networks=['switch']
 [NodeGroups.MovementModel]
-Model='Static'
+Model='SLAW'
 
 [[NodeGroups]]
 Prefix = 'd'
@@ -98,7 +98,7 @@ NodesType = 'Router'
 Networks = ['emane']
 
 [NodeGroups.MovementModel]
-Model = 'custom'
+Model = 'RandomWaypoint'
 MinSpeed = 1
 MaxSpeed = 2
 MaxPause = 17

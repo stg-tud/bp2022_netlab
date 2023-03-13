@@ -182,12 +182,12 @@ NodesType = 0
 NumberOfWaypoints = 500
 MinPause = 10
 MaxPause = 50
-LevyExponentPause = 1.0
+LevyExponent = 1.0
 HurstParameter = 0.75
 DistanceWeight = 3.0
-ClusteringRange = 50
-ClusterRatio = 3.0
-WaypointRatio = 5.0
+ClusteringRange = 50.0
+ClusterRatio = 3
+WaypointRatio = 5
 
 [[NodeGroups.Networks]]
 Name = 'wireless'

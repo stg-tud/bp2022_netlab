@@ -163,30 +163,51 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 
 		}
 		//movementmodel of nodegroups
-		model := nodes[i].MovementModel.Model
+		model := strings.ToLower(nodes[i].MovementModel.Model)
+		modelConfig := conf.NodeGroups[i].MovementModel
 
 		switch model {
-		case "Static":
-			exp.NodeGroups[i].MovementModel = movementpatterns.Static{}.Default()
-		case "RandomWaypoint":
+		case "randomwaypoint", "random waypoint", "random":
 			movementModel := movementpatterns.RandomWaypoint{}.Default().(movementpatterns.RandomWaypoint)
-			movementModel.MinSpeed = conf.NodeGroups[i].MovementModel.MinSpeed
-			movementModel.MaxSpeed = conf.NodeGroups[i].MovementModel.MaxSpeed
-			movementModel.MaxPause = conf.NodeGroups[i].MovementModel.MaxPause
+			movementModel.MinSpeed = modelConfig.MinSpeed
+			movementModel.MaxSpeed = modelConfig.MaxSpeed
+			movementModel.MaxPause = modelConfig.MaxPause
 			exp.NodeGroups[i].MovementModel = movementModel
-		case "SMOOTH":
+		case "smooth":
 			movementModel := movementpatterns.SMOOTH{}.Default().(movementpatterns.SMOOTH)
-			movementModel.Range = conf.NodeGroups[i].MovementModel.Range
-			movementModel.Clusters = conf.NodeGroups[i].MovementModel.Clusters
-			movementModel.Alpha = conf.NodeGroups[i].MovementModel.Alpha
-			movementModel.MinFlight = conf.NodeGroups[i].MovementModel.MinFlight
-			movementModel.MaxFlight = conf.NodeGroups[i].MovementModel.MaxFlight
-			movementModel.Beta = conf.NodeGroups[i].MovementModel.Beta
-			movementModel.MinPause = conf.NodeGroups[i].MovementModel.MinPause
-			movementModel.MaxPause = conf.NodeGroups[i].MovementModel.MaxPause
+			movementModel.Range = modelConfig.Range
+			movementModel.Clusters = modelConfig.Clusters
+			movementModel.Alpha = modelConfig.Alpha
+			movementModel.MinFlight = modelConfig.MinFlight
+			movementModel.MaxFlight = modelConfig.MaxFlight
+			movementModel.Beta = modelConfig.Beta
+			movementModel.MinPause = modelConfig.MinPause
+			movementModel.MaxPause = modelConfig.MaxPause
 			exp.NodeGroups[i].MovementModel = movementModel
+		case "slaw":
+			movementModel := movementpatterns.SLAW{}.Default().(movementpatterns.SLAW)
+			movementModel.NumberOfWaypoints = modelConfig.NumberOfWaypoints
+			movementModel.MinPause = modelConfig.MinPause
+			movementModel.MaxPause = modelConfig.MaxPause
+			movementModel.LevyExponent = modelConfig.LevyExponent
+			movementModel.HurstParameter = modelConfig.HurstParameter
+			movementModel.DistanceWeight = modelConfig.DistanceWeight
+			movementModel.ClusteringRange = modelConfig.ClusteringRange
+			movementModel.ClusterRatio = modelConfig.ClusterRatio
+			movementModel.WaypointRatio = modelConfig.WaypointRatio
+			exp.NodeGroups[i].MovementModel = movementModel
+		case "swim":
+			movementModel := movementpatterns.SWIM{}.Default().(movementpatterns.SWIM)
+			movementModel.Radius = modelConfig.Radius
+			movementModel.CellDistanceWeight = modelConfig.CellDistanceWeight
+			movementModel.NodeSpeedMultiplier = modelConfig.NodeSpeedMultiplier
+			movementModel.WaitingTimeExponent = modelConfig.WaitingTimeExponent
+			movementModel.WaitingTimeUpperBound = modelConfig.WaitingTimeUpperBound
+			exp.NodeGroups[i].MovementModel = movementModel
+		case "static", "none":
 		default:
 			exp.NodeGroups[i].MovementModel = movementpatterns.Static{}.Default()
+
 		}
 
 	}

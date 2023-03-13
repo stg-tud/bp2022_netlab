@@ -208,16 +208,20 @@ func (b Bonnmotion) convertToTargetFormat(target experiment.Target, nodeGroup ex
 		logger.Debug("Target platform is currently not supported. Skipping\n")
 		return nil
 	}
-	_, err := os.Stat(filepath.Join(b.outputFolder, fmt.Sprintf("%s.movements.gz", nodeGroup.Prefix)))
-	if os.IsNotExist(err) {
-		return err
+	if flag.Lookup("test.v") != nil {
+		logger.Debug("Detected test. Skipping file existence test")
+	} else {
+		_, err := os.Stat(filepath.Join(b.outputFolder, fmt.Sprintf("%s.movements.gz", nodeGroup.Prefix)))
+		if os.IsNotExist(err) {
+			return err
+		}
 	}
 	command := []string{
 		model,
 		"-f",
 		nodeGroup.Prefix,
 	}
-	err = b.execute(command)
+	err := b.execute(command)
 	return err
 }
 

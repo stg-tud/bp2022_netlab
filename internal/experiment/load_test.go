@@ -31,7 +31,9 @@ func TestLoad(t *testing.T) {
 	if actual.RandomSeed != 1673916419715 {
 		t.Fatal("Wrong Randomseed")
 	}
-	if actual.NodeGroups[0].MovementModel.String() != "Random Waypoint" {
+	if actual.NodeGroups[0].MovementModel.String() != "Static" ||
+		actual.NodeGroups[2].MovementModel.String() != "SLAW: Self-similar Least Action Walk" ||
+		actual.NodeGroups[3].MovementModel.String() != "Random Waypoint" {
 		t.Fatal("Wrong movementModel")
 	}
 	if actual.NodeGroups[4].NodesType.String() != "PC" {
@@ -46,7 +48,7 @@ func TestLoad(t *testing.T) {
 		MaxPause: 17,
 	}
 	if actual.NodeGroups[5].MovementModel != expected {
-		t.Fatal("Wrong custom movementmodel")
+		t.Fatal("Wrong custom movementModel")
 	}
 	net, _ := experiment.NewNetwork("wireless_lan", networktypes.WirelessLAN{}.Default())
 	if actual.Networks[0] != net {
