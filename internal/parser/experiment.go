@@ -13,7 +13,7 @@ import (
 type inputExperiment struct {
 	Name       any `default:"Experiment"`
 	Runs       any `default:"1"`
-	RandomSeed uint64
+	RandomSeed int64
 	Duration   any `required:"true"`
 	WorldSize  inputWorldSize
 	Targets    []string
@@ -33,8 +33,8 @@ type intermediateExperiment struct {
 }
 
 type inputWorldSize struct {
-	Height any `default:"300"`
-	Width  any `default:"300"`
+	Height any `default:"750"`
+	Width  any `default:"1000"`
 }
 
 func parseGeneralExperiment(input inputExperiment) (experiment.Experiment, error) {
@@ -52,7 +52,7 @@ func parseGeneralExperiment(input inputExperiment) (experiment.Experiment, error
 	output.Targets = parseTargets(input.Targets)
 	output.RandomSeed = intermediate.RandomSeed
 	if intermediate.RandomSeed == 0 {
-		logger.Info("No random seed given. Using a generated one.")
+		logger.Warn("No random seed given. Using a generated one.")
 		output.RandomSeed = experiment.GenerateRandomSeed()
 	}
 

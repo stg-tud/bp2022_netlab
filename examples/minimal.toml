@@ -1,0 +1,13 @@
+Name = "A very simple experiment"
+Targets = ["coreemu-lab", "The ONE"]
+
+Duration = 240
+
+[[Network]]
+Name = "Wifi"
+Type = "WirelessLAN"
+
+[[NodeGroup]]
+Prefix = "users"
+NoNodes = 7
+Networks = ["Wifi"]
