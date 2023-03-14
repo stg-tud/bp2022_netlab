@@ -10,15 +10,22 @@ import (
 
 func LoadFromFile(path string) (experiment.Experiment, error) {
 	logger.Info("Loading experiment from file")
-
-	var output experiment.Experiment
-	var tomlIn inputExperiment = inputExperiment{}
+	var output experiment.Experiment = experiment.Experiment{}
 
 	buf, err := os.ReadFile(path)
 	if err != nil {
 		return output, err
 	}
-	err = toml.Unmarshal(buf, &tomlIn)
+
+	return ParseText(buf)
+}
+
+func ParseText(input []byte) (experiment.Experiment, error) {
+	logger.Info("Loading experiment from string")
+	var output experiment.Experiment = experiment.Experiment{}
+	var tomlIn inputExperiment = inputExperiment{}
+
+	err := toml.Unmarshal(input, &tomlIn)
 	if err != nil {
 		return output, err
 	}
@@ -46,6 +53,5 @@ func LoadFromFile(path string) (experiment.Experiment, error) {
 	}
 	output.EventGenerators = eventGenerators
 
-	logger.Info("Finished loading from file")
 	return output, nil
 }

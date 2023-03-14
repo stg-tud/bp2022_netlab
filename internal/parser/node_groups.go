@@ -86,9 +86,9 @@ func parseNodeGroupNetworks(input []string, exp *experiment.Experiment) ([]*expe
 	output := []*experiment.Network{}
 	availableNetworkNames := make(map[string]int)
 	networkPointers := make(map[string]*experiment.Network)
-	for _, network := range exp.Networks {
+	for i, network := range exp.Networks {
 		availableNetworkNames[strings.ToLower(network.Name)] = 0
-		networkPointers[strings.ToLower(network.Name)] = &network
+		networkPointers[strings.ToLower(network.Name)] = &exp.Networks[i]
 	}
 
 	for _, networkName := range input {

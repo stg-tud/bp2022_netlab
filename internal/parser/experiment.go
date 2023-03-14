@@ -76,7 +76,7 @@ func parseTargets(input []string) []experiment.Target {
 		case "core", "coreemu", "core-emu":
 			output = append(output, experiment.TargetCore)
 		case "coreemulab", "coreemu-lab", "core-emulab", "core-emu-lab", "clab":
-			output = append(output, experiment.TargetCore)
+			output = append(output, experiment.TargetCoreEmulab)
 		case "the one", "theone", "one":
 			output = append(output, experiment.TargetTheOne)
 		default:
