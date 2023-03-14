@@ -20,9 +20,11 @@ type NodeGroup struct {
 }
 
 var defaultValues = NodeGroup{
-	MovementModel: movementpatterns.Static{}.Default(),
-	NodesType:     NodeTypeRouter,
-	Networks:      []*Network{},
+	MovementModel: movementpatterns.Static{},
+
+	NodesType: NodeTypeRouter,
+
+	Networks: []*Network{},
 }
 
 // NewNodeGroup returns a new NodeGroup loaded with default values.
