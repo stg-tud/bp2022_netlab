@@ -36,7 +36,7 @@ func (Bonnmotion) platform(t experiment.Target) (bool, string) {
 	case experiment.TargetTheOne:
 		return true, "TheONEFile"
 
-	case experiment.TargetCore:
+	case experiment.TargetCore, experiment.TargetCoreEmulab:
 		return true, "NSFile"
 
 	default:

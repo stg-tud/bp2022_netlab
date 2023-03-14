@@ -1,0 +1,47 @@
+Name = "Different Movement Patterns"
+Runs = 1
+RandomSeed = 7850800065078565476
+Targets = ["coreemu-lab", "The ONE"]
+
+Duration = 240
+Warmup = 5
+
+WorldSize.Height = 1000
+WorldSize.Width = 1500
+
+
+[[Network]]
+Name = "Wifi"
+Type = "WirelessLAN"
+Bandwidth = 54000000
+Range = 600
+
+[[NodeGroup]]
+Prefix = "static"
+NoNodes = 4
+MovementModel = "static"
+Networks = ["Wifi"]
+
+[[NodeGroup]]
+Prefix = "rwp"
+NoNodes = 4
+MovementModel = "Random Waypoint"
+Networks = ["Wifi"]
+
+[[NodeGroup]]
+Prefix = "swim"
+NoNodes = 4
+MovementModel = "SWIM"
+Networks = ["Wifi"]
+
+[[NodeGroup]]
+Prefix = "slaw"
+NoNodes = 4
+MovementModel = "SLAW"
+Networks = ["Wifi"]
+
+[[NodeGroup]]
+Prefix = "smooth"
+NoNodes = 4
+MovementModel = "SMOOTH"
+Networks = ["Wifi"]
