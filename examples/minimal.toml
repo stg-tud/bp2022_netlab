@@ -1,5 +1,6 @@
 Name = "A very simple experiment"
 Targets = ["coreemu-lab", "The ONE"]
+RandomSeed = 2502352939705136212
 
 Duration = 240
 

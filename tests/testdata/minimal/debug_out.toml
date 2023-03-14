@@ -1,0 +1,40 @@
+Name = 'A very simple experiment'
+Runs = 1
+Targets = [2, 1]
+RandomSeed = 2502352939705136212
+Warmup = 0
+Duration = 240
+EventGenerators = []
+
+[WorldSize]
+Height = 750
+Width = 1000
+
+[[Networks]]
+Name = 'Wifi'
+
+[Networks.Type]
+Bandwidth = 54000000
+Range = 400
+Jitter = 0
+Delay = 5000
+Loss = 0.0
+Promiscuous = false
+
+[[NodeGroups]]
+Prefix = 'users'
+NoNodes = 7
+NodesType = 1
+
+[NodeGroups.MovementModel]
+
+[[NodeGroups.Networks]]
+Name = 'Wifi'
+
+[NodeGroups.Networks.Type]
+Bandwidth = 54000000
+Range = 400
+Jitter = 0
+Delay = 5000
+Loss = 0.0
+Promiscuous = false

@@ -1,0 +1,24 @@
+2023-03-14T06:00:19.698 (generate.go:139,generate) [INFO] Starting  
+2023-03-14T06:00:19.699 (parser.go:12,LoadFromFile) [INFO] Loading experiment from file  
+2023-03-14T06:00:19.699 (parser.go:24,ParseText) [INFO] Loading experiment from string  
+2023-03-14T06:00:19.699 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Runs".  
+2023-03-14T06:00:19.699 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Height".  
+2023-03-14T06:00:19.699 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Width".  
+2023-03-14T06:00:19.699 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Bandwidth".  
+2023-03-14T06:00:19.699 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Range".  
+2023-03-14T06:00:19.699 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Jitter".  
+2023-03-14T06:00:19.699 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Delay".  
+2023-03-14T06:00:19.699 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Loss".  
+2023-03-14T06:00:19.699 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Promiscuous".  
+2023-03-14T06:00:19.699 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "MovementModel".  
+2023-03-14T06:00:19.699 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "NodesType".  
+2023-03-14T06:00:19.699 (generate.go:147,generate) [INFO] Using random seed 2502352939705136212  
+2023-03-14T06:00:19.699 (generate.go:71,buildTargets) [DEBUG] Generating output for following targets: [coreemu-lab The ONE]  
+2023-03-14T06:00:19.699 (generate.go:102,buildOutputGenerators) [DEBUG] Output generator "coreemu-lab" implies "CORE", therefore adding it  
+2023-03-14T06:00:19.699 (generate.go:115,buildOutputGenerators) [DEBUG] Selecting Debug output generator because debug logging is active  
+2023-03-14T06:00:19.699 (generate.go:129,buildOutputGenerators) [DEBUG] Generating output for following output generators: [coreemu-lab CORE The ONE Debug]  
+2023-03-14T06:00:19.699 (coreemulab.go:66,Generate) [INFO] Generating CoreEmulab output  
+2023-03-14T06:00:19.699 (core.go:237,Generate) [INFO] Generating CORE output  
+2023-03-14T06:00:19.701 (theone.go:140,Generate) [INFO] Generating TheOne output  
+2023-03-14T06:00:19.701 (debug.go:25,Generate) [INFO] Generating debug output  
+2023-03-14T06:00:19.702 (generate.go:156,generate) [INFO] Finished  

@@ -6,7 +6,7 @@ import (
 
 var debug bool
 
-var rootCmd = &cobra.Command{
+var RootCmd = &cobra.Command{
 	Use:     "netlab",
 	Short:   "netlab is a tool to generate network experiment configuration files",
 	Version: "0.0.1",
@@ -27,11 +27,11 @@ information and documentation visit https://github.com/stg-stud/bp2022_netlab.`,
 }
 
 func init() {
-	rootCmd.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "enable debug logging")
-	rootCmd.AddCommand(generateCmd)
-	rootCmd.AddCommand(testCmd)
+	RootCmd.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "enable debug logging")
+	RootCmd.AddCommand(generateCmd)
+	RootCmd.AddCommand(testCmd)
 }
 
 func Execute() error {
-	return rootCmd.Execute()
+	return RootCmd.Execute()
 }
