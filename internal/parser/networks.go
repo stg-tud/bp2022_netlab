@@ -10,6 +10,7 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
 
+// Input format of a Network configuration
 type inputNetwork struct {
 	Name any `required:"true"`
 	Type any `default:"WirelessLAN"`
@@ -26,11 +27,13 @@ type inputNetwork struct {
 	Promiscuous    any `default:"false"`
 }
 
+// Intermediate representation of a Network
 type intermediateNetwork struct {
 	Name string
 	Type string
 }
 
+// Parses all given inputNetworks to a list of valid experiment.Network
 func parseNetworks(input []inputNetwork) ([]experiment.Network, error) {
 	output := []experiment.Network{}
 	names := make(map[string]bool)
@@ -64,6 +67,7 @@ func parseNetworks(input []inputNetwork) ([]experiment.Network, error) {
 	return output, nil
 }
 
+// Parses an inputNetwork to a valid experiment.NetworkType depending on the given networkType as string
 func parseNetworkType(input inputNetwork, networkType string) (networktypes.NetworkType, error) {
 	var output networktypes.NetworkType
 	var err error

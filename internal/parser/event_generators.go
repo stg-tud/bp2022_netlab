@@ -9,6 +9,7 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 )
 
+// Input format of an EventGenerator configuration
 type inputEventGenerator struct {
 	Name   any `required:"true"`
 	Type   any `default:"Message Burst Generator"`
@@ -20,11 +21,13 @@ type inputEventGenerator struct {
 	ToHosts  inputInterval
 }
 
+// Input format of an Interval configuration
 type inputInterval struct {
 	From any `default:"-1"`
 	To   any `default:"-1"`
 }
 
+// Intermediate representation of an EventGeneratorType
 type intermediateEventGeneratorType struct {
 	Prefix   string
 	Interval customtypes.Interval
@@ -33,11 +36,13 @@ type intermediateEventGeneratorType struct {
 	ToHosts  customtypes.Interval
 }
 
+// Intermediate representation of a EventGenerator
 type intermediateEventGenerator struct {
 	Name string
 	Type string
 }
 
+// Parses all given inputEventGenerator to a list of valid experiment.EventGenerator
 func parseEventGenerators(input []inputEventGenerator) ([]experiment.EventGenerator, error) {
 	output := []experiment.EventGenerator{}
 	names := make(map[string]bool)
@@ -72,6 +77,7 @@ func parseEventGenerators(input []inputEventGenerator) ([]experiment.EventGenera
 	return output, nil
 }
 
+// Parses a given inputEventGenerator with a given type and name as strings to a valid eventgeneratortypes.EventGeneratorType
 func parseEventGeneratorType(input inputEventGenerator, eventGeneratorType string, name string) (eventgeneratortypes.EventGeneratorType, error) {
 	var output eventgeneratortypes.EventGeneratorType
 	prefixes := make(map[string]bool)
@@ -140,6 +146,7 @@ func parseEventGeneratorType(input inputEventGenerator, eventGeneratorType strin
 	}
 }
 
+// Compares an input Interval with an defaults Interval. Applies default values wherever the input has -1 as value.
 func compareIntervals(input customtypes.Interval, defaults customtypes.Interval) customtypes.Interval {
 	if input.From != -1 {
 		defaults.From = input.From

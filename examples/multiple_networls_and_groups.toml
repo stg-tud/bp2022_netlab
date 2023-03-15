@@ -32,18 +32,18 @@ Range = 800
 [[NodeGroup]]
 Prefix = "laptops"
 NoNodes = 7
-NodeType = "PC"
+NodesType = "PC"
 Networks = ["Wifi 2.4GHZ", "Wifi 5GHz"]
 
 [[NodeGroup]]
 Prefix = "IoT"
 NoNodes = 12
-NodeType = "PC"
+NodesType = "PC"
 Networks = ["Wifi 2.4GHz"]
 
 [[NodeGroup]]
 Prefix = "smartphones"
 NoNodes = 12
-NodeType = "PC"
+NodesType = "PC"
 Networks = ["Wifi 2.4GHz", "Wifi 5GHz", "LTE"]
 MovementModel = "RandomWaypoint"

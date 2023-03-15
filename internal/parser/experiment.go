@@ -10,6 +10,7 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 )
 
+// Input format of a Experiment configuration
 type inputExperiment struct {
 	Name       any `default:"Experiment"`
 	Runs       any `default:"1"`
@@ -24,6 +25,7 @@ type inputExperiment struct {
 	EventGenerator []inputEventGenerator
 }
 
+// Intermediate representation of a Experiment
 type intermediateExperiment struct {
 	Name       string
 	Runs       uint
@@ -32,11 +34,13 @@ type intermediateExperiment struct {
 	Duration   uint
 }
 
+// Input format of the WorldSize
 type inputWorldSize struct {
 	Height any `default:"750"`
 	Width  any `default:"1000"`
 }
 
+// Parses the given inputExperiment to a valid experiment.Experiment
 func parseGeneralExperiment(input inputExperiment) (experiment.Experiment, error) {
 	var output experiment.Experiment
 
@@ -69,6 +73,7 @@ func parseGeneralExperiment(input inputExperiment) (experiment.Experiment, error
 	return output, nil
 }
 
+// Generates a list of valid experiment.Target for a given list of target names as strings
 func parseTargets(input []string) []experiment.Target {
 	var output []experiment.Target
 	for _, targetString := range input {

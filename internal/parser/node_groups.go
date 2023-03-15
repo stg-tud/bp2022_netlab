@@ -8,6 +8,7 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 )
 
+// Input format of a NodeGroup configuration
 type inputNodeGroup struct {
 	Prefix        any `required:"true"`
 	NoNodes       any `default:"1"`
@@ -20,6 +21,7 @@ type inputNodeGroup struct {
 	MaxPause any `default:"0"`
 }
 
+// Intermediate representation of a NodeGroup
 type intermediateNodeGroup struct {
 	Prefix        string
 	NoNodes       uint
@@ -27,6 +29,7 @@ type intermediateNodeGroup struct {
 	NodesType     string
 }
 
+// Parses all given inputNodeGroups to a list of valid experiment.NodeGroup
 func parseNodeGroups(input []inputNodeGroup, exp *experiment.Experiment) ([]experiment.NodeGroup, error) {
 	output := []experiment.NodeGroup{}
 	prefixes := make(map[string]bool)
@@ -69,6 +72,7 @@ func parseNodeGroups(input []inputNodeGroup, exp *experiment.Experiment) ([]expe
 	return output, nil
 }
 
+// Parses an input string to a valid experiment.NodeType
 func parseNodesType(input string) (experiment.NodeType, error) {
 	switch strings.ToLower(input) {
 	case "pc", "computer", "device", "node":
@@ -82,6 +86,7 @@ func parseNodesType(input string) (experiment.NodeType, error) {
 	}
 }
 
+// Generates a list of *experiment.Network for a given list of network names as strings
 func parseNodeGroupNetworks(input []string, exp *experiment.Experiment) ([]*experiment.Network, error) {
 	output := []*experiment.Network{}
 	availableNetworkNames := make(map[string]int)
@@ -106,6 +111,7 @@ func parseNodeGroupNetworks(input []string, exp *experiment.Experiment) ([]*expe
 	return output, nil
 }
 
+// Parses a inputNodeGroup with to a movementpatterns.MovementPattern which fits the model string
 func parseMovementModel(input inputNodeGroup, model string) (movementpatterns.MovementPattern, error) {
 	switch strings.ToLower(model) {
 	case "randomwaypoint", "random waypoint", "random_waypoint", "random":
