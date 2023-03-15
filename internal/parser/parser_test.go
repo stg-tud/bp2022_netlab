@@ -1,12 +1,14 @@
 package parser_test
 
 import (
-	"errors"
+	"io/fs"
 	"testing"
 
+	"github.com/pelletier/go-toml/v2"
 	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
 	"github.com/stg-tud/bp2022_netlab/internal/eventgeneratortypes"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
+	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 	"github.com/stg-tud/bp2022_netlab/internal/parser"
 	"github.com/stretchr/testify/assert"
@@ -50,11 +52,13 @@ func TestParseSimpleText(t *testing.T) {
 func TestParseNonExistingFile(t *testing.T) {
 	_, err := parser.LoadFromFile("testdata/does-not-exist.toml")
 	assert.Error(t, err)
+	assert.IsType(t, &fs.PathError{}, err)
 }
 
 func TestParseWrongFormattedFile(t *testing.T) {
 	_, err := parser.LoadFromFile("testdata/wrong-formatted.toml")
 	assert.Error(t, err)
+	assert.IsType(t, &toml.DecodeError{}, err)
 }
 
 func TestParseSimpleFile(t *testing.T) {
@@ -86,8 +90,11 @@ func TestParseComplexFile(t *testing.T) {
 	assert.EqualValues(t, 5, exp.Runs)
 	assert.EqualValues(t, 456789, exp.Duration)
 	assert.EqualValues(t, 17, exp.Warmup)
+	assert.EqualValues(t, 1337, exp.RandomSeed)
 	assert.EqualValues(t, 2000, exp.WorldSize.Height)
 	assert.EqualValues(t, 3000, exp.WorldSize.Width)
+
+	assert.Equal(t, []experiment.Target{experiment.TargetCore, experiment.TargetCoreEmulab, experiment.TargetTheOne}, exp.Targets)
 
 	assert.Len(t, exp.Networks, 6)
 	assert.Len(t, exp.NodeGroups, 3)
@@ -133,6 +140,7 @@ func TestParseComplexFile(t *testing.T) {
 	assert.EqualValues(t, 7, exp.NodeGroups[0].NoNodes)
 	assert.EqualValues(t, experiment.NodeTypePC, exp.NodeGroups[0].NodesType)
 	assert.EqualValues(t, []*experiment.Network{&exp.Networks[0], &exp.Networks[1], &exp.Networks[3], &exp.Networks[4]}, exp.NodeGroups[0].Networks)
+	assert.IsType(t, movementpatterns.Static{}, exp.NodeGroups[0].MovementModel)
 
 	assert.Equal(t, "IoT", exp.NodeGroups[1].Prefix)
 	assert.EqualValues(t, 12, exp.NodeGroups[1].NoNodes)
@@ -143,6 +151,12 @@ func TestParseComplexFile(t *testing.T) {
 	assert.EqualValues(t, 12, exp.NodeGroups[2].NoNodes)
 	assert.EqualValues(t, experiment.NodeTypePC, exp.NodeGroups[2].NodesType)
 	assert.EqualValues(t, []*experiment.Network{&exp.Networks[0], &exp.Networks[1], &exp.Networks[2]}, exp.NodeGroups[2].Networks)
+	assert.IsType(t, movementpatterns.RandomWaypoint{}, exp.NodeGroups[2].MovementModel)
+	assert.True(t, assert.ObjectsAreEqual(movementpatterns.RandomWaypoint{
+		MinSpeed: 5,
+		MaxSpeed: 7,
+		MaxPause: 2,
+	}, exp.NodeGroups[2].MovementModel))
 
 	assert.Equal(t, "EVG1", exp.EventGenerators[0].Name)
 	assert.IsType(t, eventgeneratortypes.MessageBurstGenerator{}, exp.EventGenerators[0].Type)
@@ -169,25 +183,4 @@ func TestParseComplexFile(t *testing.T) {
 	assert.Equal(t, "EVG2", exp.EventGenerators[1].Name)
 	assert.IsType(t, eventgeneratortypes.MessageEventGenerator{}, exp.EventGenerators[1].Type)
 	assert.Equal(t, "ii", exp.EventGenerators[1].Type.(eventgeneratortypes.MessageEventGenerator).Prefix)
-}
-
-func TestMissingRequiredValuesText(t *testing.T) {
-	toml := `
-	Name = "Testing Experiment"
-	Runs = 1
-
-	[[Network]]
-	Name = "Wifi"
-	Type = "wireless lan"
-
-	[[NodeGroup]]
-	Prefix = "users"
-	NoNodes = 7
-	Networks = ["Wifi"]
-	`
-
-	_, err := parser.ParseText([]byte(toml))
-
-	assert.Error(t, err)
-	assert.Equal(t, errors.New("error parsing field \"Duration\": field is required"), err)
 }

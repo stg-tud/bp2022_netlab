@@ -2,11 +2,12 @@ Name = "Complex Experiment"
 Runs = 5
 Duration = 456789
 WarmUp = 17
+RandomSeed = 1337
 
 WorldSize.Height = 2000
 WorldSize.Width = 3000
 
-Targets = ["CORE", "coreemu", "The ONE"]
+Targets = ["CORE", "coreemu-lab", "The ONE"]
 
 [[Network]]
 Name = "Wifi 2.4GHz"
@@ -51,6 +52,7 @@ Prefix = "laptops"
 NoNodes = 7
 NodesType = "PC"
 Networks = ["Wifi 2.4GHZ", "Wifi 5GHz", "Hubbed", "Switched"]
+MovementModel = "static"
 
 [[NodeGroup]]
 Prefix = "IoT"
@@ -64,6 +66,9 @@ NoNodes = 12
 NodesType = "PC"
 Networks = ["Wifi 2.4GHz", "Wifi 5GHz", "LTE"]
 MovementModel = "RandomWaypoint"
+MinSpeed = 5
+MaxSpeed = 7
+MaxPause = 2
 
 [[EventGenerator]]
 Name = "EVG1"

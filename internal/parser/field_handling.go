@@ -37,7 +37,11 @@ func parseInterfaceInput(fieldValue reflect.Value, targetFieldType reflect.Struc
 	case reflect.Float32, reflect.Float64:
 		floatVal, fits := fieldValue.Interface().(float64)
 		if !fits {
-			return fmt.Errorf("invalid input data type -- expected %s", targetFieldType.Type.Name())
+			intVal, fits := fieldValue.Interface().(int64)
+			if !fits {
+				return fmt.Errorf("invalid input data type -- expected %s", targetFieldType.Type.Name())
+			}
+			floatVal = float64(intVal)
 		}
 		targetFieldValue.SetFloat(floatVal)
 

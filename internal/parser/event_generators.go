@@ -46,6 +46,7 @@ type intermediateEventGenerator struct {
 func parseEventGenerators(input []inputEventGenerator) ([]experiment.EventGenerator, error) {
 	output := []experiment.EventGenerator{}
 	names := make(map[string]bool)
+	prefixes := make(map[string]bool)
 
 	for i, inEvenetGenerator := range input {
 		intermediate, err := fillDefaults[inputEventGenerator, intermediateEventGenerator](inEvenetGenerator)
@@ -59,17 +60,15 @@ func parseEventGenerators(input []inputEventGenerator) ([]experiment.EventGenera
 		}
 		names[strings.ToLower(intermediate.Name)] = true
 
-		eventGeneratorType, err := parseEventGeneratorType(inEvenetGenerator, intermediate.Type, intermediate.Name)
+		eventGeneratorType, err := parseEventGeneratorType(inEvenetGenerator, intermediate.Type, intermediate.Name, prefixes)
 		if err != nil {
-			return output, fmt.Errorf("error parsing node group %d: %s", i, err)
+			return output, fmt.Errorf("error parsing event generator %d: %s", i, err)
 		}
 
 		outputEventGenerator, err := experiment.NewEventGenerator(intermediate.Name, eventGeneratorType)
 		if err != nil {
 			return output, fmt.Errorf("error parsing event generator %d: %s", i, err)
 		}
-
-		fmt.Printf("%#v\n", outputEventGenerator)
 
 		output = append(output, outputEventGenerator)
 	}
@@ -78,9 +77,8 @@ func parseEventGenerators(input []inputEventGenerator) ([]experiment.EventGenera
 }
 
 // Parses a given inputEventGenerator with a given type and name as strings to a valid eventgeneratortypes.EventGeneratorType
-func parseEventGeneratorType(input inputEventGenerator, eventGeneratorType string, name string) (eventgeneratortypes.EventGeneratorType, error) {
+func parseEventGeneratorType(input inputEventGenerator, eventGeneratorType string, name string, prefixes map[string]bool) (eventgeneratortypes.EventGeneratorType, error) {
 	var output eventgeneratortypes.EventGeneratorType
-	prefixes := make(map[string]bool)
 
 	intermediate, err := fillDefaults[inputEventGenerator, intermediateEventGeneratorType](input)
 	if err != nil {
