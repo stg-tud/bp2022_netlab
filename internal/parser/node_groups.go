@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	logger "github.com/gookit/slog"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 )
@@ -102,11 +103,10 @@ func parseNodeGroupNetworks(input []string, exp *experiment.Experiment) ([]*expe
 		if !exists {
 			return output, fmt.Errorf("network \"%s\" not found", networkName)
 		}
-		if count > 0 {
-			continue
+		if count == 0 {
+			output = append(output, networkPointers[lowerNetworkName])
+			availableNetworkNames[lowerNetworkName] = count + 1
 		}
-		output = append(output, networkPointers[lowerNetworkName])
-		availableNetworkNames[lowerNetworkName] = count + 1
 	}
 	return output, nil
 }
@@ -121,6 +121,7 @@ func parseMovementModel(input inputNodeGroup, model string) (movementpatterns.Mo
 		return fillDefaults[inputNodeGroup, movementpatterns.Static](input)
 
 	default:
-		return movementpatterns.Static{}, fmt.Errorf("movement pattern \"%s\" not found", model)
+		logger.Warnf("Unknown movement pattern \"%s\". Using static instead. Please check your config.", model)
+		return movementpatterns.Static{}, nil
 	}
 }
