@@ -200,8 +200,8 @@ func TestUnknownMovementModel(t *testing.T) {
 	MovementModel = "circular"
 	`
 
-	_, err := parser.ParseText([]byte(toml))
+	exp, err := parser.ParseText([]byte(toml))
 
-	assert.Error(t, err)
-	assert.Equal(t, errors.New("error parsing node group 0: movement pattern \"circular\" not found"), err)
+	assert.NoError(t, err) // With a unknown movement model, generation should succeed anyways
+	assert.IsType(t, movementpatterns.Static{}, exp.NodeGroups[0].MovementModel)
 }

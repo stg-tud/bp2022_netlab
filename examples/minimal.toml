@@ -1,3 +1,9 @@
+# A minimal example on how to generate experiment configs with netlab.
+#
+# This configuration will create one wireless-lan network as well as seven
+# nodes connected to it. Default values are applied to all other values.
+# See documentation for more details on the parameters and default values.
+
 Name = "A very simple experiment"
 Targets = ["coreemu-lab", "The ONE"]
 
