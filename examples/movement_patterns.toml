@@ -1,3 +1,9 @@
+# An example to demonstrate the use of different movement patterns with netlab.
+#
+# This configuration will create one network as well as five groups of nodes,
+# each of which uses as different movement model. For the movements itself,
+# default values are used. See documentation for more information on those.
+
 Name = "Different Movement Patterns"
 Runs = 1
 RandomSeed = 7850800065078565476
