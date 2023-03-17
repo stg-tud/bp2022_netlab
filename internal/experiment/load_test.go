@@ -2,13 +2,19 @@ package experiment_test
 
 import (
 	"testing"
+	"os"
 
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
+	
 )
 
 func TestLoad(t *testing.T) {
+
+	t.Cleanup(func() {
+		os.Remove("predefineData")
+	})
 
 	actual, err := experiment.LoadFromFile("testdata/load_test.toml")
 	if err != nil {

@@ -1,6 +1,7 @@
 package experiment
 
 import (
+	"bytes"
 	"errors"
 	"os"
 	"strings"
@@ -13,6 +14,7 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
 )
+const SavedPredefineFile string ="predefineData"
 
 type expConf struct {
 	Name            string
@@ -25,6 +27,8 @@ type expConf struct {
 	Targets         []string
 	Warmup          uint
 	EventGenerators []eventgenerator
+
+	StaticPredefine bool
 }
 type eventgenerator struct {
 	Name      string
@@ -66,20 +70,41 @@ type movement struct {
 
 // parse toml file into experiment struct
 func LoadFromFile(file string) (exp Experiment, returnError error) {
+	
 	logger.Info("Generate experiment")
 	var conf expConf
 	// read file
 	buf, e := os.ReadFile(file)
 	if e != nil {
 		logger.Error("could not find toml file")
-
 		return exp, e
 	}
+
 	err := toml.Unmarshal(buf, &conf)
 	if err != nil {
 		logger.Error("Error parsing toml into struct")
 		return exp, err
 	}
+	
+	if conf.StaticPredefine{
+		buffer,e := os.ReadFile(SavedPredefineFile)
+		if e != nil {
+			logger.Error("could not find static predefine data")
+			return
+		}
+		if(bytes.Equal(buf,buffer)){
+			
+		}
+
+
+		}
+		err = os.WriteFile(SavedPredefineFile,buf,0644)
+		if err != nil{
+			logger.Error("Error writing predefine data")
+			return exp,err
+		}
+	
+
 	// actual experiment
 	exp = Experiment{}
 	var replaceTargets []Target
@@ -104,6 +129,7 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 	exp.RandomSeed = conf.RandomSeed
 	exp.WorldSize = conf.WorldSize
 	exp.Warmup = conf.Warmup
+	
 	// network slices
 	nets := conf.Networks
 	for i := range nets {
