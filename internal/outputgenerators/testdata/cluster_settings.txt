@@ -100,6 +100,7 @@ Group7.interface1= wireless
 Group7.movementModel = RandomWaypoint
 
 GroupPosition 1: Position = (40,55)
+
 ## Message creation parameters
 # How many event generators
 Events.nrof = 2
