@@ -3,6 +3,7 @@ package outputgenerators
 import (
 	"fmt"
 	"os"
+	"io"
 	"path/filepath"
 	"text/template"
 
@@ -94,8 +95,27 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 	replace.RandomSeed = exp.RandomSeed
 	replace.Warmup = exp.Warmup
 	replace.Runtime = exp.Duration
+
 	if exp.ExternalMovement.Active {
 		replace.Automator = exp.ExternalMovement.FileName
+
+		source, err := os.Open(filepath.Join(exp.ExternalMovement.FileName))
+    	if err != nil {
+        	logger.Error("Error opening external file",err)
+		}
+    	defer source.Close()
+		destination, err := os.Create(filepath.Join(outputFilePath,exp.ExternalMovement.FileName))
+    	if err != nil {
+			logger.Error("Error creating external file",err)
+    	}
+    	defer destination.Close()
+
+	    _, err = io.Copy(destination, source)
+    	if err != nil {
+    	    logger.Error("Error copying external file",err)
+    	}
+
+
 	}
 	confTemplate, err := template.ParseFS(TemplatesFS, fmt.Sprintf("%s/%s", TemplatesFolder, "experiment.conf"))
 	if err != nil {
