@@ -5,6 +5,10 @@ RandomSeed = 1673916419715
 Warmup = 5
 Duration = 43
 
+[PredefinePosition]
+X = 40
+Y = 55
+
 [WorldSize]
 Height = 170
 Width = 240
@@ -62,7 +66,12 @@ LossStartRange = 300.0
 [[NodeGroups]]
 Prefix = 'a'
 NoNodes = 1
+DefaultPosition = true
 NodesType = 0
+
+[NodeGroups.Position]
+X = 40
+Y = 55
 
 [NodeGroups.MovementModel]
 MinSpeed = 123
@@ -83,7 +92,12 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'b'
 NoNodes = 2
+DefaultPosition = false
 NodesType = 0
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 123
@@ -109,7 +123,12 @@ Name = 'switch'
 [[NodeGroups]]
 Prefix = 'c'
 NoNodes = 3
+DefaultPosition = false
 NodesType = 0
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 
@@ -121,7 +140,12 @@ Name = 'switch'
 [[NodeGroups]]
 Prefix = 'd'
 NoNodes = 4
+DefaultPosition = false
 NodesType = 0
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 123
@@ -142,7 +166,12 @@ Promiscuous = true
 [[NodeGroups]]
 Prefix = 'e'
 NoNodes = 5
+DefaultPosition = false
 NodesType = 1
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 
@@ -154,7 +183,12 @@ Name = 'hub'
 [[NodeGroups]]
 Prefix = 'f'
 NoNodes = 6
+DefaultPosition = false
 NodesType = 0
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 1
@@ -169,7 +203,12 @@ Name = 'emane'
 [[NodeGroups]]
 Prefix = 'g'
 NoNodes = 7
+DefaultPosition = false
 NodesType = 0
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 123

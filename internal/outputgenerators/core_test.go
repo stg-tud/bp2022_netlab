@@ -28,7 +28,7 @@ func TestCore(t *testing.T) {
 	if err != nil {
 		t.Fatal("Could not read output file", err)
 	}
-
+	
 	if string(actual) != string(expected) {
 		t.Fatal("Output does not match expected output!")
 	}

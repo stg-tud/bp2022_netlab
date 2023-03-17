@@ -45,7 +45,11 @@ Group{{add $index 1}}.interface{{add $index1 1}}= {{$interfaces.Name}}
 Group{{add $index 1}}.movementModel = {{$group.MovementModel}}
 {{end}}
 
-
+{{- range $index, $group:= .Groups}}
+{{- if eq .DefaultPosition true}}
+GroupPosition {{add $index 1}}: Position = ({{$group.Position.X}},{{$group.Position.Y}})
+{{- end}}
+{{- end}}
 
 ## Message creation parameters
 # How many event generators

@@ -32,7 +32,7 @@
   </networks>
   <devices>
     <device id="11" name="a1" icon="" canvas="1" type="router" class="" image="">
-      <position x="100" y="70"/>
+      <position x="40" y="55"/>
       <configservices>
         <service name="zebra"/>
         <service name="OSPFv2"/>
