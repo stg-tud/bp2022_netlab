@@ -2,8 +2,8 @@ package outputgenerators
 
 import (
 	"fmt"
-	"os"
 	"io"
+	"os"
 	"path/filepath"
 	"text/template"
 
@@ -178,25 +178,25 @@ func (t TheOne) Generate(exp experiment.Experiment) {
 		EventGenerators:  t.buildEventGenerators(exp),
 	}
 
-	if exp.ExternalMovement.Active{
+	if exp.ExternalMovement.Active {
 		replace.ExternalFile = exp.ExternalMovement.FileName
 
 		source, err := os.Open(filepath.Join(exp.ExternalMovement.FileName))
-    	if err != nil {
-        	logger.Error("Error opening external file",err)
+		if err != nil {
+			logger.Error("Error opening external file", err)
 		}
-    	defer source.Close()
-		destination, err := os.Create(filepath.Join(outputFilePath,exp.ExternalMovement.FileName))
-    	if err != nil {
-			logger.Error("Error creating external file",err)
-    	}
-    	defer destination.Close()
+		defer source.Close()
+		destination, err := os.Create(filepath.Join(outputFilePath, exp.ExternalMovement.FileName))
+		if err != nil {
+			logger.Error("Error creating external file", err)
+		}
+		defer destination.Close()
 
-	    _, err = io.Copy(destination, source)
-    	if err != nil {
-    	    logger.Error("Error copying external file",err)
-    	}
-		
+		_, err = io.Copy(destination, source)
+		if err != nil {
+			logger.Error("Error copying external file", err)
+		}
+
 	}
 
 	funcs := template.FuncMap{"add": add}
