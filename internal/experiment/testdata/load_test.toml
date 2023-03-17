@@ -4,7 +4,10 @@ Targets = ["Core","The One"]
 RandomSeed = 1673916419715
 Duration = 123456
 Warmup = 5
-StaticPredefine = true
+
+[PredefinePosition]
+X = 40
+Y = 55
 
 [WorldSize]
 Height = 170
@@ -107,7 +110,7 @@ MaxPause = 17
 [[NodeGroups]]
 Prefix = 'g'
 NoNodes = 7
-
+PredefinePosition = true
 
 [NodeGroups.MovementModel]
 Model = 'RandomWaypoint'

@@ -57,6 +57,11 @@ func GetTestingExperiment() experiment.Experiment {
 	nodegroups = append(nodegroups, ng)
 
 	nodegroups[0].Networks = []*experiment.Network{&networks[0]}
+	nodegroups[0].DefaultPosition = true
+	nodegroups[0].Position = customtypes.Position{
+		X: 40,
+		Y: 55,
+	}
 	nodegroups[1].Networks = []*experiment.Network{&networks[0], &networks[1]}
 
 	nodegroups[2].Networks = []*experiment.Network{&networks[1]}
@@ -89,7 +94,10 @@ func GetTestingExperiment() experiment.Experiment {
 			Height: 170,
 			Width:  240,
 		},
-
+		PredefinePosition: customtypes.Position{
+			X: 40,
+			Y: 55,
+		},
 		Networks:        networks,
 		NodeGroups:      nodegroups,
 		EventGenerators: eventgenerators,

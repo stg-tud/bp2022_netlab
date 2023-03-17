@@ -1,13 +1,13 @@
 package experiment_test
 
 import (
-	"testing"
 	"os"
+	"testing"
 
+	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
-	
 )
 
 func TestLoad(t *testing.T) {
@@ -67,6 +67,13 @@ func TestLoad(t *testing.T) {
 	}
 	if actual.NodeGroups[6].NodesType.String() != "Router" {
 		t.Fatal("Wrong default network for Nodegroup")
+	}
+	expectedPosition := customtypes.Position{
+		X: 40,
+		Y: 55,
+	}
+	if actual.NodeGroups[6].Position != expectedPosition {
+		t.Fatal("Wrong predefine Position, expected:", expectedPosition, "actual:", actual.NodeGroups[6].Position)
 	}
 
 }
