@@ -39,6 +39,7 @@ type theOneData struct {
 	Warmup                      uint
 	Runtime                     uint
 	NoEventGenerator            int
+	ExternalFile                string
 }
 type eventGenerator struct {
 	Name string
@@ -174,6 +175,10 @@ func (t TheOne) Generate(exp experiment.Experiment) {
 		Groups:           t.buildGroups(exp),
 		NoEventGenerator: len(exp.EventGenerators),
 		EventGenerators:  t.buildEventGenerators(exp),
+	}
+
+	if exp.ExternalMovement.Active{
+		replace.ExternalFile = exp.ExternalMovement.FileName
 	}
 
 	funcs := template.FuncMap{"add": add}
