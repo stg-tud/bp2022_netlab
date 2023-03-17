@@ -11,6 +11,7 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/logging"
 	"github.com/stg-tud/bp2022_netlab/internal/outputgenerators"
+	"github.com/stg-tud/bp2022_netlab/internal/parser"
 )
 
 var overwriteExisting bool
@@ -137,7 +138,7 @@ func generate(cmd *cobra.Command, args []string) {
 	logging.Init(debug)
 	logger.Info("Starting")
 
-	exp, err := experiment.LoadFromFile(args[0])
+	exp, err := parser.LoadFromFile(args[0])
 	if err != nil {
 		logger.Error("Error loading file:", err)
 		return
