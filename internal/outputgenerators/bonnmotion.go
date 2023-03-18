@@ -51,7 +51,7 @@ func (b Bonnmotion) TargetIsSupported(t experiment.Target) bool {
 	return supported
 }
 
-// Returns whether the given movement Pattern is supported. 
+// Returns whether the given movement Pattern is supported.
 func (b Bonnmotion) MovementPatternIsSupported(movementPattern movementpatterns.MovementPattern) bool {
 	switch movementPattern.(type) {
 	case movementpatterns.RandomWaypoint:
