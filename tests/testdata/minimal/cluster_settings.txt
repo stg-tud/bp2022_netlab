@@ -1,0 +1,59 @@
+#
+# Default settings for the simulation
+#
+
+## Scenario settings
+Scenario.name = "A_very_simple_experiment"
+RandomSeed = 2502352939705136212
+Scenario.simulateConnections = true
+Scenario.updateInterval = 0.1
+# 43k ~= 12h
+Scenario.endTime = 240
+Wifi.type = SimpleBroadcastInterface
+# transmit speed of 2 Mbps = 250kBps
+Wifi.transmitSpeed = 54000000
+Wifi.transmitRange = 400
+
+
+Scenario.nrofHostGroups = 1
+
+# common settings for all groups
+Group.movementModel = ClusterMovement
+Group.router = EpidemicRouter
+Group.bufferSize = 5M
+Group.waitTime = 0, 120
+#All nodes have the firstinterface inteface
+Group.nrofInterfaces = 1
+Group.interface1 = 
+# walking speeds
+Group.speed = 0.5, 1.5
+#Group.msgTtl = 60
+
+Group.nrofHosts = 40
+Group.nrofApplications = 0
+Group1.groupID = users
+Group1.nrofHosts = 7
+Group1.nrofInterfaces = 1
+Group1.interface1= Wifi
+Group1.movementModel = Static
+
+
+
+
+## Message creation parameters
+# How many event generators
+Events.nrof = 0
+
+## Movement model settings
+# seed for movement models' pseudo random number generator (default = 0)
+MovementModel.rngSeed = 2502352939705136212
+# World's size for Movement Models without implicit size (width, height; meters)
+MovementModel.worldSize = 20000, 15000
+# How long time to move hosts in the world before real simulation
+MovementModel.warmup = 0
+
+
+# how many events to show in the log panel (default = 30)
+GUI.EventLogPanel.nrofEvents = 30
+# Regular Expression log filter (see Pattern-class from the Java API for RE-matching details)
+#GUI.EventLogPanel.REfilter = .*p[1-9]<->p[1-9]$
