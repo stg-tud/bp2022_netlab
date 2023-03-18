@@ -1,4 +1,22 @@
+```
+            _   _       _
+ _ __   ___| |_| | __ _| |__
+| '_ \ / _ \ __| |/ _' | '_ \
+| | | |  __/ |_| | (_| | |_) |
+|_| |_|\___|\__|_|\__,_|_.__/
+```
+
 # bp2022_netlab
+
+netlab helps you to quickly generate configuration files for network experiment softwares such as [CORE](http://coreemu.github.io/core/), [coreemu-lab](https://github.com/gh0st42/coreemu-lab) and [The ONE](https://github.com/akeranen/the-one) using a single TOML file. Its aim is to make your work easier, thus it handles annoying tasks such as generating IP addresses, movement patterns (using [BonnMotion](https://sys.cs.uos.de/bonnmotion/)) and multiple parameterized runs.
+
+netlab was developed by a group of five students as part of a bachelor internship of the [department of computer science](https://www.informatik.tu-darmstadt.de/fb20/index.en.jsp) at [TU Darmstadt](https://www.tu-darmstadt.de/index.en.jsp) in summer term 2023.
+
+## Requirements
+
+In order to generate movement patterns, [BonnMotion](https://sys.cs.uos.de/bonnmotion/) version 3.0.1 or higher must be installed. It must either be available under the name "bm" (which is default) in your `$PATH`/`%Path%` or you must specify the path of the BonnMotion executable using the `-b <path-to-bonnmotion>` flag of netlab.
+
+If you do not want to use our pre-built [Releases](https://github.com/stg-tud/bp2022_netlab/releases) you will also need [go](https://go.dev/) version 1.19 or higher installed.
 
 ## Installation
 
@@ -6,14 +24,16 @@ To install netlab, you can either use the pre-built binaries provided [here](htt
 
 ```bash
 # HTTPS:
-git clone https://github.com/stg-tud/bp2022_netlab.git -o netlab
-
+git clone https://github.com/stg-tud/bp2022_netlab.git netlab
 # SSH:
-git clone git@github.com:stg-tud/bp2022_netlab.git -o netlab
+git clone git@github.com:stg-tud/bp2022_netlab.git netlab
 
 cd netlab
-make build
-make install
+
+# Linux, macOS:
+go build -o netlab main.go
+# Windows:
+go build -o netlab.exe main.go
 ```
 
 ## Usage
@@ -32,9 +52,9 @@ The usage itself should be pretty self-explainatory. You can always run `netlab 
 
 Currently, these **commands** are supported:
 
-- `netlab version`: Shows the current version number of netlab
-- `netlab test [filename]`: Tests the given TOML file for errors but does not generate any output files
-- `netlab generate [filename]`: Loads the given TOML file and generates output files for all targets.
+- `netlab version`: Shows the current version number of netlab.
+- `netlab test [filename]`: Tests the given TOML file for errors but does not generate any output files.
+- `netlab generate [filename]` (or `netlab gen [filename]` for short): Loads the given TOML file and generates output files for all targets.
 
 There are also some **flags** which might interest you:
 
@@ -44,29 +64,8 @@ There are also some **flags** which might interest you:
 - `-o --overwrite`: overwrites existing files _(`generate` only)_
 - `-f <name> --folder <name>`: outputs to the specified folder name instead of the default `output` _(`generate` only)_
 - `-t <target> --target <target>`: outputs for the specified target format. If specified, the targets definition from the TOML file will be ignored. Can be specified multiple times for multiple targets. Possible values are for example `core`, `coreemu-lab` and `the-one`. _(`generate` only)_
+- `-b <path-to-bonnmotion> --bonnmotion <path-to-bonnmotion>`: path of the BonnMotion executable to run, if not installed as `bm` in `$PATH`/`%Path%`. _(`generate` only)_
 
-## Contributing
+## Configuration files
 
-### VS Code
-
-We use Visual Studio Code with the [Go Extension](https://marketplace.visualstudio.com/items?itemName=golang.Go) installed.
-
-For the most convenient development, turn on "Format On Save" in VS Code settings (`@lang:go @id:editor.formatOnSave`) and set the "Default Formatter" (`@lang:go @id:editor.defaultFormatter`) to `golang.go`.
-
-### Pre-commit hook
-
-Additionally you can use the provided **pre-commit hook** to run tests and format check on commit. Activate it by running the following command inside the repository:
-
-```bash
-git config core.hooksPath .githooks
-```
-
-Please make sure to use `gofmt` and `go test` (or use pre-commit hook instead) as tests will fail if your commits do not comply with the formatting style.
-
-### golangci-lint
-
-We also use the tool [golangci-lint](https://golangci-lint.run/) for some static code analysis. This is also part of our testing pipeline so please make sure to run those tests before commiting (or use pre-commit hook instead).
-
-It can be installed as described [here](https://golangci-lint.run/usage/install/#local-installation). Please make sure it is callable by `golangci-lint` (e. g. by adding its path to the `$PATH` environment variable).
-
-In case check errors should be intentionally be ignored please use linter directives as described [here](https://golangci-lint.run/usage/false-positives/#nolint-directive).
+netlab uses TOML files for experiment configurations. For more information on how to create those, have a look at the [Wiki](https://github.com/stg-tud/bp2022_netlab/wiki/). You can also find a few example files in the [examples](https://github.com/stg-tud/bp2022_netlab/tree/documentation/examples) folder.

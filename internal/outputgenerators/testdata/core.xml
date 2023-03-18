@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<scenario name="Testing Experiment">
+<scenario name="Testing_Experiment">
   <networks>
     <network id="5" name="net_wireless_lan" icon="" canvas="1" type="WIRELESS_LAN">
       <position x="100" y="100"/>
@@ -530,6 +530,7 @@
     <configuration name="shapes" value="[]"/>
     <configuration name="edges" value="[]"/>
     <configuration name="hidden" value="[]"/>
+    <configuration name="canvas c1" value="{name {Canvas1}} {refpt {0 0 47.5791667 -122.132322 2.0}} {scale 150.0} {size { 240 170}}"/>
     <configuration name="canvas" value="{&quot;gridlines&quot;: true, &quot;canvases&quot;: [{&quot;id&quot;: 1, &quot;wallpaper&quot;: null, &quot;wallpaper_style&quot;: 1, &quot;fit_image&quot;: false, &quot;dimensions&quot;: [240, 170]}]}"/>
   </session_metadata>
   <default_services>

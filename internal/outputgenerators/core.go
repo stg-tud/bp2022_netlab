@@ -274,7 +274,7 @@ func (c Core) Generate(exp experiment.Experiment) {
 	}
 
 	replacements := coreData{
-		ScenarioName: exp.Name,
+		ScenarioName: folderstructure.FileSystemEscape(exp.Name),
 		Networks:     networks,
 		Devices:      devices,
 		WorldSize:    exp.WorldSize,

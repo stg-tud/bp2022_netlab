@@ -22,11 +22,7 @@ type NodeGroup struct {
 }
 
 var defaultValues = NodeGroup{
-	MovementModel: movementpatterns.RandomWaypoint{
-		MinSpeed: 123,
-		MaxSpeed: 456,
-		MaxPause: 0,
-	},
+	MovementModel: movementpatterns.Static{},
 
 	NodesType: NodeTypeRouter,
 
