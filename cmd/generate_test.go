@@ -9,10 +9,12 @@ import (
 )
 
 var stringTest string
-var exTarget experiment.Target
+
+//var exTarget experiment.Target
 
 var exptest experiment.Experiment = experiment.Experiment{}
-var outTest []outputgenerators.OutputGenerator
+
+// var outTest []outputgenerators.OutputGenerator
 var boolCore bool
 var boolClab bool
 var boolTheOne bool
