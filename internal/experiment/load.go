@@ -25,7 +25,7 @@ type expConf struct {
 	Targets          []string
 	Warmup           uint
 	EventGenerators  []eventgenerator
-	ExternalMovement externalmovement
+	ExternalMovement ExternalMovement
 }
 type eventgenerator struct {
 	Name      string

@@ -1,6 +1,6 @@
 package experiment
 
-type externalmovement struct {
+type ExternalMovement struct {
 	Active   bool
 	FileName string
 }
