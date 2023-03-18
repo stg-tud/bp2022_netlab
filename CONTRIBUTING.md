@@ -62,9 +62,9 @@ The TOML file will be parsed by the `parser` package, which will generate an `ex
 
 ## Adding new output generators
 
-As described above, output generators get an instance of `experiment.Experiment` passed as their only parameter to the `Generate` method. From there on, they should generate the respective configuration files with the information given in the `experiment.Experiment`, call the program with the repective parameters or similar.
+As described above, output generators get an instance of `experiment.Experiment` passed as their only parameter to the `Generate` method. From there on, they should generate the respective configuration files with the information given in the `experiment.Experiment`, call the program with the respective parameters or similar.
 
-If you're adding an output generator for a new software, you might also want to add a `experiment.Target`. Targets are the target softwares, a user might want configuration files for (e.g. `BonnMotion` is not a target as a user wants the configuration for network simulation softwares, not single movement patterns. But it is indeed an output generator). Targets can be added in the `experiment.Target` struct in `experiment/targets.go`.
+If you're adding an output generator for a new software, you might also want to add a `experiment.Target`. Targets are the target softwares, a user might want configuration files for. For example `BonnMotion` is not a target as a user wants the configuration for network simulation softwares, not single movement patterns. But it is indeed an output generator. Targets can be added in the `experiment.Target` struct in `experiment/targets.go`.
 
 For new output generators/targets to work properly, they must also be added to those locations:
 

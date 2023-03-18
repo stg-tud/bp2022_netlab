@@ -1,0 +1,3 @@
+bonnmotion -fsmartphones RandomWaypoint -h7 -l5 -p2 -d42 -n12 -x3000 -y2000 -R1337
+bonnmotion NSFile -fsmartphones
+bonnmotion TheONEFile -fsmartphones
