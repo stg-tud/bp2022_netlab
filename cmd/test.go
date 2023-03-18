@@ -5,8 +5,8 @@ import (
 
 	logger "github.com/gookit/slog"
 	"github.com/spf13/cobra"
-	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/logging"
+	"github.com/stg-tud/bp2022_netlab/internal/parser"
 )
 
 var testCmd = &cobra.Command{
@@ -23,7 +23,7 @@ further steps are taken, e.g. no output files will be generated.`,
 // test user's input file for errors
 func test(cmd *cobra.Command, args []string) {
 	logging.Init(debug)
-	_, err := experiment.LoadFromFile(args[0])
+	_, err := parser.LoadFromFile(args[0])
 	if err != nil {
 		logger.Error("Error parsing file:", err)
 		fmt.Println()

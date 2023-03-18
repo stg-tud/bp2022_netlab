@@ -69,9 +69,6 @@ NoNodes = 1
 NodesType = 0
 
 [NodeGroups.MovementModel]
-MinSpeed = 123
-MaxSpeed = 456
-MaxPause = 0
 
 [[NodeGroups.Networks]]
 Name = 'wireless_lan'
@@ -90,9 +87,6 @@ NoNodes = 2
 NodesType = 0
 
 [NodeGroups.MovementModel]
-MinSpeed = 123
-MaxSpeed = 456
-MaxPause = 0
 
 [[NodeGroups.Networks]]
 Name = 'wireless_lan'
@@ -128,9 +122,6 @@ NoNodes = 4
 NodesType = 0
 
 [NodeGroups.MovementModel]
-MinSpeed = 123
-MaxSpeed = 456
-MaxPause = 0
 
 [[NodeGroups.Networks]]
 Name = 'changed_wifi'
@@ -176,9 +167,6 @@ NoNodes = 7
 NodesType = 0
 
 [NodeGroups.MovementModel]
-MinSpeed = 123
-MaxSpeed = 456
-MaxPause = 0
 
 [[NodeGroups.Networks]]
 Name = 'wireless'
