@@ -104,6 +104,7 @@
     <configuration name="shapes" value="[]"/>
     <configuration name="edges" value="[]"/>
     <configuration name="hidden" value="[]"/>
+    <configuration name="canvas c1" value="{name {Canvas1}} {refpt {0 0 47.5791667 -122.132322 2.0}} {scale 150.0} {size { {{ .WorldSize.Width }} {{ .WorldSize.Height }}}}"/>
     <configuration name="canvas" value="{&quot;gridlines&quot;: true, &quot;canvases&quot;: [{&quot;id&quot;: 1, &quot;wallpaper&quot;: null, &quot;wallpaper_style&quot;: 1, &quot;fit_image&quot;: false, &quot;dimensions&quot;: [{{ .WorldSize.Width }}, {{ .WorldSize.Height }}]}]}"/>
   </session_metadata>
   <default_services>
