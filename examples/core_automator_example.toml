@@ -1,0 +1,26 @@
+# An example demonstrating the ease of creating core-automator experiments
+#
+# This example is inspired by an example by gh0st42:
+# https://github.com/gh0st42/coreemu-lab/blob/main/examples/core-automator-example
+
+Name = "core-automator"
+Runs = 1
+Duration = 30
+Targets = ["coreemu-lab"]
+RandomSeed = 8311008601969058206
+
+[[Network]]
+Name = "AdHocWiFi"
+type = "wireless_lan"
+Range = 180
+Bandwidth = 54000000
+Jitter = 0
+Delay = 20000
+Loss = 0
+Promiscuous = false
+
+[[NodeGroup]]
+Prefix = "n"
+NoNodes = 3
+NodesType = "PC"
+Networks = ["AdHocWiFi"]

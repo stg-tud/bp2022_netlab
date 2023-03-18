@@ -11,32 +11,29 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestMultipleNetworksAndGroupsFile(t *testing.T) {
+func TestCoreAutomatorExampleFile(t *testing.T) {
 	t.Cleanup(func() {
 		os.RemoveAll(folderstructure.OutputFolderName)
 	})
 
-	assert.FileExists(t, filepath.Join(ExamplesFolder, "multiple_networks_and_groups.toml"))
+	assert.FileExists(t, filepath.Join(ExamplesFolder, "core_automator_example.toml"))
 
 	netlabCmd := cmd.RootCmd
-	netlabCmd.SetArgs([]string{"generate", "-d", filepath.Join(ExamplesFolder, "multiple_networks_and_groups.toml")})
+	netlabCmd.SetArgs([]string{"generate", "-d", filepath.Join(ExamplesFolder, "core_automator_example.toml")})
 	err := netlabCmd.Execute()
 	assert.NoError(t, err)
 
 	compareFiles := []string{
-		"cluster_settings.txt",
 		"core.xml",
-		"debug_out.toml",
 		"experiment.conf",
-		filepath.Join("movements", "bonnmotion.steps"),
 	}
 
 	for _, fileName := range compareFiles {
-		expectedFile, err := os.ReadFile(filepath.Join(TestDataFolder, "multi_networks_groups", fileName))
+		expectedFile, err := os.ReadFile(filepath.Join(TestDataFolder, "core_automator_example", fileName))
 		assert.NoError(t, err)
 		expectedClean := strings.ReplaceAll(string(expectedFile), "\r\n", "\n")
 
-		actualFile, err := os.ReadFile(filepath.Join(folderstructure.OutputFolderName, "Multiple_Networks___Groups", fileName))
+		actualFile, err := os.ReadFile(filepath.Join(folderstructure.OutputFolderName, "core-automator", fileName))
 		assert.NoError(t, err)
 		actualClean := strings.ReplaceAll(string(actualFile), "\r\n", "\n")
 
