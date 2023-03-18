@@ -1,0 +1,15 @@
+2023-03-18T15:28:46.149 (generate.go:139,generate) [INFO] Starting  
+2023-03-18T15:28:46.149 (parser.go:13,LoadFromFile) [INFO] Loading experiment from file  
+2023-03-18T15:28:46.149 (parser.go:26,ParseText) [INFO] Loading experiment from string  
+2023-03-18T15:28:46.149 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "Height".  
+2023-03-18T15:28:46.149 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "Width".  
+2023-03-18T15:28:46.149 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "MovementModel".  
+2023-03-18T15:28:46.149 (generate.go:147,generate) [INFO] Using random seed 8311008601969058206  
+2023-03-18T15:28:46.149 (generate.go:71,buildTargets) [DEBUG] Generating output for following targets: [coreemu-lab]  
+2023-03-18T15:28:46.149 (generate.go:102,buildOutputGenerators) [DEBUG] Output generator "coreemu-lab" implies "CORE", therefore adding it  
+2023-03-18T15:28:46.149 (generate.go:115,buildOutputGenerators) [DEBUG] Selecting Debug output generator because debug logging is active  
+2023-03-18T15:28:46.149 (generate.go:129,buildOutputGenerators) [DEBUG] Generating output for following output generators: [coreemu-lab CORE Debug]  
+2023-03-18T15:28:46.149 (coreemulab.go:66,Generate) [INFO] Generating CoreEmulab output  
+2023-03-18T15:28:46.157 (core.go:237,Generate) [INFO] Generating CORE output  
+2023-03-18T15:28:46.159 (debug.go:25,Generate) [INFO] Generating debug output  
+2023-03-18T15:28:46.159 (generate.go:156,generate) [INFO] Finished  
