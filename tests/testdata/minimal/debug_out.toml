@@ -10,6 +10,10 @@ EventGenerators = []
 Height = 750
 Width = 1000
 
+[ExternalMovement]
+Active = false
+FileName = ''
+
 [[Networks]]
 Name = 'Wifi'
 
