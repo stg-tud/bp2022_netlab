@@ -19,6 +19,7 @@ var boolCore bool
 var boolClab bool
 var boolTheOne bool
 
+// test
 func TestStringTargetMappingTHEONE(t *testing.T) {
 
 	stringTest = "the-one"
