@@ -19,7 +19,6 @@ var boolCore bool
 var boolClab bool
 var boolTheOne bool
 
-// test
 func TestStringTargetMappingTHEONE(t *testing.T) {
 
 	stringTest = "the-one"
@@ -77,8 +76,7 @@ func TestBuildTargets(t *testing.T) {
 	if len(expectedTar) != len(actual) {
 		t.Fatal("wrong number of Targets")
 	}
-
-	for i := 0; i < len(actual); i++ {
+	for _, i := range actual {
 		if actual[i] != expectedTar[i] {
 			t.Fatal("Wrong Target")
 		}
@@ -111,7 +109,7 @@ func TestBuildOutputGenerators(t *testing.T) {
 	boolTheOne = false
 	var boolBonnmotion = false
 
-	for i := 0; i < len(outTest); i++ {
+	for i := range outTest {
 		if outgen2 == outTest[i] {
 			boolClab = true
 		}
