@@ -10,7 +10,7 @@
 
 netlab helps you to quickly generate configuration files for network experiment softwares such as [CORE](http://coreemu.github.io/core/), [coreemu-lab](https://github.com/gh0st42/coreemu-lab) and [The ONE](https://github.com/akeranen/the-one) using a single TOML file. Its aim is to make your work easier, thus it handles annoying tasks such as generating IP addresses, movement patterns (using [BonnMotion](https://sys.cs.uos.de/bonnmotion/)) and multiple parameterized runs.
 
-netlab was developed by a group of five students as part of a bachelor internship of the [department of computer science](https://www.informatik.tu-darmstadt.de/fb20/index.en.jsp) at [TU Darmstadt](https://www.tu-darmstadt.de/index.en.jsp) in summer term 2023.
+netlab was developed by a group of five students for the [Software Technology Group](https://www.stg.tu-darmstadt.de/main_stg/index.en.jsp) as part of a bachelor internship of the [department of computer science](https://www.informatik.tu-darmstadt.de/fb20/index.en.jsp) at [TU Darmstadt](https://www.tu-darmstadt.de/index.en.jsp) in summer term 2023.
 
 ## Requirements
 
