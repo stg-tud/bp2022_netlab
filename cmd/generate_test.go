@@ -4,11 +4,18 @@ import (
 	"testing"
 
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
+	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 	"github.com/stg-tud/bp2022_netlab/internal/outputgenerators"
 )
 
 var stringTest string
 var exTarget experiment.Target
+
+var exptest experiment.Experiment = experiment.Experiment{}
+var outTest []outputgenerators.OutputGenerator
+var boolCore bool
+var boolClab bool
+var boolTheOne bool
 
 func TestStringTargetMappingTHEONE(t *testing.T) {
 
@@ -53,38 +60,82 @@ func TestStringTargetMappingCoreemu(t *testing.T) {
 
 }
 
-func TestTargetOutputGeneratorMappingCore(t *testing.T) {
+func TestBuildTargets(t *testing.T) {
 
-	exTarget = experiment.TargetCore
+	exptest.Targets = append(exptest.Targets, experiment.TargetCore)
+	exptest.Targets = append(exptest.Targets, experiment.TargetTheOne)
 
-	expected, err := targetOutputGeneratorMapping(exTarget)
+	var expectedTar [2]experiment.Target
+	expectedTar[0] = experiment.TargetCore
+	expectedTar[1] = experiment.TargetTheOne
 
-	if (expected != outputgenerators.Core{}) {
-		t.Fatal(" created wrong or non outputgenerators", err)
+	actual := buildTargets(exptest)
+
+	if len(expectedTar) != len(actual) {
+		t.Fatal("wrong number of Targets")
+	}
+
+	for i := 0; i < len(actual); i++ {
+		if actual[i] != expectedTar[i] {
+			t.Fatal("Wrong Target")
+		}
 	}
 
 }
 
-func TestTargetOutputGeneratorMappingCoreEmulab(t *testing.T) {
+func TestBuildOutputGenerators(t *testing.T) {
 
-	exTarget = experiment.TargetCoreEmulab
+	var outgen1 outputgenerators.OutputGenerator = outputgenerators.Core{}
+	var outgen2 outputgenerators.OutputGenerator = outputgenerators.CoreEmulab{}
+	var outgen3 outputgenerators.OutputGenerator = outputgenerators.TheOne{}
+	var outgen4 outputgenerators.OutputGenerator = outputgenerators.Bonnmotion{}
 
-	expected, err := targetOutputGeneratorMapping(exTarget)
+	exptest.Targets = append(exptest.Targets, experiment.TargetCore)
+	exptest.Targets = append(exptest.Targets, experiment.TargetTheOne)
+	exptest.Targets = append(exptest.Targets, experiment.TargetCoreEmulab)
 
-	if (expected != outputgenerators.CoreEmulab{}) {
-		t.Fatal(" created wrong or non outputgenerators", err)
+	var nodetest experiment.NodeGroup
+	nodetest.MovementModel = movementpatterns.RandomWaypoint{}
+
+	exptest.NodeGroups = append(exptest.NodeGroups, nodetest)
+	// exptest.Targets = append(exptest.Targets, experiment.TargetB
+	// man kann in den bonnmotion fall nie reinlaufen?
+
+	outTest := buildOutputGenerators(exptest)
+
+	boolCore = false
+	boolClab = false
+	boolTheOne = false
+	var boolBonnmotion = false
+
+	for i := 0; i < len(outTest); i++ {
+		if outgen2 == outTest[i] {
+			boolClab = true
+		}
+		if outgen3 == outTest[i] {
+			boolTheOne = true
+		}
+		if outgen1 == outTest[i] {
+			boolCore = true
+		}
+		if outgen4 == outTest[i] {
+			boolBonnmotion = true
+		}
 	}
 
-}
-
-func TestTargetOutputGeneratorMappingOne(t *testing.T) {
-
-	exTarget = experiment.TargetTheOne
-
-	expected, err := targetOutputGeneratorMapping(exTarget)
-
-	if (expected != outputgenerators.TheOne{}) {
-		t.Fatal(" created wrong or non outputgenerators", err)
+	if !boolClab {
+		t.Fatal(" created  non outputgenerator CoreEmuLab ")
 	}
 
+	if !boolCore {
+		t.Fatal(" created  non outputgenerator Core ")
+	}
+
+	if !boolTheOne {
+		t.Fatal(" created  non outputgenerator TheOne")
+	}
+
+	if !boolBonnmotion {
+		t.Fatal(" created  non outputgenerator TheOne")
+	}
 }
