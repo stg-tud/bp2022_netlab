@@ -1,0 +1,12 @@
+Name = "Testing Experiment"
+Runs = 1
+Duration = 123
+
+[[Network]]
+Name = "Wifi"
+Type = "wireless lan"
+
+[[NodeGroup]]
+Prefix = "users"
+NoNodes = 7
+Networks = ["Wifi"]

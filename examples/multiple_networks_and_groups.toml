@@ -1,3 +1,9 @@
+# An example on how to configure a more complex network scenario in netlab.
+#
+# This configuration will create three different networks as well as three
+# different groups of nodes. They are connected to different networks and
+# the "smartphones" groups uses Random Waypoint movement.
+
 Name = "Multiple Networks & Groups"
 Runs = 1
 RandomSeed = 7850800065078565476
@@ -32,18 +38,18 @@ Range = 800
 [[NodeGroup]]
 Prefix = "laptops"
 NoNodes = 7
-NodeType = "PC"
+NodesType = "PC"
 Networks = ["Wifi 2.4GHZ", "Wifi 5GHz"]
 
 [[NodeGroup]]
 Prefix = "IoT"
 NoNodes = 12
-NodeType = "PC"
+NodesType = "PC"
 Networks = ["Wifi 2.4GHz"]
 
 [[NodeGroup]]
 Prefix = "smartphones"
 NoNodes = 12
-NodeType = "PC"
+NodesType = "PC"
 Networks = ["Wifi 2.4GHz", "Wifi 5GHz", "LTE"]
 MovementModel = "RandomWaypoint"

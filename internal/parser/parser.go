@@ -8,6 +8,7 @@ import (
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 )
 
+// Loads a file at the given path and tries to parse its contents to an experiment.Experiment
 func LoadFromFile(path string) (experiment.Experiment, error) {
 	logger.Info("Loading experiment from file")
 	var output experiment.Experiment = experiment.Experiment{}
@@ -20,6 +21,7 @@ func LoadFromFile(path string) (experiment.Experiment, error) {
 	return ParseText(buf)
 }
 
+// Parses a given input text to an experiment.Experiment
 func ParseText(input []byte) (experiment.Experiment, error) {
 	logger.Info("Loading experiment from string")
 	var output experiment.Experiment = experiment.Experiment{}

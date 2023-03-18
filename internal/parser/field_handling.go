@@ -9,6 +9,8 @@ import (
 	logger "github.com/gookit/slog"
 )
 
+// Converts an input field's value to target field's type and writes it to the target field's value.
+// This works for types String, Int, Int32, Int64, Uint, Uint32, Uint64, Float32, Float64 and Bool.
 func parseInterfaceInput(fieldValue reflect.Value, targetFieldType reflect.StructField, targetFieldValue reflect.Value) error {
 	switch targetFieldType.Type.Kind() {
 	case reflect.String:
@@ -35,7 +37,11 @@ func parseInterfaceInput(fieldValue reflect.Value, targetFieldType reflect.Struc
 	case reflect.Float32, reflect.Float64:
 		floatVal, fits := fieldValue.Interface().(float64)
 		if !fits {
-			return fmt.Errorf("invalid input data type -- expected %s", targetFieldType.Type.Name())
+			intVal, fits := fieldValue.Interface().(int64)
+			if !fits {
+				return fmt.Errorf("invalid input data type -- expected %s", targetFieldType.Type.Name())
+			}
+			floatVal = float64(intVal)
 		}
 		targetFieldValue.SetFloat(floatVal)
 
@@ -54,10 +60,16 @@ func parseInterfaceInput(fieldValue reflect.Value, targetFieldType reflect.Struc
 			return fmt.Errorf("invalid input data type -- expected %s", targetFieldType.Type.Name())
 		}
 		targetFieldValue.SetBool(boolVal)
+
+	default:
+		return errors.New("target data type is not supported")
 	}
 	return nil
 }
 
+// Applies the default value to an _emtpy_ field (fieldType and fieldValue). Writes the result to the target field (targetFieldType and targetFieldValue).
+// If no default value is specified, the field will be skipped resulting in the nil value of the target field type (e.g. 0 for int or false for bool).
+// If the field is required, throws an error.
 func parseDefaultValue(fieldType reflect.StructField, fieldValue reflect.Value, targetFieldType reflect.StructField, targetFieldValue reflect.Value) error {
 	defaultValue, hasDefault := fieldType.Tag.Lookup("default")
 	if !hasDefault {
@@ -112,6 +124,8 @@ func parseDefaultValue(fieldType reflect.StructField, fieldValue reflect.Value, 
 	return nil
 }
 
+// Transfers the value of an input field (fieldType and fieldValue) to an output field (targetFieldType and targetFieldValue).
+// If of type `any`/`interface`, convert the value to the correct target type. If empty, apply default value.
 func handleField(fieldType reflect.StructField, fieldValue reflect.Value, targetFieldType reflect.StructField, targetFieldValue reflect.Value) error {
 	// input and output have same type, just copy value
 	if fieldType.Type == targetFieldType.Type {
@@ -135,6 +149,12 @@ func handleField(fieldType reflect.StructField, fieldValue reflect.Value, target
 	return nil
 }
 
+// Converts an input struct of type IN to an output struct of type OUT.
+// Handles type conversions from `any` to the correct target type (int, uint, float, bool and string only!).
+// Also applies default values for empty fields and errors when a required field is empty.
+//
+// To make a field required, make it of type `any` in the IN struct and add a struct tag `required:"true"`.
+// To give a field a default value, make it of type `any` in the IN struct and add a struct tag `default:"<value of target type>"`.
 func fillDefaults[IN any, OUT any](input IN) (OUT, error) {
 	var output OUT
 
