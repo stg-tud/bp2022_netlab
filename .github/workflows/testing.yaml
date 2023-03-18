@@ -26,9 +26,6 @@ jobs:
           version: latest
           cache: true
 
-      - name: Coverage
-        run: go test -v -coverpkg=./... -coverprofile=profile.cov ./... && go tool cover -func profile.cov
-
   build-test:
     name: Build & test
     strategy:
