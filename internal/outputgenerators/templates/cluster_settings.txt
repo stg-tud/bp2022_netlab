@@ -9,7 +9,7 @@ Scenario.simulateConnections = true
 Scenario.updateInterval = 0.1
 # 43k ~= 12h
 Scenario.endTime = {{ .Runtime}}
-Scenario.file = "{{ .ExternalFile}}"
+Scenario.file = {{ .ExternalFile}}
 
 {{- range $index, $interfaces:=.Interfaces}}
 {{$interfaces.Name}}.type = SimpleBroadcastInterface

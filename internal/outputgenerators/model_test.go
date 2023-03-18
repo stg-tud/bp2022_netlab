@@ -89,10 +89,6 @@ func GetTestingExperiment() experiment.Experiment {
 			Height: 170,
 			Width:  240,
 		},
-		/*ExternalMovement: experiment.ExternalMovement{
-			Active:   true,
-			FileName: "three_nodes.pos",
-		},*/
 		Networks:        networks,
 		NodeGroups:      nodegroups,
 		EventGenerators: eventgenerators,
