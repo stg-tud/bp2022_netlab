@@ -1,41 +1,36 @@
-2023-03-14T06:12:40.099 (generate.go:139,generate) [INFO] Starting  
-2023-03-14T06:12:40.099 (parser.go:12,LoadFromFile) [INFO] Loading experiment from file  
-2023-03-14T06:12:40.099 (parser.go:24,ParseText) [INFO] Loading experiment from string  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Jitter".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Delay".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Loss".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Promiscuous".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Jitter".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Delay".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Loss".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Promiscuous".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Jitter".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Delay".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Loss".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "Promiscuous".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "MovementModel".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "NodesType".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "MovementModel".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "NodesType".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "NodesType".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "MinSpeed".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "MaxSpeed".  
-2023-03-14T06:12:40.099 (field_handling.go:126,handleField) [DEBUG] Trying to use default value for field "MaxPause".  
-2023-03-14T06:12:40.099 (generate.go:147,generate) [INFO] Using random seed 7850800065078565476  
-2023-03-14T06:12:40.099 (generate.go:71,buildTargets) [DEBUG] Generating output for following targets: [coreemu-lab The ONE]  
-2023-03-14T06:12:40.099 (generate.go:102,buildOutputGenerators) [DEBUG] Output generator "coreemu-lab" implies "CORE", therefore adding it  
-2023-03-14T06:12:40.099 (generate.go:109,buildOutputGenerators) [DEBUG] Selecting BonnMotion output generator because node group "smartphones" needs a movement model  
-2023-03-14T06:12:40.099 (generate.go:115,buildOutputGenerators) [DEBUG] Selecting Debug output generator because debug logging is active  
-2023-03-14T06:12:40.099 (generate.go:129,buildOutputGenerators) [DEBUG] Generating output for following output generators: [coreemu-lab CORE The ONE BonnMotion Debug]  
-2023-03-14T06:12:40.099 (coreemulab.go:66,Generate) [INFO] Generating CoreEmulab output  
-2023-03-14T06:12:40.100 (core.go:237,Generate) [INFO] Generating CORE output  
-2023-03-14T06:12:40.123 (theone.go:140,Generate) [INFO] Generating TheOne output  
-2023-03-14T06:12:40.125 (bonnmotion.go:151,Generate) [INFO] Generating BonnMotion output  
-2023-03-14T06:12:40.125 (bonnmotion.go:175,Generate) [DEBUG] Movement model "movementpatterns.Static" is currently not supported. Skipping  
-2023-03-14T06:12:40.125 (bonnmotion.go:175,Generate) [DEBUG] Movement model "movementpatterns.Static" is currently not supported. Skipping  
-2023-03-14T06:12:40.125 (bonnmotion.go:110,execute) [DEBUG] Detected test. Skipping actual command execution  
-2023-03-14T06:12:40.125 (bonnmotion.go:136,convertToTargetFormat) [DEBUG] Target platform is currently not supported. Skipping
+2023-03-18T15:27:37.753 (generate.go:139,generate) [INFO] Starting  
+2023-03-18T15:27:37.754 (parser.go:13,LoadFromFile) [INFO] Loading experiment from file  
+2023-03-18T15:27:37.754 (parser.go:26,ParseText) [INFO] Loading experiment from string  
+2023-03-18T15:27:37.754 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "Jitter".  
+2023-03-18T15:27:37.755 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "Delay".  
+2023-03-18T15:27:37.755 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "Loss".  
+2023-03-18T15:27:37.755 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "Promiscuous".  
+2023-03-18T15:27:37.755 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "Jitter".  
+2023-03-18T15:27:37.755 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "Delay".  
+2023-03-18T15:27:37.755 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "Loss".  
+2023-03-18T15:27:37.755 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "Promiscuous".  
+2023-03-18T15:27:37.755 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "Jitter".  
+2023-03-18T15:27:37.755 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "Delay".  
+2023-03-18T15:27:37.755 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "Loss".  
+2023-03-18T15:27:37.755 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "Promiscuous".  
+2023-03-18T15:27:37.755 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "MovementModel".  
+2023-03-18T15:27:37.755 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "MovementModel".  
+2023-03-18T15:27:37.756 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "MinSpeed".  
+2023-03-18T15:27:37.756 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "MaxSpeed".  
+2023-03-18T15:27:37.756 (field_handling.go:140,handleField) [DEBUG] Trying to use default value for field "MaxPause".  
+2023-03-18T15:27:37.756 (generate.go:147,generate) [INFO] Using random seed 7850800065078565476  
+2023-03-18T15:27:37.756 (generate.go:71,buildTargets) [DEBUG] Generating output for following targets: [coreemu-lab The ONE]  
+2023-03-18T15:27:37.756 (generate.go:102,buildOutputGenerators) [DEBUG] Output generator "coreemu-lab" implies "CORE", therefore adding it  
+2023-03-18T15:27:37.756 (generate.go:109,buildOutputGenerators) [DEBUG] Selecting BonnMotion output generator because node group "smartphones" needs a movement model  
+2023-03-18T15:27:37.756 (generate.go:115,buildOutputGenerators) [DEBUG] Selecting Debug output generator because debug logging is active  
+2023-03-18T15:27:37.756 (generate.go:129,buildOutputGenerators) [DEBUG] Generating output for following output generators: [coreemu-lab CORE The ONE BonnMotion Debug]  
+2023-03-18T15:27:37.756 (coreemulab.go:66,Generate) [INFO] Generating CoreEmulab output  
+2023-03-18T15:27:37.757 (core.go:237,Generate) [INFO] Generating CORE output  
+2023-03-18T15:27:37.776 (theone.go:140,Generate) [INFO] Generating TheOne output  
+2023-03-18T15:27:37.777 (bonnmotion.go:151,Generate) [INFO] Generating BonnMotion output  
+2023-03-18T15:27:37.778 (bonnmotion.go:175,Generate) [DEBUG] Movement model "movementpatterns.Static" is currently not supported. Skipping  
+2023-03-18T15:27:37.778 (bonnmotion.go:175,Generate) [DEBUG] Movement model "movementpatterns.Static" is currently not supported. Skipping  
+2023-03-18T15:27:37.871 (bonnmotion.go:136,convertToTargetFormat) [DEBUG] Target platform is currently not supported. Skipping
   
-2023-03-14T06:12:40.125 (bonnmotion.go:110,execute) [DEBUG] Detected test. Skipping actual command execution  
-2023-03-14T06:12:40.126 (debug.go:25,Generate) [INFO] Generating debug output  
-2023-03-14T06:12:40.126 (generate.go:156,generate) [INFO] Finished  
+2023-03-18T15:27:38.059 (debug.go:25,Generate) [INFO] Generating debug output  
+2023-03-18T15:27:38.059 (generate.go:156,generate) [INFO] Finished  
