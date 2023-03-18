@@ -6,6 +6,10 @@ Warmup = 5
 Duration = 240
 EventGenerators = []
 
+[PredefinePosition]
+X = 0
+Y = 0
+
 [WorldSize]
 Height = 1000
 Width = 1500
@@ -46,7 +50,12 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'laptops'
 NoNodes = 7
+DefaultPosition = false
 NodesType = 1
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 
@@ -75,7 +84,12 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'IoT'
 NoNodes = 12
+DefaultPosition = false
 NodesType = 1
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 
@@ -93,7 +107,12 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'smartphones'
 NoNodes = 12
+DefaultPosition = false
 NodesType = 1
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 0

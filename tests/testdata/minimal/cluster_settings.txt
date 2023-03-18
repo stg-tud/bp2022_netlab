@@ -38,8 +38,6 @@ Group1.interface1= Wifi
 Group1.movementModel = Static
 
 
-
-
 ## Message creation parameters
 # How many event generators
 Events.nrof = 0
