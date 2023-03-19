@@ -1,6 +1,6 @@
 Name = 'core-automator'
 Runs = 1
-Targets = [2, 1, 0]
+Targets = [2]
 RandomSeed = 8311008601969058206
 Warmup = 0
 Duration = 30
@@ -24,12 +24,9 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'n'
 NoNodes = 3
-NodesType = 0
+NodesType = 1
 
 [NodeGroups.MovementModel]
-MinSpeed = 3
-MaxSpeed = 30
-MaxPause = 0
 
 [[NodeGroups.Networks]]
 Name = 'AdHocWiFi'

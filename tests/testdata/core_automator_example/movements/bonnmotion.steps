@@ -1,4 +1,0 @@
-bm -fn RandomWaypoint -h 30 -l 3 -p 0 -d 30 -n 3 -x 1000 -y 750 -R 8311008601969058206
-bm NSFile -f n
-bm TheONEFile -f n
-bm NSFile -f n

@@ -6,12 +6,8 @@
 Name = "core-automator"
 Runs = 1
 Duration = 30
-Targets = ["coreemu-lab", "one", "core"]
+Targets = ["coreemu-lab"]
 RandomSeed = 8311008601969058206
-
-[ExternalMovement]
-Active = true
-FileName = "three_nodes.pos"
 
 [[Network]]
 Name = "AdHocWiFi"
@@ -26,9 +22,5 @@ Promiscuous = false
 [[NodeGroup]]
 Prefix = "n"
 NoNodes = 3
-NodesType = "Router"
+NodesType = "PC"
 Networks = ["AdHocWiFi"]
-MovementModel = "random waypoint"
-MaxPause = 0
-MinSpeed = 3
-MaxSpeed = 30

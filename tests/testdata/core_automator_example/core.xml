@@ -6,31 +6,22 @@
     </network>
   </networks>
   <devices>
-    <device id="6" name="n1" icon="" canvas="1" type="router" class="" image="">
+    <device id="6" name="n1" icon="" canvas="1" type="PC" class="" image="">
       <position x="200" y="100"/>
       <configservices>
-        <service name="zebra"/>
-        <service name="OSPFv2"/>
-        <service name="OSPFv3"/>
-        <service name="IPForward"/>
+        <service name="DefaultRoute"/>
       </configservices>
     </device>
-    <device id="7" name="n2" icon="" canvas="1" type="router" class="" image="">
+    <device id="7" name="n2" icon="" canvas="1" type="PC" class="" image="">
       <position x="300" y="100"/>
       <configservices>
-        <service name="zebra"/>
-        <service name="OSPFv2"/>
-        <service name="OSPFv3"/>
-        <service name="IPForward"/>
+        <service name="DefaultRoute"/>
       </configservices>
     </device>
-    <device id="8" name="n3" icon="" canvas="1" type="router" class="" image="">
+    <device id="8" name="n3" icon="" canvas="1" type="PC" class="" image="">
       <position x="400" y="100"/>
       <configservices>
-        <service name="zebra"/>
-        <service name="OSPFv2"/>
-        <service name="OSPFv3"/>
-        <service name="IPForward"/>
+        <service name="DefaultRoute"/>
       </configservices>
     </device>
   </devices>
@@ -59,18 +50,9 @@
     </mobility_configuration>
   </mobility_configurations>
   <configservice_configurations>
-    <service name="zebra" node="6"/>
-    <service name="OSPFv2" node="6"/>
-    <service name="OSPFv3" node="6"/>
-    <service name="IPForward" node="6"/>
-    <service name="zebra" node="7"/>
-    <service name="OSPFv2" node="7"/>
-    <service name="OSPFv3" node="7"/>
-    <service name="IPForward" node="7"/>
-    <service name="zebra" node="8"/>
-    <service name="OSPFv2" node="8"/>
-    <service name="OSPFv3" node="8"/>
-    <service name="IPForward" node="8"/>
+    <service name="DefaultRoute" node="6"/>
+    <service name="DefaultRoute" node="7"/>
+    <service name="DefaultRoute" node="8"/>
   </configservice_configurations>
   <session_origin lat="47.579166412353516" lon="-122.13232421875" alt="2.0" scale="150.0"/>
   <session_options>
