@@ -66,7 +66,7 @@ LossStartRange = 300.0
 [[NodeGroups]]
 Prefix = 'a'
 NoNodes = 1
-DefaultPosition = true
+PredefinedPosition = true
 NodesType = 0
 
 [NodeGroups.Position]
@@ -89,7 +89,7 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'b'
 NoNodes = 2
-DefaultPosition = false
+PredefinedPosition = false
 NodesType = 0
 
 [NodeGroups.Position]
@@ -117,7 +117,7 @@ Name = 'switch'
 [[NodeGroups]]
 Prefix = 'c'
 NoNodes = 3
-DefaultPosition = false
+PredefinedPosition = false
 NodesType = 0
 
 [NodeGroups.Position]
@@ -134,7 +134,7 @@ Name = 'switch'
 [[NodeGroups]]
 Prefix = 'd'
 NoNodes = 4
-DefaultPosition = false
+PredefinedPosition = false
 NodesType = 0
 
 [NodeGroups.Position]
@@ -157,7 +157,7 @@ Promiscuous = true
 [[NodeGroups]]
 Prefix = 'e'
 NoNodes = 5
-DefaultPosition = false
+PredefinedPosition = false
 NodesType = 1
 
 [NodeGroups.Position]
@@ -174,7 +174,7 @@ Name = 'hub'
 [[NodeGroups]]
 Prefix = 'f'
 NoNodes = 6
-DefaultPosition = false
+PredefinedPosition = false
 NodesType = 0
 
 [NodeGroups.Position]
@@ -194,7 +194,7 @@ Name = 'emane'
 [[NodeGroups]]
 Prefix = 'g'
 NoNodes = 7
-DefaultPosition = false
+PredefinedPosition = false
 NodesType = 0
 
 [NodeGroups.Position]

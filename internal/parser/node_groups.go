@@ -5,17 +5,20 @@ import (
 	"strings"
 
 	logger "github.com/gookit/slog"
+	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/movementpatterns"
 )
 
 // Input format of a NodeGroup configuration
 type inputNodeGroup struct {
-	Prefix        any `required:"true"`
-	NoNodes       any `default:"1"`
-	MovementModel any `default:"Static"`
-	NodesType     any `default:"PC"`
-	Networks      []string
+	Prefix             any `required:"true"`
+	NoNodes            any `default:"1"`
+	MovementModel      any `default:"Static"`
+	NodesType          any `default:"PC"`
+	Networks           []string
+	PredefinedPosition bool
+	Position           customtypes.Position
 
 	MinSpeed any `default:"0"`
 	MaxSpeed any `default:"1"`
@@ -24,10 +27,12 @@ type inputNodeGroup struct {
 
 // Intermediate representation of a NodeGroup
 type intermediateNodeGroup struct {
-	Prefix        string
-	NoNodes       uint
-	MovementModel string
-	NodesType     string
+	Prefix             string
+	NoNodes            uint
+	MovementModel      string
+	NodesType          string
+	PredefinedPosition bool
+	Position           customtypes.Position
 }
 
 // Parses all given inputNodeGroups to a list of valid experiment.NodeGroup
@@ -50,6 +55,10 @@ func parseNodeGroups(input []inputNodeGroup, exp *experiment.Experiment) ([]expe
 		outputNodeGroup, err := experiment.NewNodeGroup(intermediate.Prefix, intermediate.NoNodes)
 		if err != nil {
 			return output, fmt.Errorf("error parsing node group %d: %s", i, err)
+		}
+		outputNodeGroup.PredefinedPosition = intermediate.PredefinedPosition
+		if intermediate.PredefinedPosition {
+			outputNodeGroup.Position = exp.PredefinePosition
 		}
 
 		outputNodeGroup.NodesType, err = parseNodesType(intermediate.NodesType)

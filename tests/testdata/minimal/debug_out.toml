@@ -28,7 +28,7 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'users'
 NoNodes = 7
-DefaultPosition = false
+PredefinedPosition = false
 NodesType = 1
 
 [NodeGroups.Position]

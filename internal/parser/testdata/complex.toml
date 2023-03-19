@@ -9,6 +9,10 @@ WorldSize.Width = 3000
 
 Targets = ["CORE", "coreemu-lab", "The ONE"]
 
+[PredefinePosition]
+X = 40
+Y = 55
+
 [[Network]]
 Name = "Wifi 2.4GHz"
 Type = "WirelessLAN"
@@ -53,12 +57,14 @@ NoNodes = 7
 NodesType = "PC"
 Networks = ["Wifi 2.4GHZ", "Wifi 5GHz", "Hubbed", "Switched"]
 MovementModel = "static"
+PredefinedPosition = true
 
 [[NodeGroup]]
 Prefix = "IoT"
 NoNodes = 12
 NodesType = "Router"
 Networks = ["Wifi 2.4GHz", "EMANE"]
+PredefinedPosition = false
 
 [[NodeGroup]]
 Prefix = "smartphones"

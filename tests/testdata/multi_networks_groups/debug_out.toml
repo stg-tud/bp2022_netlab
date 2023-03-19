@@ -50,7 +50,7 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'laptops'
 NoNodes = 7
-DefaultPosition = false
+PredefinedPosition = false
 NodesType = 1
 
 [NodeGroups.Position]
@@ -84,7 +84,7 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'IoT'
 NoNodes = 12
-DefaultPosition = false
+PredefinedPosition = false
 NodesType = 1
 
 [NodeGroups.Position]
@@ -107,7 +107,7 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'smartphones'
 NoNodes = 12
-DefaultPosition = false
+PredefinedPosition = false
 NodesType = 1
 
 [NodeGroups.Position]
