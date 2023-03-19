@@ -99,10 +99,10 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 	if exp.ExternalMovement.Active {
 		replace.Automator = exp.ExternalMovement.FileName
 		path, err := os.Getwd()
-		if err != nil{
+		if err != nil {
 			logger.Error("Error getting current directory")
 		}
-		source, err := os.Open(filepath.Join(path,exp.ExternalMovement.FileName))
+		source, err := os.Open(filepath.Join(path, exp.ExternalMovement.FileName))
 		if err != nil {
 			logger.Error("Error opening external file", err)
 		}
