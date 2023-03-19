@@ -26,6 +26,7 @@ func TestCoreAutomatorExampleFile(t *testing.T) {
 	compareFiles := []string{
 		"core.xml",
 		"experiment.conf",
+		"debug_out.toml",
 	}
 
 	for _, fileName := range compareFiles {

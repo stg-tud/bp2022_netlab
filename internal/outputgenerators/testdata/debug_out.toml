@@ -106,6 +106,9 @@ NoNodes = 3
 NodesType = 0
 
 [NodeGroups.MovementModel]
+MinSpeed = 1
+MaxSpeed = 5
+MaxPause = 3600
 
 [[NodeGroups.Networks]]
 Name = 'switch'
@@ -148,9 +151,9 @@ NoNodes = 6
 NodesType = 0
 
 [NodeGroups.MovementModel]
-MinSpeed = 1
-MaxSpeed = 2
-MaxPause = 17
+MinSpeed = 123
+MaxSpeed = 456
+MaxPause = 789
 
 [[NodeGroups.Networks]]
 Name = 'emane'

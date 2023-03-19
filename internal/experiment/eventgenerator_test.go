@@ -1,20 +1,23 @@
 package experiment_test
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/stg-tud/bp2022_netlab/internal/eventgeneratortypes"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestEventGeneratorWithoutName(t *testing.T) {
-	_, error1 := experiment.NewDefaultEventGenerator("")
-	_, error2 := experiment.NewEventGenerator("", eventgeneratortypes.MessageEventGenerator{})
-	if error1 == nil || error2 == nil {
-		t.Fatal("eventgeneratortypes without name should not be allowed!")
-	}
+	_, err := experiment.NewDefaultEventGenerator("")
+	assert.Error(t, err)
+	assert.Equal(t, errors.New("name of the EventGenerator must consist of at least on character"), err)
+	_, err = experiment.NewEventGenerator("", eventgeneratortypes.MessageEventGenerator{})
+	assert.Error(t, err)
+	assert.Equal(t, errors.New("name of the EventGenerator must consist of at least on character"), err)
 }
 
 func TestNewEventGenerator(t *testing.T) {
@@ -25,14 +28,8 @@ func TestNewEventGenerator(t *testing.T) {
 	for _, eventGenerator := range eventGenerator {
 		eventGeneratorName := fmt.Sprintf("eventGenerator_under_test_%s", strings.ToLower(eventGenerator.String()))
 		eventGeneratorUnderTest, err := experiment.NewEventGenerator(eventGeneratorName, eventGenerator)
-		if err != nil {
-			t.Fatalf("Error creating new '%s' EventGenerator: %s", eventGenerator.String(), err)
-		}
-		if eventGeneratorUnderTest.Name != eventGeneratorName {
-			t.Fatalf("EventGenerator has wrong name '%s', expected '%s'!", eventGeneratorUnderTest.Name, eventGeneratorName)
-		}
-		if eventGeneratorUnderTest.Type != eventGenerator {
-			t.Fatalf("EventGenerator has wrong type '%s', expected '%s'!", eventGeneratorUnderTest.Type, eventGenerator)
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, eventGeneratorName, eventGeneratorUnderTest.Name)
+		assert.Equal(t, eventGenerator, eventGeneratorUnderTest.Type)
 	}
 }
