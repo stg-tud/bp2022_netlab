@@ -45,18 +45,19 @@ func parseNodeGroups(input []inputNodeGroup, exp *experiment.Experiment) ([]expe
 		if err != nil {
 			return output, fmt.Errorf("error parsing node group %d: %s", i, err)
 		}
-
+		
 		_, exists := prefixes[intermediate.Prefix]
 		if exists {
 			return output, fmt.Errorf("a node group with the prefix \"%s\" already exists", intermediate.Prefix)
 		}
+		prefixes[intermediate.Prefix] = true
 
 		outputNodeGroup, err := experiment.NewNodeGroup(intermediate.Prefix, intermediate.NoNodes)
 		if err != nil {
 			return output, fmt.Errorf("error parsing node group %d: %s", i, err)
 		}
-		outputNodeGroup.PredefinedPosition = intermediate.PredefinedPosition
-		if intermediate.PredefinedPosition {
+		outputNodeGroup.PredefinedPosition=intermediate.PredefinedPosition
+		if intermediate.PredefinedPosition{
 			outputNodeGroup.Position = exp.PredefinePosition
 		}
 
