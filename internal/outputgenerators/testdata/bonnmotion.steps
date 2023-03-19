@@ -1,15 +1,6 @@
 bonnmotion -fc RandomWaypoint -h 5 -l 1 -p 3600 -d 43 -n 3 -x 240 -y 170 -R 1673916419715
 bonnmotion NSFile -f c
 bonnmotion TheONEFile -f c
-bonnmotion -fd SWIM -r 0.2 -c 0.5 -m 1.5 -e 1.55 -u 100 -d 43 -n 4 -x 240 -y 170 -R 1673916419715
-bonnmotion NSFile -f d
-bonnmotion TheONEFile -f d
-bonnmotion -fe SMOOTH -g 100 -h 40 -k 1.45 -l 1 -m 14000 -o 1.5 -p 10 -q 3600 -d 43 -n 5 -x 240 -y 170 -R 1673916419715
-bonnmotion NSFile -f e
-bonnmotion TheONEFile -f e
 bonnmotion -ff RandomWaypoint -h 456 -l 123 -p 789 -d 43 -n 6 -x 240 -y 170 -R 1673916419715
 bonnmotion NSFile -f f
 bonnmotion TheONEFile -f f
-bonnmotion -fg SLAW -w 500 -p 10 -P 50 -b 1 -h 0.75 -l 3 -r 50 -Q 3 -W 5 -d 43 -n 7 -x 240 -y 170 -R 1673916419715
-bonnmotion NSFile -f g
-bonnmotion TheONEFile -f g

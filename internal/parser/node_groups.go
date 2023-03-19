@@ -133,20 +133,11 @@ func parseNodeGroupNetworks(input []string, exp *experiment.Experiment) ([]*expe
 // Parses a inputNodeGroup with to a movementpatterns.MovementPattern which fits the model string
 func parseMovementModel(input inputNodeGroup, model string) (movementpatterns.MovementPattern, error) {
 	switch strings.ToLower(model) {
-	case "randomwaypoint", "random waypoint", "random_waypoint", "random":
+	case "randomwaypoint", "random waypoint", "random_waypoint", "random", "waypoint":
 		return fillDefaults[inputNodeGroup, movementpatterns.RandomWaypoint](input)
 
 	case "static", "none":
 		return fillDefaults[inputNodeGroup, movementpatterns.Static](input)
-
-	case "slaw":
-		return fillDefaults[inputNodeGroup, movementpatterns.SLAW](input)
-
-	case "smooth":
-		return fillDefaults[inputNodeGroup, movementpatterns.SMOOTH](input)
-
-	case "swim":
-		return fillDefaults[inputNodeGroup, movementpatterns.SWIM](input)
 
 	default:
 		logger.Warnf("Unknown movement pattern \"%s\". Using static instead. Please check your config.", model)

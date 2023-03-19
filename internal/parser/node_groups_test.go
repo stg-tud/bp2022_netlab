@@ -101,43 +101,6 @@ func TestMovementModels(t *testing.T) {
 	MinSpeed = 3
 	MaxSpeed = 4
 	MaxPause = 5
-
-	[[NodeGroup]]
-	Prefix = "slaw"
-	NoNodes = 7
-	MovementModel = "slaw"
-	NumberOfWaypoints = 21
-	MinPause = 3
-	MaxPause = 4
-	LevyExponent = 22.2
-	HurstParameter = 33.3
-	DistanceWeight = 19.8
-	ClusteringRange = 7.8
-	ClusterRatio = 8
-	WaypointRatio = 12
-
-	[[NodeGroup]]
-	Prefix = "swim"
-	NoNodes = 7
-	MovementModel = "swim"
-	Radius = 19.1
-	CellDistanceWeight = 32.1
-	NodeSpeedMultiplier = 7.6
-	WaitingTimeExponent = 0.9
-	WaitingTimeUpperBound = 22.2
-
-	[[NodeGroup]]
-	Prefix = "smooth"
-	NoNodes = 7
-	MovementModel = "smooth"
-	Range = 8
-	Clusters = 9
-	Alpha = 99.9
-	MinFlight = 7
-	MaxFlight = 12
-	Beta = 11.1
-	MinPause = 3
-	MaxPause = 4
 	`
 
 	exp, err := parser.ParseText([]byte(toml))
@@ -153,40 +116,6 @@ func TestMovementModels(t *testing.T) {
 		MaxSpeed: 4,
 		MaxPause: 5,
 	}, exp.NodeGroups[1].MovementModel))
-
-	assert.IsType(t, movementpatterns.SLAW{}, exp.NodeGroups[2].MovementModel)
-	assert.True(t, assert.ObjectsAreEqual(movementpatterns.SLAW{
-		NumberOfWaypoints: 21,
-		MinPause:          3,
-		MaxPause:          4,
-		LevyExponent:      22.2,
-		HurstParameter:    33.3,
-		DistanceWeight:    19.8,
-		ClusteringRange:   7.8,
-		ClusterRatio:      8,
-		WaypointRatio:     12,
-	}, exp.NodeGroups[2].MovementModel))
-
-	assert.IsType(t, movementpatterns.SWIM{}, exp.NodeGroups[3].MovementModel)
-	assert.True(t, assert.ObjectsAreEqual(movementpatterns.SWIM{
-		Radius:                19.1,
-		CellDistanceWeight:    32.1,
-		NodeSpeedMultiplier:   7.6,
-		WaitingTimeExponent:   0.9,
-		WaitingTimeUpperBound: 22.2,
-	}, exp.NodeGroups[3].MovementModel))
-
-	assert.IsType(t, movementpatterns.SMOOTH{}, exp.NodeGroups[4].MovementModel)
-	assert.True(t, assert.ObjectsAreEqual(movementpatterns.SMOOTH{
-		Range:     8,
-		Clusters:  9,
-		Alpha:     99.9,
-		MinFlight: 7,
-		MaxFlight: 12,
-		Beta:      11.1,
-		MinPause:  3,
-		MaxPause:  4,
-	}, exp.NodeGroups[4].MovementModel))
 }
 
 func TestUnknownMovementModel(t *testing.T) {

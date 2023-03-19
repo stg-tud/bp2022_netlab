@@ -1,0 +1,43 @@
+Name = 'core-automator'
+Runs = 1
+Targets = [2, 1, 0]
+RandomSeed = 8311008601969058206
+Warmup = 0
+Duration = 30
+EventGenerators = []
+
+[WorldSize]
+Height = 750
+Width = 1000
+
+[[Networks]]
+Name = 'AdHocWiFi'
+
+[Networks.Type]
+Bandwidth = 54000000
+Range = 180
+Jitter = 0
+Delay = 20000
+Loss = 0.0
+Promiscuous = false
+
+[[NodeGroups]]
+Prefix = 'n'
+NoNodes = 3
+NodesType = 0
+
+[NodeGroups.MovementModel]
+MinSpeed = 3
+MaxSpeed = 30
+MaxPause = 0
+
+[[NodeGroups.Networks]]
+Name = 'AdHocWiFi'
+
+[NodeGroups.Networks.Type]
+Bandwidth = 54000000
+Range = 180
+Jitter = 0
+Delay = 20000
+Loss = 0.0
+Promiscuous = false

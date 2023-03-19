@@ -53,76 +53,11 @@ func (b Bonnmotion) TargetIsSupported(t experiment.Target) bool {
 // Returns whether the given MovementPattern is (currently) supported by this output generator.
 func (b Bonnmotion) MovementPatternIsSupported(movementPattern movementpatterns.MovementPattern) bool {
 	switch movementPattern.(type) {
-	case movementpatterns.RandomWaypoint, movementpatterns.SMOOTH, movementpatterns.SLAW, movementpatterns.SWIM:
+	case movementpatterns.RandomWaypoint:
 		return true
 
 	default:
 		return false
-	}
-}
-
-// Returns the parameter set for SMOOTH movement model for a given NodeGroup inside an Experiment.
-func (Bonnmotion) smoothParameters(movementModel movementpatterns.SMOOTH) []string {
-	return []string{
-		"SMOOTH",
-		"-g",
-		fmt.Sprintf("%d", movementModel.Range),
-		"-h",
-		fmt.Sprintf("%d", movementModel.Clusters),
-		"-k",
-		fmt.Sprintf("%v", movementModel.Alpha),
-		"-l",
-		fmt.Sprintf("%d", movementModel.MinFlight),
-		"-m",
-		fmt.Sprintf("%d", movementModel.MaxFlight),
-		"-o",
-		fmt.Sprintf("%v", movementModel.Beta),
-		"-p",
-		fmt.Sprintf("%d", movementModel.MinPause),
-		"-q",
-		fmt.Sprintf("%d", movementModel.MaxPause),
-	}
-}
-
-// Returns the parameter set for SLAW movement model for a given NodeGroup inside an Experiment.
-func (Bonnmotion) slawParameters(movementModel movementpatterns.SLAW) []string {
-	return []string{
-		"SLAW",
-		"-w",
-		fmt.Sprintf("%d", movementModel.NumberOfWaypoints),
-		"-p",
-		fmt.Sprintf("%d", movementModel.MinPause),
-		"-P",
-		fmt.Sprintf("%d", movementModel.MaxPause),
-		"-b",
-		fmt.Sprintf("%v", movementModel.LevyExponent),
-		"-h",
-		fmt.Sprintf("%v", movementModel.HurstParameter),
-		"-l",
-		fmt.Sprintf("%v", movementModel.DistanceWeight),
-		"-r",
-		fmt.Sprintf("%v", movementModel.ClusteringRange),
-		"-Q",
-		fmt.Sprintf("%v", movementModel.ClusterRatio),
-		"-W",
-		fmt.Sprintf("%v", movementModel.WaypointRatio),
-	}
-}
-
-// Returns the parameter set for SWIM movement model for a given NodeGroup inside an Experiment.
-func (Bonnmotion) swimParameters(movementModel movementpatterns.SWIM) []string {
-	return []string{
-		"SWIM",
-		"-r",
-		fmt.Sprintf("%v", movementModel.Radius),
-		"-c",
-		fmt.Sprintf("%v", movementModel.CellDistanceWeight),
-		"-m",
-		fmt.Sprintf("%v", movementModel.NodeSpeedMultiplier),
-		"-e",
-		fmt.Sprintf("%v", movementModel.WaitingTimeExponent),
-		"-u",
-		fmt.Sprintf("%v", movementModel.WaitingTimeUpperBound),
 	}
 }
 
@@ -182,12 +117,6 @@ func (b Bonnmotion) generateNodeGroup(exp experiment.Experiment, nodeGroup exper
 	switch movementModel := nodeGroup.MovementModel.(type) {
 	case movementpatterns.RandomWaypoint:
 		movementModelParameters = b.randomWaypointParameters(movementModel)
-	case movementpatterns.SMOOTH:
-		movementModelParameters = b.smoothParameters(movementModel)
-	case movementpatterns.SLAW:
-		movementModelParameters = b.slawParameters(movementModel)
-	case movementpatterns.SWIM:
-		movementModelParameters = b.swimParameters(movementModel)
 	default:
 		return fmt.Errorf("movement model \"%s\" is not supported", nodeGroup.MovementModel.String())
 	}

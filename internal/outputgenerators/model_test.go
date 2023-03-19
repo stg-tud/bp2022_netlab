@@ -63,10 +63,8 @@ func GetTestingExperiment() experiment.Experiment {
 	nodegroups[2].MovementModel = movementpatterns.RandomWaypoint{}.Default()
 
 	nodegroups[3].Networks = []*experiment.Network{&networks[2]}
-	nodegroups[3].MovementModel = movementpatterns.SWIM{}.Default()
 
 	nodegroups[4].NodesType = experiment.NodeTypePC
-	nodegroups[4].MovementModel = movementpatterns.SMOOTH{}.Default()
 	nodegroups[4].Networks = []*experiment.Network{&networks[3]}
 
 	nodegroups[5].Networks = []*experiment.Network{&networks[4]}
@@ -77,7 +75,6 @@ func GetTestingExperiment() experiment.Experiment {
 	}
 
 	nodegroups[6].Networks = []*experiment.Network{&networks[5]}
-	nodegroups[6].MovementModel = movementpatterns.SLAW{}.Default()
 
 	exp := experiment.Experiment{
 		Name:    "Testing Experiment",

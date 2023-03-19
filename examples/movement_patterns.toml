@@ -35,19 +35,10 @@ MovementModel = "Random Waypoint"
 Networks = ["Wifi"]
 
 [[NodeGroup]]
-Prefix = "swim"
+Prefix = "fast_rwp"
 NoNodes = 4
-MovementModel = "SWIM"
+MovementModel = "Random Waypoint"
 Networks = ["Wifi"]
-
-[[NodeGroup]]
-Prefix = "slaw"
-NoNodes = 4
-MovementModel = "SLAW"
-Networks = ["Wifi"]
-
-[[NodeGroup]]
-Prefix = "smooth"
-NoNodes = 4
-MovementModel = "SMOOTH"
-Networks = ["Wifi"]
+MinSpeed = 30
+MaxSpeed = 100
+MaxPause = 1
