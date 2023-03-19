@@ -90,7 +90,7 @@ func (t TheOne) buildGroups(exp experiment.Experiment) []group {
 			MovementModel:  t.movementPattern(expNodeGroups.MovementModel),
 			NrofInterfaces: len(expNodeGroups.Networks),
 		}
-		if expNodeGroups.DefaultPosition {
+		if expNodeGroups.PredefinedPosition {
 			group.DefaultPosition = true
 			group.Position = expNodeGroups.Position
 		}

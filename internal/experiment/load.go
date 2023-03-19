@@ -135,10 +135,10 @@ func LoadFromFile(file string) (exp Experiment, returnError error) {
 
 		//
 		if nodes[i].PredefinePosition {
-			node.DefaultPosition = true
+			node.PredefinedPosition = true
 			node.Position = conf.PredefinePosition
 		} else {
-			node.DefaultPosition = false
+			node.PredefinedPosition = false
 		}
 
 		switch nodes[i].NodesType {

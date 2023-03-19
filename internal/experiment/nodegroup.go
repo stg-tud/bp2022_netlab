@@ -10,11 +10,11 @@ import (
 // A NodeGroup represents a group of dependent nodes sharing properties
 // such as a MovementModel or network settings.
 type NodeGroup struct {
-	Prefix          string
-	NoNodes         uint
-	DefaultPosition bool
-	Position        customtypes.Position
-	MovementModel   movementpatterns.MovementPattern
+	Prefix             string
+	NoNodes            uint
+	PredefinedPosition bool
+	Position           customtypes.Position
+	MovementModel      movementpatterns.MovementPattern
 
 	NodesType NodeType
 

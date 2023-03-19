@@ -57,7 +57,7 @@ func GetTestingExperiment() experiment.Experiment {
 	nodegroups = append(nodegroups, ng)
 
 	nodegroups[0].Networks = []*experiment.Network{&networks[0]}
-	nodegroups[0].DefaultPosition = true
+	nodegroups[0].PredefinedPosition = true
 	nodegroups[0].Position = customtypes.Position{
 		X: 40,
 		Y: 55,

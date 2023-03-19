@@ -65,6 +65,7 @@ NoNodes = 1
 NodesType = 'Router'
 Networks = ['wireless_lan']
 
+
 [[NodeGroups]]
 Prefix = 'b'
 NoNodes = 2
