@@ -39,7 +39,7 @@ Group.nrofApplications = 0
 Group{{add $index 1}}.groupID = {{$group.Id}}
 Group{{add $index 1}}.nrofHosts = {{$group.NrofHosts}}
 Group{{add $index 1}}.nrofInterfaces = {{$group.NrofInterfaces}}
-{{- if eq .DefaultPosition true}}
+{{- if eq $group.PredefinePosition true}}
 Group{{add $index 1}}.clusterCenter = {{$group.Position.X}},{{$group.Position.Y}}
 {{- end}}
 {{- range $index1, $interfaces:= .Interfaces }}

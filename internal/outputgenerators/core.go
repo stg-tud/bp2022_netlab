@@ -209,8 +209,11 @@ func (c Core) buildDevice(deviceId uint, exp experiment.Experiment, nodeGroup ex
 	if nodeGroup.PredefinedPosition {
 
 		dev.Position = nodeGroup.Position
+
 	}
+
 	return dev, nil
+
 }
 
 // buildDevices generates the configuration for devices for CORE

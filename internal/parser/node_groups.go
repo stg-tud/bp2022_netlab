@@ -17,7 +17,7 @@ type inputNodeGroup struct {
 	MovementModel      any `default:"Static"`
 	NodesType          any `default:"PC"`
 	Networks           []string
-	PredefinedPosition bool
+	PredefinedPosition any `default:"true"`
 	Position           customtypes.Position
 
 	MinSpeed any `default:"0"`

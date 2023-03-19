@@ -18,13 +18,13 @@ import (
 type TheOne struct{}
 
 type group struct {
-	Id              string
-	NrofHosts       uint
-	NrofInterfaces  int
-	Interfaces      []*experiment.Network
-	MovementModel   string
-	Position        customtypes.Position
-	DefaultPosition bool
+	Id                 string
+	NrofHosts          uint
+	NrofInterfaces     int
+	Interfaces         []*experiment.Network
+	MovementModel      string
+	Position           customtypes.Position
+	PredefinedPosition bool
 }
 
 type theOneData struct {
@@ -91,7 +91,7 @@ func (t TheOne) buildGroups(exp experiment.Experiment) []group {
 			NrofInterfaces: len(expNodeGroups.Networks),
 		}
 		if expNodeGroups.PredefinedPosition {
-			group.DefaultPosition = true
+			group.PredefinedPosition = true
 			group.Position = expNodeGroups.Position
 		}
 		groups = append(groups, group)
