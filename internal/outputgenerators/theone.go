@@ -180,13 +180,16 @@ func (t TheOne) Generate(exp experiment.Experiment) {
 
 	if exp.ExternalMovement.Active {
 		replace.ExternalFile = exp.ExternalMovement.FileName
-
-		source, err := os.Open(filepath.Join(exp.ExternalMovement.FileName))
+		path, err := os.Getwd()
+		if err != nil{
+			logger.Error("Error getting current directory")
+		}
+		source, err := os.Open(filepath.Join(path,exp.ExternalMovement.FileName))
 		if err != nil {
 			logger.Error("Error opening external file", err)
 		}
 		defer source.Close()
-		destination, err := os.Create(filepath.Join(outputFilePath, exp.ExternalMovement.FileName))
+		destination, err := os.Create(filepath.Join(outputFolder, exp.ExternalMovement.FileName))
 		if err != nil {
 			logger.Error("Error creating external file", err)
 		}
