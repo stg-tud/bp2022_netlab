@@ -39,17 +39,14 @@ Group.nrofApplications = 0
 Group{{add $index 1}}.groupID = {{$group.Id}}
 Group{{add $index 1}}.nrofHosts = {{$group.NrofHosts}}
 Group{{add $index 1}}.nrofInterfaces = {{$group.NrofInterfaces}}
+{{- if eq .DefaultPosition true}}
+Group{{add $index 1}}.clusterCenter = {{$group.Position.X}},{{$group.Position.Y}}
+{{- end}}
 {{- range $index1, $interfaces:= .Interfaces }}
 Group{{add $index 1}}.interface{{add $index1 1}}= {{$interfaces.Name}}
 {{- end}}
 Group{{add $index 1}}.movementModel = {{$group.MovementModel}}
 {{end}}
-
-{{- range $index, $group:= .Groups}}
-{{- if eq .DefaultPosition true}}
-GroupPosition {{add $index 1}}: Position = ({{$group.Position.X}},{{$group.Position.Y}})
-{{- end}}
-{{- end}}
 
 ## Message creation parameters
 # How many event generators
