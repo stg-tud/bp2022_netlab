@@ -17,28 +17,9 @@ type inputNodeGroup struct {
 	NodesType     any `default:"PC"`
 	Networks      []string
 
-	MinSpeed              any `default:"1"`
-	MaxSpeed              any `default:"5"`
-	MinPause              any `default:"10"`
-	MaxPause              any `default:"3600"`
-	Range                 any `default:"100"`
-	Clusters              any `default:"40"`
-	Alpha                 any `default:"1.45"`
-	MinFlight             any `default:"1"`
-	MaxFlight             any `default:"14000"`
-	Beta                  any `default:"1.5"`
-	NumberOfWaypoints     any `default:"500"`
-	LevyExponent          any `default:"1.0"`
-	HurstParameter        any `default:"0.75"`
-	DistanceWeight        any `default:"3.0"`
-	ClusteringRange       any `default:"50.0"`
-	ClusterRatio          any `default:"3"`
-	WaypointRatio         any `default:"5"`
-	Radius                any `default:"0.2"`
-	CellDistanceWeight    any `default:"0.5"`
-	NodeSpeedMultiplier   any `default:"1.5"`
-	WaitingTimeExponent   any `default:"1.55"`
-	WaitingTimeUpperBound any `default:"100.0"`
+	MinSpeed any `default:"1"`
+	MaxSpeed any `default:"5"`
+	MaxPause any `default:"3600"`
 }
 
 // Intermediate representation of a NodeGroup
