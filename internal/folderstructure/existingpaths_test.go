@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestExistingPathsAllowance(t *testing.T) {
@@ -16,21 +17,16 @@ func TestExistingPathsAllowance(t *testing.T) {
 	folderstructure.OverwriteExisting = true
 
 	err := os.MkdirAll(folderstructure.OutputFolderName, 0755)
-	if err != nil {
-		t.Fatal("Error creating output folder", err)
-	}
+	assert.NoError(t, err)
+
 	testingFile := filepath.Join(folderstructure.OutputFolderName, "test.test")
-	if !folderstructure.MayCreatePath(testingFile) {
-		t.Fatal("Creation denied while it should be allowed!")
-	}
+	assert.True(t, folderstructure.MayCreatePath(testingFile), "Creation denied while it should be allowed!")
+
 	fbuffer, err := os.Create(testingFile)
-	if err != nil {
-		t.Fatal("Error creating file", err)
-	}
+	assert.NoError(t, err)
 	defer fbuffer.Close()
-	if !folderstructure.MayCreatePath(testingFile) {
-		t.Fatal("Creation denied while it should be allowed!")
-	}
+
+	assert.True(t, folderstructure.MayCreatePath(testingFile), "Creation denied while it should be allowed!")
 }
 
 func TestExistingPathsDenial(t *testing.T) {
@@ -40,27 +36,19 @@ func TestExistingPathsDenial(t *testing.T) {
 	if _, err := os.Stat(folderstructure.OutputFolderName); !os.IsNotExist(err) {
 		// Folder already exists. Removing it in order to check generation.
 		err = os.RemoveAll(folderstructure.OutputFolderName)
-		if err != nil {
-			t.Fatal("Could not remove existing output folder!")
-		}
+		assert.NoError(t, err)
 	}
 
 	folderstructure.OverwriteExisting = false
 
 	err := os.MkdirAll(folderstructure.OutputFolderName, 0755)
-	if err != nil {
-		t.Fatal("Error creating output folder", err)
-	}
+	assert.NoError(t, err)
 	testingFile := filepath.Join(folderstructure.OutputFolderName, "test.test")
-	if !folderstructure.MayCreatePath(testingFile) {
-		t.Fatal("Creation denied while it should be allowed!")
-	}
+	assert.True(t, folderstructure.MayCreatePath(testingFile), "Creation denied while it should be allowed!")
+
 	fbuffer, err := os.Create(testingFile)
-	if err != nil {
-		t.Fatal("Error creating file", err)
-	}
+	assert.NoError(t, err)
 	defer fbuffer.Close()
-	if folderstructure.MayCreatePath(testingFile) {
-		t.Fatal("Creation allowed while it should be denied!")
-	}
+
+	assert.False(t, folderstructure.MayCreatePath(testingFile), "Creation allowed while it should be denied!")
 }

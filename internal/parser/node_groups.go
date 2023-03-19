@@ -20,9 +20,9 @@ type inputNodeGroup struct {
 	PredefinedPosition any `default:"false"`
 	Position           customtypes.Position
 
-	MinSpeed any `default:"0"`
-	MaxSpeed any `default:"1"`
-	MaxPause any `default:"0"`
+	MinSpeed any `default:"1"`
+	MaxSpeed any `default:"5"`
+	MaxPause any `default:"3600"`
 }
 
 // Intermediate representation of a NodeGroup
@@ -123,7 +123,7 @@ func parseNodeGroupNetworks(input []string, exp *experiment.Experiment) ([]*expe
 // Parses a inputNodeGroup with to a movementpatterns.MovementPattern which fits the model string
 func parseMovementModel(input inputNodeGroup, model string) (movementpatterns.MovementPattern, error) {
 	switch strings.ToLower(model) {
-	case "randomwaypoint", "random waypoint", "random_waypoint", "random":
+	case "randomwaypoint", "random waypoint", "random_waypoint", "random", "waypoint":
 		return fillDefaults[inputNodeGroup, movementpatterns.RandomWaypoint](input)
 
 	case "static", "none":

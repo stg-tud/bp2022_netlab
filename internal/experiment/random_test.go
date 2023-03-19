@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGenerateRandomSeedRandomness(t *testing.T) {
@@ -13,9 +14,7 @@ func TestGenerateRandomSeedRandomness(t *testing.T) {
 	for i := 0; i < Runs; i++ {
 		seed := experiment.GenerateRandomSeed()
 		_, present := seeds[seed]
-		if present {
-			t.Fatal("GenerateRandomSeed() returned the same seed multiple times!")
-		}
+		assert.False(t, present, "GenerateRandomSeed() returned the same seed multiple times!")
 		seeds[seed] = true
 	}
 }
@@ -31,9 +30,7 @@ func TestGetRandomSourceDeterminancy(t *testing.T) {
 		var previousValue int = randObjects[0].Int()
 		for i := 1; i < Runs; i++ {
 			currentValue := randObjects[i].Int()
-			if currentValue != previousValue {
-				t.Fatal("GetRandomSource() returned Rand objects that do not have the same outputs!")
-			}
+			assert.Equal(t, previousValue, currentValue, "GetRandomSource() returned Rand objects that do not have the same outputs!")
 		}
 	}
 }

@@ -37,7 +37,7 @@ All functional code is inside the `internal` directory. It is split into these p
 - `experiment`: Package experiment holds the data structure needed to represent a experiment.
 - `folderstructure`: Package folderstructure provides functions for the folder strucure of output data.
 - `logging`: Package logging provides functions for logging.
-- `movementpatterns`: Package movementpatterns holds all supported types of movement configurations such as RandomWaypoint, SLAW and SWIM.
+- `movementpatterns`: Package movementpatterns holds all supported types of movement configurations such as RandomWaypoint.
 - `networktypes`: Package networktypes holds all supported types of network configurations such as Wireless LAN and Switch.
 - `outputgenerators`: Package outputgenerators holds generators for all supported output formats.
 - `parser`: Package parser holds all functionality around parsing of the input TOML file.

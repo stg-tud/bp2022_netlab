@@ -1,2 +1,3 @@
-bonnmotion -fsmartphones RandomWaypoint -h1 -l0 -p0 -d240 -n12 -x1500 -y1000 -R7850800065078565476
-bonnmotion TheONEFile -fsmartphones
+bm -fsmartphones RandomWaypoint -h 5 -l 1 -p 3600 -d 240 -n 12 -x 1500 -y 1000 -R 7850800065078565476
+bm NSFile -f smartphones
+bm TheONEFile -f smartphones

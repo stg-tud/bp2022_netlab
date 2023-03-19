@@ -1,20 +1,23 @@
 package experiment_test
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/networktypes"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNetworkWithoutName(t *testing.T) {
-	_, error1 := experiment.NewDefaultNetwork("")
-	_, error2 := experiment.NewNetwork("", networktypes.Emane{})
-	if error1 == nil || error2 == nil {
-		t.Fatal("Networks without name should not be allowed!")
-	}
+	_, err := experiment.NewDefaultNetwork("")
+	assert.Error(t, err)
+	assert.Equal(t, errors.New("name of the Network must consist of at least on character"), err)
+	_, err = experiment.NewNetwork("", networktypes.Emane{})
+	assert.Error(t, err)
+	assert.Equal(t, errors.New("name of the Network must consist of at least on character"), err)
 }
 
 func TestNewNetwork(t *testing.T) {
@@ -28,14 +31,8 @@ func TestNewNetwork(t *testing.T) {
 	for _, networkType := range networkTypes {
 		networkName := fmt.Sprintf("network_under_test_%s", strings.ToLower(networkType.String()))
 		network_under_test, err := experiment.NewNetwork(networkName, networkType)
-		if err != nil {
-			t.Fatalf("Error creating new '%s' network: %s", networkType.String(), err)
-		}
-		if network_under_test.Name != networkName {
-			t.Fatalf("Network has wrong name '%s', expected '%s'!", network_under_test.Name, networkName)
-		}
-		if network_under_test.Type != networkType {
-			t.Fatalf("Network has wrong type '%s', expected '%s'!", network_under_test.Type, networkType)
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, networkName, network_under_test.Name)
+		assert.Equal(t, networkType, network_under_test.Type)
 	}
 }

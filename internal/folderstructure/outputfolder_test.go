@@ -7,6 +7,7 @@ import (
 
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetOutputFolder(t *testing.T) {
@@ -21,9 +22,7 @@ func TestGetOutputFolder(t *testing.T) {
 		outputFolder := folderstructure.GetOutputFolder(experiment)
 		expectedOutput := filepath.Join(folderstructure.OutputFolderName, folderstructure.FileSystemEscape(experiment.Name))
 
-		if outputFolder != expectedOutput {
-			t.Fatalf("Output \"%s\" does not match expected output \"%s\"!", outputFolder, expectedOutput)
-		}
+		assert.Equal(t, expectedOutput, outputFolder)
 	}
 }
 
@@ -41,9 +40,7 @@ func TestGetOutputFolderWithSubfolders(t *testing.T) {
 	}
 	outputFolder := folderstructure.GetOutputFolder(exampleExperiment, subfolders...)
 	expectedOutput := filepath.Join(folderstructure.OutputFolderName, "Example_Experiment", expectedSubfolders[0], expectedSubfolders[1], expectedSubfolders[2])
-	if outputFolder != expectedOutput {
-		t.Fatalf("Output \"%s\" does not match expected output \"%s\"!", outputFolder, expectedOutput)
-	}
+	assert.Equal(t, expectedOutput, outputFolder)
 }
 
 func TestGetAndCreateOutputFolder(t *testing.T) {
@@ -53,9 +50,7 @@ func TestGetAndCreateOutputFolder(t *testing.T) {
 	if _, err := os.Stat(folderstructure.OutputFolderName); !os.IsNotExist(err) {
 		// Folder already exists. Removing it in order to check generation.
 		err = os.RemoveAll(folderstructure.OutputFolderName)
-		if err != nil {
-			t.Fatal("Could not remove existing output folder!")
-		}
+		assert.NoError(t, err)
 	}
 
 	experiments := []experiment.Experiment{
@@ -71,14 +66,8 @@ func TestGetAndCreateOutputFolder(t *testing.T) {
 		subfolders := []string{"test-subdir"}
 		outputFolder, err := folderstructure.GetAndCreateOutputFolder(experiment, subfolders...)
 		expectedOutput := filepath.Join(folderstructure.OutputFolderName, folderstructure.FileSystemEscape(experiment.Name), "test-subdir")
-		if err != nil {
-			t.Fatal("Error running GetAndCreateOutputFolder:", err)
-		}
-		if outputFolder != expectedOutput {
-			t.Fatalf("Output \"%s\" does not match expected output \"%s\"!", outputFolder, expectedOutput)
-		}
-		if _, err := os.Stat(outputFolder); os.IsNotExist(err) {
-			t.Fatal("Method did not create folder!")
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, expectedOutput, outputFolder)
+		assert.DirExists(t, outputFolder)
 	}
 }

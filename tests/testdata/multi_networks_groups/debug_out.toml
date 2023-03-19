@@ -111,9 +111,9 @@ X = 0
 Y = 0
 
 [NodeGroups.MovementModel]
-MinSpeed = 0
-MaxSpeed = 1
-MaxPause = 0
+MinSpeed = 1
+MaxSpeed = 5
+MaxPause = 3600
 
 [[NodeGroups.Networks]]
 Name = 'Wifi 2.4GHz'

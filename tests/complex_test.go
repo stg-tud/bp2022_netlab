@@ -27,6 +27,7 @@ func TestComplexFile(t *testing.T) {
 		"cluster_settings.txt",
 		"core.xml",
 		"experiment.conf",
+		"debug_out.toml",
 		filepath.Join("movements", "bonnmotion.steps"),
 	}
 
