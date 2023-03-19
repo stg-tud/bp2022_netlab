@@ -9,7 +9,6 @@ Scenario.simulateConnections = true
 Scenario.updateInterval = 0.1
 # 43k ~= 12h
 Scenario.endTime = 240
-Scenario.file = 
 Wifi 2.4GHz.type = SimpleBroadcastInterface
 # transmit speed of 2 Mbps = 250kBps
 Wifi 2.4GHz.transmitSpeed = 54000000
