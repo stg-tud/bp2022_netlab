@@ -85,10 +85,12 @@ func GetTestingExperiment() experiment.Experiment {
 		RandomSeed: 1673916419715,
 		Warmup:     5,
 		Duration:   43,
+		Automator: "three_nodes.pos",
 		WorldSize: customtypes.Area{
 			Height: 170,
 			Width:  240,
 		},
+		
 		Networks:        networks,
 		NodeGroups:      nodegroups,
 		EventGenerators: eventgenerators,

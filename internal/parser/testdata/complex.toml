@@ -3,15 +3,12 @@ Runs = 5
 Duration = 456789
 WarmUp = 17
 RandomSeed = 1337
+Automator = three_nodes.pos
 
 WorldSize.Height = 2000
 WorldSize.Width = 3000
 
 Targets = ["CORE", "coreemu-lab", "The ONE"]
-
-[ExternalMovement]
-Active = true
-FileName = "three_nodes.pos"
 
 [[Network]]
 Name = "Wifi 2.4GHz"

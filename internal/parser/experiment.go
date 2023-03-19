@@ -12,14 +12,14 @@ import (
 
 // Input format of a Experiment configuration
 type inputExperiment struct {
-	Name             any `default:"Experiment"`
-	Runs             any `default:"1"`
-	RandomSeed       int64
-	Duration         any `required:"true"`
-	WorldSize        inputWorldSize
-	Targets          []string
-	Warmup           uint
-	ExternalMovement experiment.ExternalMovement
+	Name       any `default:"Experiment"`
+	Runs       any `default:"1"`
+	RandomSeed int64
+	Duration   any `required:"true"`
+	WorldSize  inputWorldSize
+	Targets    []string
+	Warmup     uint
+	Automator  any `default:"three_nodes.pos"`
 
 	Network        []inputNetwork
 	NodeGroup      []inputNodeGroup
@@ -28,12 +28,12 @@ type inputExperiment struct {
 
 // Intermediate representation of a Experiment
 type intermediateExperiment struct {
-	Name             string
-	Runs             uint
-	RandomSeed       int64
-	Warmup           uint
-	Duration         uint
-	ExternalMovement experiment.ExternalMovement
+	Name       string
+	Runs       uint
+	RandomSeed int64
+	Warmup     uint
+	Duration   uint
+	Automator  string
 }
 
 // Input format of the WorldSize
@@ -50,7 +50,7 @@ func parseGeneralExperiment(input inputExperiment) (experiment.Experiment, error
 	if err != nil {
 		return output, err
 	}
-	output.ExternalMovement = intermediate.ExternalMovement
+	output.Automator = intermediate.Automator
 	output.Name = intermediate.Name
 	output.Runs = intermediate.Runs
 	output.Duration = intermediate.Duration

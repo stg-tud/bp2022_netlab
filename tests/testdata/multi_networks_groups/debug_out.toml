@@ -4,15 +4,12 @@ Targets = [2, 1]
 RandomSeed = 7850800065078565476
 Warmup = 5
 Duration = 240
+Automator = 'three_nodes.pos'
 EventGenerators = []
 
 [WorldSize]
 Height = 1000
 Width = 1500
-
-[ExternalMovement]
-Active = false
-FileName = ''
 
 [[Networks]]
 Name = 'Wifi 2.4GHz'

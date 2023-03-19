@@ -15,7 +15,7 @@ type Experiment struct {
 	Warmup           uint
 	Duration         uint
 	WorldSize        customtypes.Area
-	ExternalMovement ExternalMovement
+	Automator string
 
 	Networks        []Network
 	NodeGroups      []NodeGroup

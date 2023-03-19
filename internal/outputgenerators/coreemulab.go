@@ -2,7 +2,6 @@ package outputgenerators
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -19,10 +18,9 @@ func (CoreEmulab) String() string {
 }
 
 type coreEmuData struct {
-	Name      string
-	Scenario  string
-	Automator string
-
+	Name          string
+	Scenario      string
+	Automator     string
 	GUI           uint
 	RandomSeed    int64
 	PidStat       uint
@@ -47,9 +45,7 @@ const CoreEmulabOutput = "experiment.conf"
 // The default values for experiment.conf
 var defaultValuesCoreEmulab = coreEmuData{
 
-	Scenario:  "core.xml",
-	Automator: "",
-
+	Scenario:      "core.xml",
 	GUI:           1,
 	PidStat:       0,
 	PidParam:      "vnoded",
@@ -95,30 +91,8 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 	replace.RandomSeed = exp.RandomSeed
 	replace.Warmup = exp.Warmup
 	replace.Runtime = exp.Duration
+	replace.Automator = exp.Automator
 
-	if exp.ExternalMovement.Active {
-		replace.Automator = exp.ExternalMovement.FileName
-		path, err := os.Getwd()
-		if err != nil {
-			logger.Error("Error getting current directory")
-		}
-		source, err := os.Open(filepath.Join(path, exp.ExternalMovement.FileName))
-		if err != nil {
-			logger.Error("Error opening external file", err)
-		}
-		defer source.Close()
-		destination, err := os.Create(filepath.Join(outputFolder, exp.ExternalMovement.FileName))
-		if err != nil {
-			logger.Error("Error creating external file", err)
-		}
-		defer destination.Close()
-
-		_, err = io.Copy(destination, source)
-		if err != nil {
-			logger.Error("Error copying external file", err)
-		}
-
-	}
 	confTemplate, err := template.ParseFS(TemplatesFS, fmt.Sprintf("%s/%s", TemplatesFolder, "experiment.conf"))
 	if err != nil {
 		logger.Error("Error opening template file:", err)

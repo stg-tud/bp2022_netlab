@@ -93,8 +93,7 @@ func TestParseComplexFile(t *testing.T) {
 	assert.EqualValues(t, 1337, exp.RandomSeed)
 	assert.EqualValues(t, 2000, exp.WorldSize.Height)
 	assert.EqualValues(t, 3000, exp.WorldSize.Width)
-	assert.EqualValues(t, true, exp.ExternalMovement.Active)
-	assert.EqualValues(t, "three_nodes.pos", exp.ExternalMovement.FileName)
+	assert.EqualValues(t, "three_nodes.pos", exp.Automator)
 
 	assert.Equal(t, []experiment.Target{experiment.TargetCore, experiment.TargetCoreEmulab, experiment.TargetTheOne}, exp.Targets)
 

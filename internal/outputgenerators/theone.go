@@ -63,7 +63,7 @@ func add(x, y int) int {
 	return x + y
 }
 
-// Tests if the given Random Seed is bigger than an int31 value and if so turns the given value to a int31 value.
+// Tests if the given Random Seed is bigger than an int31 value and if so turns the given value to an int31 value.
 func (t TheOne) int32Cutter(rngSeed int64) uint32 {
 	const int31 = 2147483647
 	if rngSeed > int31 {
