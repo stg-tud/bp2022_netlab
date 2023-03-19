@@ -24,7 +24,12 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'n'
 NoNodes = 3
+PredefinedPosition = false
 NodesType = 1
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 

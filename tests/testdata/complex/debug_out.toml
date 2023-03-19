@@ -62,7 +62,12 @@ Name = 'EMANE'
 [[NodeGroups]]
 Prefix = 'laptops'
 NoNodes = 7
+PredefinedPosition = false
 NodesType = 1
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 
@@ -101,7 +106,12 @@ Name = 'Switched'
 [[NodeGroups]]
 Prefix = 'IoT'
 NoNodes = 12
+PredefinedPosition = false
 NodesType = 0
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 
@@ -124,7 +134,12 @@ Name = 'EMANE'
 [[NodeGroups]]
 Prefix = 'smartphones'
 NoNodes = 12
+PredefinedPosition = false
 NodesType = 1
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 5
