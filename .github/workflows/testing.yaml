@@ -24,7 +24,8 @@ jobs:
         uses: golangci/golangci-lint-action@v3
         with:
           version: latest
-          cache: true   
+          cache: true
+
   build-test:
     name: Build & test
     strategy:
