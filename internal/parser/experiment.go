@@ -28,11 +28,11 @@ type inputExperiment struct {
 
 // Intermediate representation of a Experiment
 type intermediateExperiment struct {
-	Name       string
-	Runs       uint
-	RandomSeed int64
-	Warmup     uint
-	Duration   uint
+	Name             string
+	Runs             uint
+	RandomSeed       int64
+	Warmup           uint
+	Duration         uint
 	ExternalMovement experiment.ExternalMovement
 }
 
@@ -67,8 +67,6 @@ func parseGeneralExperiment(input inputExperiment) (experiment.Experiment, error
 		return output, err
 	}
 	output.WorldSize = worldSize
-
-	
 
 	if intermediate.Runs == 0 {
 		return output, errors.New("experiment must have at least one run")
