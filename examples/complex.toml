@@ -1,0 +1,95 @@
+# A complex example featuring most of the valid parameters
+#
+# This configuration will create six networks, each of a different type.
+# Also three different node groups with different movement models, network
+# assignments and types are generated as well as two event generators.
+
+Name = "Complex Experiment"
+Runs = 1
+Duration = 42
+WarmUp = 17
+RandomSeed = 1337
+
+WorldSize.Height = 2000
+WorldSize.Width = 3000
+
+Targets = ["CORE", "coreemu-lab", "The ONE"]
+
+[[Network]]
+Name = "Wifi 2.4GHz"
+Type = "WirelessLAN"
+
+[[Network]]
+Name = "Wifi 5GHz"
+Type = "WirelessLAN"
+Bandwidth = 1300000000
+Range = 80
+Jitter = 2
+Delay = 1000
+Loss = 0.1
+Promiscuous = true
+
+[[Network]]
+Name = "LTE"
+Type = "Wireless"
+Movement = true
+Bandwidth = 250000000
+Range = 600
+Jitter = 5
+Delay = 2000
+LossInitial = 0.1
+LossFactor = 3.0
+LossStartRange = 100.0
+
+[[Network]]
+Name = "Hubbed"
+Type = "Hub"
+
+[[Network]]
+Name = "Switched"
+Type = "Switch"
+
+[[Network]]
+Name = "EMANE"
+Type = "emane"
+
+[[NodeGroup]]
+Prefix = "laptops"
+NoNodes = 7
+NodesType = "PC"
+Networks = ["Wifi 2.4GHZ", "Wifi 5GHz", "Hubbed", "Switched"]
+MovementModel = "static"
+
+[[NodeGroup]]
+Prefix = "IoT"
+NoNodes = 12
+NodesType = "Router"
+Networks = ["Wifi 2.4GHz", "EMANE"]
+
+[[NodeGroup]]
+Prefix = "smartphones"
+NoNodes = 12
+NodesType = "PC"
+Networks = ["Wifi 2.4GHz", "Wifi 5GHz", "LTE"]
+MovementModel = "RandomWaypoint"
+MinSpeed = 5
+MaxSpeed = 7
+MaxPause = 2
+
+[[EventGenerator]]
+Name = "EVG1"
+Type = "Burst"
+Prefix = "i"
+Interval.From = 3
+Interval.To = 4
+Size.From = 17
+Size.To = 35
+Hosts.From = 9
+Hosts.To = 12
+ToHosts.From = 0
+ToHosts.To = 9
+
+[[EventGenerator]]
+Name = "EVG2"
+Type = "MessageEventGenerator"
+Prefix = "ii"
