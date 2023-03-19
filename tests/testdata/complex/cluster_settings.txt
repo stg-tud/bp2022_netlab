@@ -63,14 +63,14 @@ Group1.interface1= Wifi 2.4GHz
 Group1.interface2= Wifi 5GHz
 Group1.interface3= Hubbed
 Group1.interface4= Switched
-Group1.movementModel = Static
+Group1.movementModel = 
 
 Group2.groupID = IoT
 Group2.nrofHosts = 12
 Group2.nrofInterfaces = 2
 Group2.interface1= Wifi 2.4GHz
 Group2.interface2= EMANE
-Group2.movementModel = Static
+Group2.movementModel = 
 
 Group3.groupID = smartphones
 Group3.nrofHosts = 12

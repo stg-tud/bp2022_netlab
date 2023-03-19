@@ -39,6 +39,7 @@ type theOneData struct {
 	Warmup                      uint
 	Runtime                     uint
 	NoEventGenerator            int
+	RngSeed                     uint32
 }
 type eventGenerator struct {
 	Name string
@@ -62,13 +63,20 @@ func add(x, y int) int {
 	return x + y
 }
 
+// Tests if the given Random Seed is bigger then a int31 value and if so turns the given value to a int31 value
+func (t TheOne) int32Cutter(rngSeed int64) uint32 {
+	const int31 = 2147483647
+	if rngSeed > int31 {
+		return uint32(rngSeed) >> 1
+	}
+	return uint32(rngSeed)
+}
+
 // returns the names of the movement pattern types in the way needed
 func (t TheOne) movementPattern(movementPatternType movementpatterns.MovementPattern) string {
 	switch movementPatternType.(type) {
 	case movementpatterns.RandomWaypoint:
 		return "RandomWaypoint"
-	case movementpatterns.Static:
-		return "Static"
 	default:
 		return ""
 	}
@@ -162,6 +170,7 @@ func (t TheOne) Generate(exp experiment.Experiment) {
 
 	// WorldSizes are multiplied by 20, because the Size of The ONE is about 20 times bigger compared to the values of clab, Core, etc.
 	// WarmUp is multiplied by 200, because the warm up period for THE ONE is about 200 times longer compared to the values of clab, Core, etc.
+
 	replace := theOneData{
 		ScenarioName:     folderstructure.FileSystemEscape(exp.Name),
 		RandomSeed:       exp.RandomSeed,
@@ -174,6 +183,7 @@ func (t TheOne) Generate(exp experiment.Experiment) {
 		Groups:           t.buildGroups(exp),
 		NoEventGenerator: len(exp.EventGenerators),
 		EventGenerators:  t.buildEventGenerators(exp),
+		RngSeed:          t.int32Cutter(exp.RandomSeed),
 	}
 
 	funcs := template.FuncMap{"add": add}

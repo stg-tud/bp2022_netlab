@@ -35,7 +35,7 @@ Group1.groupID = users
 Group1.nrofHosts = 7
 Group1.nrofInterfaces = 1
 Group1.interface1= Wifi
-Group1.movementModel = Static
+Group1.movementModel = 
 
 
 
@@ -46,7 +46,7 @@ Events.nrof = 0
 
 ## Movement model settings
 # seed for movement models' pseudo random number generator (default = 0)
-MovementModel.rngSeed = 2502352939705136212
+MovementModel.rngSeed = 1289992746
 # World's size for Movement Models without implicit size (width, height; meters)
 MovementModel.worldSize = 20000, 15000
 # How long time to move hosts in the world before real simulation

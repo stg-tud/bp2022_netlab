@@ -60,32 +60,32 @@ Group1.groupID = a
 Group1.nrofHosts = 1
 Group1.nrofInterfaces = 1
 Group1.interface1= wireless_lan
-Group1.movementModel = Static
+Group1.movementModel = 
 
 Group2.groupID = b
 Group2.nrofHosts = 2
 Group2.nrofInterfaces = 2
 Group2.interface1= wireless_lan
 Group2.interface2= switch
-Group2.movementModel = Static
+Group2.movementModel = 
 
 Group3.groupID = c
 Group3.nrofHosts = 3
 Group3.nrofInterfaces = 1
 Group3.interface1= switch
-Group3.movementModel = Static
+Group3.movementModel = 
 
 Group4.groupID = d
 Group4.nrofHosts = 4
 Group4.nrofInterfaces = 1
 Group4.interface1= changed_wifi
-Group4.movementModel = Static
+Group4.movementModel = 
 
 Group5.groupID = e
 Group5.nrofHosts = 5
 Group5.nrofInterfaces = 1
 Group5.interface1= hub
-Group5.movementModel = Static
+Group5.movementModel = 
 
 Group6.groupID = f
 Group6.nrofHosts = 6
@@ -97,7 +97,7 @@ Group7.groupID = g
 Group7.nrofHosts = 7
 Group7.nrofInterfaces = 1
 Group7.interface1= wireless
-Group7.movementModel = Static
+Group7.movementModel = 
 
 
 
@@ -136,7 +136,7 @@ Events2.prefix = M
 
 ## Movement model settings
 # seed for movement models' pseudo random number generator (default = 0)
-MovementModel.rngSeed = 1673916419715
+MovementModel.rngSeed = 1587070785
 # World's size for Movement Models without implicit size (width, height; meters)
 MovementModel.worldSize = 4800, 3400
 # How long time to move hosts in the world before real simulation
