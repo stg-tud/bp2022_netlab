@@ -6,10 +6,6 @@ Warmup = 0
 Duration = 240
 EventGenerators = []
 
-[PredefinePosition]
-X = 0
-Y = 0
-
 [WorldSize]
 Height = 750
 Width = 1000
