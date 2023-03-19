@@ -55,10 +55,8 @@ NodesType = "PC"
 Networks = ["Wifi 2.4GHZ", "Wifi 5GHz", "Hubbed", "Switched"]
 MovementModel = "static"
 PredefinedPosition = true
-
-[NodeGroup.Position]
-X = 40
-Y = 50
+Position.X = 40
+Position.Y = 50
 
 [[NodeGroup]]
 Prefix = "IoT"
