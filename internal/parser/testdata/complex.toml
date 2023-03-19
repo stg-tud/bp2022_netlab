@@ -9,6 +9,10 @@ WorldSize.Width = 3000
 
 Targets = ["CORE", "coreemu-lab", "The ONE"]
 
+[ExternalMovement]
+Active = true
+FileName = "three_nodes.pos"
+
 [[Network]]
 Name = "Wifi 2.4GHz"
 Type = "WirelessLAN"

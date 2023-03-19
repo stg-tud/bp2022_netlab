@@ -85,7 +85,7 @@ func TestParseComplexFile(t *testing.T) {
 	exp, err := parser.LoadFromFile("testdata/complex.toml")
 
 	assert.NoError(t, err)
-
+	
 	assert.Equal(t, "Complex Experiment", exp.Name)
 	assert.EqualValues(t, 5, exp.Runs)
 	assert.EqualValues(t, 456789, exp.Duration)
@@ -93,6 +93,8 @@ func TestParseComplexFile(t *testing.T) {
 	assert.EqualValues(t, 1337, exp.RandomSeed)
 	assert.EqualValues(t, 2000, exp.WorldSize.Height)
 	assert.EqualValues(t, 3000, exp.WorldSize.Width)
+	assert.EqualValues(t,true,exp.ExternalMovement.Active)
+	assert.EqualValues(t,"three_nodes.pos",exp.ExternalMovement.FileName)
 
 	assert.Equal(t, []experiment.Target{experiment.TargetCore, experiment.TargetCoreEmulab, experiment.TargetTheOne}, exp.Targets)
 
