@@ -2,7 +2,6 @@ package outputgenerators
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -40,7 +39,6 @@ type theOneData struct {
 	Warmup                      uint
 	Runtime                     uint
 	NoEventGenerator            int
-	ExternalFile                string
 }
 type eventGenerator struct {
 	Name string
@@ -176,30 +174,6 @@ func (t TheOne) Generate(exp experiment.Experiment) {
 		Groups:           t.buildGroups(exp),
 		NoEventGenerator: len(exp.EventGenerators),
 		EventGenerators:  t.buildEventGenerators(exp),
-	}
-
-	if exp.ExternalMovement.Active {
-		replace.ExternalFile = exp.ExternalMovement.FileName
-		path, err := os.Getwd()
-		if err != nil {
-			logger.Error("Error getting current directory")
-		}
-		source, err := os.Open(filepath.Join(path, exp.ExternalMovement.FileName))
-		if err != nil {
-			logger.Error("Error opening external file", err)
-		}
-		defer source.Close()
-		destination, err := os.Create(filepath.Join(outputFolder, exp.ExternalMovement.FileName))
-		if err != nil {
-			logger.Error("Error creating external file", err)
-		}
-		defer destination.Close()
-
-		_, err = io.Copy(destination, source)
-		if err != nil {
-			logger.Error("Error copying external file", err)
-		}
-
 	}
 
 	funcs := template.FuncMap{"add": add}
