@@ -11,11 +11,11 @@ type Experiment struct {
 	Runs    uint
 	Targets []Target
 
-	RandomSeed       int64
-	Warmup           uint
-	Duration         uint
-	WorldSize        customtypes.Area
-	Automator string
+	RandomSeed int64
+	Warmup     uint
+	Duration   uint
+	WorldSize  customtypes.Area
+	Automator  string
 
 	Networks        []Network
 	NodeGroups      []NodeGroup

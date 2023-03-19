@@ -3,7 +3,7 @@ Runs = 5
 Duration = 456789
 WarmUp = 17
 RandomSeed = 1337
-Automator = three_nodes.pos
+Automator = "three_nodes.pos"
 
 WorldSize.Height = 2000
 WorldSize.Width = 3000
