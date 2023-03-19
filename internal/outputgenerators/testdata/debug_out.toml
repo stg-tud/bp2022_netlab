@@ -5,10 +5,6 @@ RandomSeed = 1673916419715
 Warmup = 5
 Duration = 43
 
-[PredefinePosition]
-X = 40
-Y = 55
-
 [WorldSize]
 Height = 170
 Width = 240

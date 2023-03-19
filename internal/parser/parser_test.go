@@ -84,8 +84,9 @@ func TestParseSimpleFile(t *testing.T) {
 func TestParseComplexFile(t *testing.T) {
 	exp, err := parser.LoadFromFile("testdata/complex.toml")
 	assert.Equal(t, true, exp.NodeGroups[0].PredefinedPosition)
-	assert.Equal(t, customtypes.Position{X: 40, Y: 55}, exp.NodeGroups[0].Position)
+	assert.Equal(t, customtypes.Position{X: 40, Y: 50}, exp.NodeGroups[0].Position)
 	assert.Equal(t, false, exp.NodeGroups[1].PredefinedPosition)
+	assert.Equal(t, false, exp.NodeGroups[2].PredefinedPosition)
 	assert.NoError(t, err)
 
 	assert.Equal(t, "Complex Experiment", exp.Name)
@@ -95,7 +96,6 @@ func TestParseComplexFile(t *testing.T) {
 	assert.EqualValues(t, 1337, exp.RandomSeed)
 	assert.EqualValues(t, 2000, exp.WorldSize.Height)
 	assert.EqualValues(t, 3000, exp.WorldSize.Width)
-	assert.EqualValues(t, customtypes.Position{X: 40, Y: 55}, exp.PredefinePosition)
 
 	assert.Equal(t, []experiment.Target{experiment.TargetCore, experiment.TargetCoreEmulab, experiment.TargetTheOne}, exp.Targets)
 

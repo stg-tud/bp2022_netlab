@@ -20,20 +20,18 @@ type inputExperiment struct {
 	Targets    []string
 	Warmup     uint
 
-	Network           []inputNetwork
-	NodeGroup         []inputNodeGroup
-	EventGenerator    []inputEventGenerator
-	PredefinePosition customtypes.Position
+	Network        []inputNetwork
+	NodeGroup      []inputNodeGroup
+	EventGenerator []inputEventGenerator
 }
 
 // Intermediate representation of a Experiment
 type intermediateExperiment struct {
-	Name              string
-	Runs              uint
-	RandomSeed        int64
-	Warmup            uint
-	Duration          uint
-	PredefinePosition customtypes.Position
+	Name       string
+	Runs       uint
+	RandomSeed int64
+	Warmup     uint
+	Duration   uint
 }
 
 // Input format of the WorldSize
@@ -50,7 +48,7 @@ func parseGeneralExperiment(input inputExperiment) (experiment.Experiment, error
 	if err != nil {
 		return output, err
 	}
-	output.PredefinePosition = intermediate.PredefinePosition
+
 	output.Name = intermediate.Name
 	output.Runs = intermediate.Runs
 	output.Duration = intermediate.Duration

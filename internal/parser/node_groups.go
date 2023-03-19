@@ -58,7 +58,7 @@ func parseNodeGroups(input []inputNodeGroup, exp *experiment.Experiment) ([]expe
 		}
 		outputNodeGroup.PredefinedPosition = intermediate.PredefinedPosition
 		if intermediate.PredefinedPosition {
-			outputNodeGroup.Position = exp.PredefinePosition
+			outputNodeGroup.Position = intermediate.Position
 		}
 
 		outputNodeGroup.NodesType, err = parseNodesType(intermediate.NodesType)
