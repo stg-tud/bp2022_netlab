@@ -55,7 +55,7 @@ type networkInterfaceTheOne struct {
 }
 
 // The name of the file that should be written to
-const TheOneOutput = "cluster_settings.txt"
+const TheOneOutput = "theone_settings.txt"
 
 func (TheOne) String() string {
 	return "The ONE"
@@ -85,7 +85,7 @@ func (t TheOne) movementPattern(movementPatternType movementpatterns.MovementPat
 	}
 }
 
-// generates the group for cluster_settings.txt
+// generates the group for theone_settings.txt
 func (t TheOne) buildGroups(exp experiment.Experiment) []group {
 	logger.Trace("Building Groups")
 	groups := []group{}
@@ -108,7 +108,7 @@ func (t TheOne) buildGroups(exp experiment.Experiment) []group {
 	return groups
 }
 
-// generates the interfaces for cluster_settings.txt
+// generates the interfaces for theone_settings.txt
 // 6750 bandwidth and 100 range are default values for wireless_lan, the prefered type if nothing else is set
 func (t TheOne) buildInterfaces(exp experiment.Experiment) (networks []networkInterfaceTheOne) {
 	logger.Trace("Building Interfaces")
@@ -136,7 +136,7 @@ func (t TheOne) buildInterfaces(exp experiment.Experiment) (networks []networkIn
 	return networks
 }
 
-// generates the eventgeneratortypes for cluster_settings.txt
+// generates the eventgeneratortypes for theone_settings.txt
 func (t TheOne) buildEventGenerators(exp experiment.Experiment) (eventGenerators []eventGenerator) {
 	logger.Trace("Building Event Generators")
 	for _, expEventGenerator := range exp.EventGenerators {

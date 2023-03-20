@@ -24,7 +24,7 @@ func TestComplexFile(t *testing.T) {
 	assert.NoError(t, err)
 
 	compareFiles := []string{
-		"cluster_settings.txt",
+		"theone_settings.txt",
 		"core.xml",
 		"experiment.conf",
 		"debug_out.toml",

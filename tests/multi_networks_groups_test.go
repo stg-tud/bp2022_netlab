@@ -24,7 +24,7 @@ func TestMultipleNetworksAndGroupsFile(t *testing.T) {
 	assert.NoError(t, err)
 
 	compareFiles := []string{
-		"cluster_settings.txt",
+		"theone_settings.txt",
 		"core.xml",
 		"debug_out.toml",
 		"experiment.conf",
