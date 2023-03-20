@@ -10,8 +10,11 @@ require (
 	github.com/stretchr/testify v1.8.2
 )
 
+require google.golang.org/protobuf v1.26.0 // indirect
+
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/golang/protobuf v1.5.3
 	github.com/gookit/color v1.5.2 // indirect
 	github.com/gookit/goutil v0.6.7 // indirect
 	github.com/gookit/gsr v0.0.8 // indirect

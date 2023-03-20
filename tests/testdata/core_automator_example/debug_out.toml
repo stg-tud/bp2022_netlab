@@ -4,6 +4,7 @@ Targets = [2]
 RandomSeed = 8311008601969058206
 Warmup = 0
 Duration = 30
+Automator = 'three_nodes.pos'
 EventGenerators = []
 
 [WorldSize]

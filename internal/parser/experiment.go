@@ -19,6 +19,7 @@ type inputExperiment struct {
 	WorldSize  inputWorldSize
 	Targets    []string
 	Warmup     uint
+	Automator  string
 
 	Network        []inputNetwork
 	NodeGroup      []inputNodeGroup
@@ -32,6 +33,7 @@ type intermediateExperiment struct {
 	RandomSeed int64
 	Warmup     uint
 	Duration   uint
+	Automator  string
 }
 
 // Input format of the WorldSize
@@ -48,7 +50,7 @@ func parseGeneralExperiment(input inputExperiment) (experiment.Experiment, error
 	if err != nil {
 		return output, err
 	}
-
+	output.Automator = intermediate.Automator
 	output.Name = intermediate.Name
 	output.Runs = intermediate.Runs
 	output.Duration = intermediate.Duration

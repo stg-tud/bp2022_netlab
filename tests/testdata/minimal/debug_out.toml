@@ -4,6 +4,7 @@ Targets = [2, 1]
 RandomSeed = 2502352939705136212
 Warmup = 0
 Duration = 240
+Automator = ''
 EventGenerators = []
 
 [WorldSize]
