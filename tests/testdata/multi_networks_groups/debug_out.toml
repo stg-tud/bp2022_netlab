@@ -47,7 +47,12 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'laptops'
 NoNodes = 7
+PredefinedPosition = false
 NodesType = 1
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 
@@ -76,7 +81,12 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'IoT'
 NoNodes = 12
+PredefinedPosition = false
 NodesType = 1
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 
@@ -94,7 +104,12 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'smartphones'
 NoNodes = 12
+PredefinedPosition = false
 NodesType = 1
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 1

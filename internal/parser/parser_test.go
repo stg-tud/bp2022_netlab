@@ -83,7 +83,10 @@ func TestParseSimpleFile(t *testing.T) {
 
 func TestParseComplexFile(t *testing.T) {
 	exp, err := parser.LoadFromFile("testdata/complex.toml")
-
+	assert.Equal(t, true, exp.NodeGroups[0].PredefinedPosition)
+	assert.Equal(t, customtypes.Position{X: 40, Y: 50}, exp.NodeGroups[0].Position)
+	assert.Equal(t, false, exp.NodeGroups[1].PredefinedPosition)
+	assert.Equal(t, false, exp.NodeGroups[2].PredefinedPosition)
 	assert.NoError(t, err)
 
 	assert.Equal(t, "Complex Experiment", exp.Name)

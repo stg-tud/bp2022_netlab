@@ -63,7 +63,12 @@ LossStartRange = 300.0
 [[NodeGroups]]
 Prefix = 'a'
 NoNodes = 1
+PredefinedPosition = true
 NodesType = 0
+
+[NodeGroups.Position]
+X = 40
+Y = 55
 
 [NodeGroups.MovementModel]
 
@@ -81,7 +86,12 @@ Promiscuous = false
 [[NodeGroups]]
 Prefix = 'b'
 NoNodes = 2
+PredefinedPosition = false
 NodesType = 0
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 
@@ -104,7 +114,12 @@ Name = 'switch'
 [[NodeGroups]]
 Prefix = 'c'
 NoNodes = 3
+PredefinedPosition = false
 NodesType = 0
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 1
@@ -119,7 +134,12 @@ Name = 'switch'
 [[NodeGroups]]
 Prefix = 'd'
 NoNodes = 4
+PredefinedPosition = false
 NodesType = 0
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 
@@ -137,7 +157,12 @@ Promiscuous = true
 [[NodeGroups]]
 Prefix = 'e'
 NoNodes = 5
+PredefinedPosition = false
 NodesType = 1
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 
@@ -149,7 +174,12 @@ Name = 'hub'
 [[NodeGroups]]
 Prefix = 'f'
 NoNodes = 6
+PredefinedPosition = false
 NodesType = 0
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 MinSpeed = 123
@@ -164,7 +194,12 @@ Name = 'emane'
 [[NodeGroups]]
 Prefix = 'g'
 NoNodes = 7
+PredefinedPosition = false
 NodesType = 0
+
+[NodeGroups.Position]
+X = 0
+Y = 0
 
 [NodeGroups.MovementModel]
 

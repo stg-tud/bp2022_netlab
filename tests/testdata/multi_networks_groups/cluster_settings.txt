@@ -63,8 +63,6 @@ Group3.interface3= LTE
 Group3.movementModel = RandomWaypoint
 
 
-
-
 ## Message creation parameters
 # How many event generators
 Events.nrof = 0

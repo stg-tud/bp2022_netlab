@@ -7,6 +7,7 @@ import (
 	"text/template"
 
 	logger "github.com/gookit/slog"
+	"github.com/stg-tud/bp2022_netlab/internal/customtypes"
 	"github.com/stg-tud/bp2022_netlab/internal/eventgeneratortypes"
 	"github.com/stg-tud/bp2022_netlab/internal/experiment"
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
@@ -17,11 +18,13 @@ import (
 type TheOne struct{}
 
 type group struct {
-	Id             string
-	NrofHosts      uint
-	NrofInterfaces int
-	Interfaces     []*experiment.Network
-	MovementModel  string
+	Id                 string
+	NrofHosts          uint
+	NrofInterfaces     int
+	Interfaces         []*experiment.Network
+	MovementModel      string
+	Position           customtypes.Position
+	PredefinedPosition bool
 }
 
 type theOneData struct {
@@ -94,6 +97,10 @@ func (t TheOne) buildGroups(exp experiment.Experiment) []group {
 			Interfaces:     expNodeGroups.Networks,
 			MovementModel:  t.movementPattern(expNodeGroups.MovementModel),
 			NrofInterfaces: len(expNodeGroups.Networks),
+		}
+		if expNodeGroups.PredefinedPosition {
+			group.PredefinedPosition = true
+			group.Position = expNodeGroups.Position
 		}
 		groups = append(groups, group)
 

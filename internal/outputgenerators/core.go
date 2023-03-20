@@ -206,6 +206,11 @@ func (c Core) buildDevice(deviceId uint, exp experiment.Experiment, nodeGroup ex
 		Type:          c.deviceType(nodeGroup.NodesType),
 		Interfaces:    deviceNetworkInterfaces,
 	}
+
+	if nodeGroup.PredefinedPosition {
+		dev.Position = nodeGroup.Position
+	}
+
 	return dev, nil
 }
 

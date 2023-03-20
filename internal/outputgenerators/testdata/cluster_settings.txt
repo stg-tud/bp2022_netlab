@@ -59,6 +59,7 @@ Group.nrofApplications = 0
 Group1.groupID = a
 Group1.nrofHosts = 1
 Group1.nrofInterfaces = 1
+Group1.clusterCenter = 40,55
 Group1.interface1= wireless_lan
 Group1.movementModel = 
 
@@ -98,8 +99,6 @@ Group7.nrofHosts = 7
 Group7.nrofInterfaces = 1
 Group7.interface1= wireless
 Group7.movementModel = 
-
-
 
 
 ## Message creation parameters
