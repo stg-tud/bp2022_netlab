@@ -24,13 +24,13 @@ func TestMinialFile(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.FileExists(t, filepath.Join(folderstructure.OutputFolderName, "netlab.log"))
-	assert.FileExists(t, filepath.Join(folderstructure.OutputFolderName, "A_very_simple_experiment", "cluster_settings.txt"))
+	assert.FileExists(t, filepath.Join(folderstructure.OutputFolderName, "A_very_simple_experiment", "theone_settings.txt"))
 	assert.FileExists(t, filepath.Join(folderstructure.OutputFolderName, "A_very_simple_experiment", "core.xml"))
 	assert.FileExists(t, filepath.Join(folderstructure.OutputFolderName, "A_very_simple_experiment", "debug_out.toml"))
 	assert.FileExists(t, filepath.Join(folderstructure.OutputFolderName, "A_very_simple_experiment", "experiment.conf"))
 
 	compareFiles := []string{
-		"cluster_settings.txt",
+		"theone_settings.txt",
 		"core.xml",
 		"debug_out.toml",
 		"experiment.conf",
