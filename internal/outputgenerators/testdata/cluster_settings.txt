@@ -73,7 +73,11 @@ Group3.groupID = c
 Group3.nrofHosts = 3
 Group3.nrofInterfaces = 1
 Group3.interface1= switch
+<<<<<<< HEAD
 Group3.movementModel = 
+=======
+Group3.movementModel = RandomWaypoint
+>>>>>>> 0e23b7fa0ae67c75506485ad8166b72677de3da5
 
 Group4.groupID = d
 Group4.nrofHosts = 4

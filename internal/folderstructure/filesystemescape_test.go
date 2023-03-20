@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestFilesystemEncode(t *testing.T) {
@@ -15,8 +16,6 @@ func TestFilesystemEncode(t *testing.T) {
 	}
 	for input, expectedOutput := range tests {
 		output := folderstructure.FileSystemEscape(input)
-		if output != expectedOutput {
-			t.Fatalf("Output \"%s\" does not match expected output \"%s\"!", output, expectedOutput)
-		}
+		assert.Equal(t, expectedOutput, output)
 	}
 }

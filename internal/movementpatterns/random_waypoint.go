@@ -9,3 +9,11 @@ type RandomWaypoint struct {
 func (RandomWaypoint) String() string {
 	return "Random Waypoint"
 }
+
+func (RandomWaypoint) Default() MovementPattern {
+	return RandomWaypoint{
+		MinSpeed: 1,
+		MaxSpeed: 5,
+		MaxPause: 3600,
+	}
+}

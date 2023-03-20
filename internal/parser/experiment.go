@@ -19,7 +19,7 @@ type inputExperiment struct {
 	WorldSize  inputWorldSize
 	Targets    []string
 	Warmup     uint
-	Automator  any `default:"three_nodes.pos"`
+	Automator  string
 
 	Network        []inputNetwork
 	NodeGroup      []inputNodeGroup

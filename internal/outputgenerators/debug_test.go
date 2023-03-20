@@ -8,6 +8,7 @@ import (
 
 	"github.com/stg-tud/bp2022_netlab/internal/folderstructure"
 	"github.com/stg-tud/bp2022_netlab/internal/outputgenerators"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDebugGeneration(t *testing.T) {
@@ -21,18 +22,12 @@ func TestDebugGeneration(t *testing.T) {
 	og.Generate(testingExperiment)
 
 	expected, err := os.ReadFile(filepath.Join(TestDataFolder, outputgenerators.DebugOutputFile))
-	if err != nil {
-		t.Fatal("Could not read output file", err)
-	}
+	assert.NoError(t, err)
 	expectedClean := strings.ReplaceAll(string(expected), "\r\n", "\n")
 
 	actual, err := os.ReadFile(filepath.Join(outputFolder, outputgenerators.DebugOutputFile))
-	if err != nil {
-		t.Fatal("Could not read output file", err)
-	}
+	assert.NoError(t, err)
 	actualClean := strings.ReplaceAll(string(actual), "\r\n", "\n")
 
-	if string(actualClean) != string(expectedClean) {
-		t.Fatal("Output does not match expected output!")
-	}
+	assert.Equal(t, expectedClean, actualClean)
 }

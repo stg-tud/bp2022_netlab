@@ -84,6 +84,40 @@ func TestAssignedToSameNetworkMultipleTimes(t *testing.T) {
 	assert.Equal(t, []*experiment.Network{&exp.Networks[0]}, exp.NodeGroups[0].Networks)
 }
 
+func TestMovementModels(t *testing.T) {
+	toml := `
+	Name = "Testing Experiment"
+	Duration = 123
+
+	[[NodeGroup]]
+	Prefix = "static"
+	NoNodes = 7
+	MovementModel = "static"
+
+	[[NodeGroup]]
+	Prefix = "rwp"
+	NoNodes = 7
+	MovementModel = "random waypoint"
+	MinSpeed = 3
+	MaxSpeed = 4
+	MaxPause = 5
+	`
+
+	exp, err := parser.ParseText([]byte(toml))
+
+	assert.NoError(t, err)
+
+	assert.IsType(t, movementpatterns.Static{}, exp.NodeGroups[0].MovementModel)
+	assert.True(t, assert.ObjectsAreEqual(movementpatterns.Static{}, exp.NodeGroups[0].MovementModel))
+
+	assert.IsType(t, movementpatterns.RandomWaypoint{}, exp.NodeGroups[1].MovementModel)
+	assert.True(t, assert.ObjectsAreEqual(movementpatterns.RandomWaypoint{
+		MinSpeed: 3,
+		MaxSpeed: 4,
+		MaxPause: 5,
+	}, exp.NodeGroups[1].MovementModel))
+}
+
 func TestUnknownMovementModel(t *testing.T) {
 	toml := `
 	Name = "Testing Experiment"
