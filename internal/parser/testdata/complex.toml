@@ -54,7 +54,6 @@ NoNodes = 7
 NodesType = "PC"
 Networks = ["Wifi 2.4GHZ", "Wifi 5GHz", "Hubbed", "Switched"]
 MovementModel = "static"
-PredefinedPosition = true
 Position.X = 40
 Position.Y = 50
 
@@ -63,7 +62,6 @@ Prefix = "IoT"
 NoNodes = 12
 NodesType = "Router"
 Networks = ["Wifi 2.4GHz", "EMANE"]
-PredefinedPosition = false
 
 [[NodeGroup]]
 Prefix = "smartphones"
