@@ -8,6 +8,7 @@ Runs = 1
 Duration = 30
 Targets = ["coreemu-lab"]
 RandomSeed = 8311008601969058206
+Automator = "three_nodes.pos"
 
 [[Network]]
 Name = "AdHocWiFi"

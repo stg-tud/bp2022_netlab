@@ -18,10 +18,9 @@ func (CoreEmulab) String() string {
 }
 
 type coreEmuData struct {
-	Name      string
-	Scenario  string
-	Automator string
-
+	Name          string
+	Scenario      string
+	Automator     string
 	GUI           uint
 	RandomSeed    int64
 	PidStat       uint
@@ -46,9 +45,7 @@ const CoreEmulabOutput = "experiment.conf"
 // The default values for experiment.conf
 var defaultValuesCoreEmulab = coreEmuData{
 
-	Scenario:  "core.xml",
-	Automator: "",
-
+	Scenario:      "core.xml",
 	GUI:           1,
 	PidStat:       0,
 	PidParam:      "vnoded",
@@ -94,6 +91,7 @@ func (c CoreEmulab) Generate(exp experiment.Experiment) {
 	replace.RandomSeed = exp.RandomSeed
 	replace.Warmup = exp.Warmup
 	replace.Runtime = exp.Duration
+	replace.Automator = exp.Automator
 
 	confTemplate, err := template.ParseFS(TemplatesFS, fmt.Sprintf("%s/%s", TemplatesFolder, "experiment.conf"))
 	if err != nil {

@@ -69,7 +69,7 @@ Events{{add $index 1}}.prefix = {{.Type.Prefix}}
 
 ## Movement model settings
 # seed for movement models' pseudo random number generator (default = 0)
-MovementModel.rngSeed = {{ .RandomSeed}}
+MovementModel.rngSeed = {{ .RngSeed}}
 # World's size for Movement Models without implicit size (width, height; meters)
 MovementModel.worldSize = {{ .WorldSizeWidth}}, {{ .WorldSizeHeight}}
 # How long time to move hosts in the world before real simulation

@@ -46,13 +46,13 @@ Group1.nrofHosts = 7
 Group1.nrofInterfaces = 2
 Group1.interface1= Wifi 2.4GHz
 Group1.interface2= Wifi 5GHz
-Group1.movementModel = Static
+Group1.movementModel = 
 
 Group2.groupID = IoT
 Group2.nrofHosts = 12
 Group2.nrofInterfaces = 1
 Group2.interface1= Wifi 2.4GHz
-Group2.movementModel = Static
+Group2.movementModel = 
 
 Group3.groupID = smartphones
 Group3.nrofHosts = 12
@@ -69,7 +69,7 @@ Events.nrof = 0
 
 ## Movement model settings
 # seed for movement models' pseudo random number generator (default = 0)
-MovementModel.rngSeed = 7850800065078565476
+MovementModel.rngSeed = 751799602
 # World's size for Movement Models without implicit size (width, height; meters)
 MovementModel.worldSize = 30000, 20000
 # How long time to move hosts in the world before real simulation

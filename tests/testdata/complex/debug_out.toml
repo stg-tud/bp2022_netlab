@@ -4,6 +4,7 @@ Targets = [0, 2, 1]
 RandomSeed = 1337
 Warmup = 17
 Duration = 42
+Automator = ''
 
 [WorldSize]
 Height = 2000
