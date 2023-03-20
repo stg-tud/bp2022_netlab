@@ -68,4 +68,4 @@ There are also some **flags** which might interest you:
 
 ## Configuration files
 
-netlab uses TOML files for experiment configurations. For more information on how to create those, have a look at the [Wiki](https://github.com/stg-tud/bp2022_netlab/wiki/). You can also find a few example files in the [examples](https://github.com/stg-tud/bp2022_netlab/tree/documentation/examples) folder.
+netlab uses TOML files for experiment configurations. For more information on how to create those, have a look at the [Wiki](https://github.com/stg-tud/bp2022_netlab/wiki/). You can also find a few example files in the [examples](https://github.com/stg-tud/bp2022_netlab/tree/main/examples) folder.
